@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import model.UserAccount;
@@ -62,6 +63,27 @@ public class UserDAOImpl implements UserDAO {
             session.delete(user);
         }
         logger.info("UserAccount deleted successfully, user details=" + user);
+    }
+
+    @SuppressWarnings("unchecked")
+    public UserAccount getUserByUserNameAndPassword(String userName, String password) {
+
+        List<UserAccount> users = new ArrayList<>();
+
+        users = sessionFactory.getCurrentSession()
+                .createQuery("from UserAccount where userName = :userName and password =  :password")
+                .setString("userName", userName)
+                .setString("password", password)
+                .list();
+
+        logger.info("UserAccount obtained successfully by , user details=" + userName + ", " + password);
+
+        if (users.size() > 0) {
+            return users.get(0);
+        } else {
+            return null;
+        }
+
     }
 
 }

@@ -1,20 +1,18 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+
 <html>
 <head>
-    <title>home</title>
-
+    <title>User Info</title>
 </head>
 <body>
 <jsp:include page="_menu.jsp"/>
-<h1>
-    Home
-</h1>
+USER INFO
 
 ${user.userName}
-${user.password}
-
-
+${user.gender}
+${user.money}<%--
+${user.products}--%>
 </body>
 </html>

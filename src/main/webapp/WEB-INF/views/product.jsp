@@ -1,7 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
-<%@ page session="false" %>
 <html>
 <head>
     <title>Product Page</title>
@@ -85,7 +84,7 @@
 
 
 <br>
-<h3>User List</h3>
+<h3>Product List</h3>
 <c:if test="${!empty listProducts}">
     <table class="tg">
         <tr>

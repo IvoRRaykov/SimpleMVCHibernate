@@ -1,7 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
-<%@ page session="false" %>
 <html>
 <head>
     <title>User Page</title>
@@ -17,7 +16,7 @@
     Register User
 </h1>
 
-<c:url var="addAction" value="/user/add" />
+<c:url var="addAction" value="/admin/register" />
 
 <form:form action="${addAction}" commandName="user">
     <table>
@@ -114,8 +113,8 @@
                 <td>${user.password}</td>
                 <td>${user.money}</td>
                 <td>${user.gender}</td>
-                <td><a href="<c:url value='/editUser/${user.id}' />" >Edit</a></td>
-                <td><a href="<c:url value='/removeUser/${user.id}' />" >Delete</a></td>
+                <td><a href="<c:url value='/admin/editUser/${user.id}' />" >Edit</a></td>
+                <td><a href="<c:url value='/admin/removeUser/${user.id}' />" >Delete</a></td>
             </tr>
         </c:forEach>
     </table>

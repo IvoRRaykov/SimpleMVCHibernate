@@ -47,4 +47,9 @@ public class UserServiceImpl implements UserService {
         this.userDAO.removeUser(id);
     }
 
+    @Override
+    @Transactional
+    public UserAccount getUserByUserNameAndPassword(String userName, String password) {
+        return this.userDAO.getUserByUserNameAndPassword(userName,password);
+    }
 }
