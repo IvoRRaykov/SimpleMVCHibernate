@@ -12,7 +12,10 @@ USER INFO
 
 ${user.userName}
 ${user.gender}
-${user.money}<%--
-${user.products}--%>
+${user.money}
+
+
+<jsp:include page="_footer.jsp"/>
+
 </body>
 </html>

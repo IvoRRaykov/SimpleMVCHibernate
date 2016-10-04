@@ -12,6 +12,8 @@
     </style>
 </head>
 <body>
+<jsp:include page="_adminMenu.jsp"/>
+
 <h1>
     Register User
 </h1>

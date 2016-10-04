@@ -1,56 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="dataSourceStorage">
   <data-source name="MySQL - simple_schema@localhost" uuid="132b2f56-575c-44ac-bdad-031dc1076821">
-    <database-info product="MySQL" version="5.7.13-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
-      <extra-name-characters>#@</extra-name-characters>
-      <identifier-quote-string>`</identifier-quote-string>
-    </database-info>
-    <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
-    <database-model serializer="dbm" rdbms="MYSQL" format-version="2.6">
-      <schema id="1" name="simple_schema">
-        <visible>1</visible>
-      </schema>
-      <schema id="2" name="information_schema"/>
-      <schema id="3" name="mysql"/>
-      <schema id="4" name="performance_schema"/>
-      <schema id="5" name="sakila"/>
-      <schema id="6" name="sys"/>
-      <schema id="7" name="test_schema"/>
-      <schema id="8" name="world"/>
-      <table id="9" parent="1" name="user_account"/>
-      <column id="10" parent="9" name="id">
-        <mandatory>1</mandatory>
-        <data-type>int(11) unsigned|0</data-type>
-        <sequence-identity>1</sequence-identity>
-      </column>
-      <column id="11" parent="9" name="user_name">
-        <mandatory>1</mandatory>
-        <data-type>varchar(20)|0</data-type>
-      </column>
-      <column id="12" parent="9" name="password">
-        <mandatory>1</mandatory>
-        <data-type>varchar(45)|0</data-type>
-      </column>
-      <column id="13" parent="9" name="money">
-        <mandatory>1</mandatory>
-        <data-type>float|0</data-type>
-      </column>
-      <column id="14" parent="9" name="country">
-        <data-type>varchar(20)|0</data-type>
-      </column>
-      <index id="15" parent="9" name="user_name_UNIQUE">
-        <columns>user_name</columns>
-        <desc-columns></desc-columns>
-        <unique>1</unique>
-      </index>
-      <key id="16" parent="9" name="PRIMARY">
-        <columns>id</columns>
-        <primary>1</primary>
-      </key>
-      <key id="17" parent="9" name="user_name_UNIQUE">
-        <columns>user_name</columns>
-        <underlying-index>user_name_UNIQUE</underlying-index>
-      </key>
-    </database-model>
+    <database-info product="" version="" jdbc-version="" driver-name="" driver-version=""/>
   </data-source>
 </component>

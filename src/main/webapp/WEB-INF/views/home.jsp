@@ -15,6 +15,7 @@
 ${user.userName}
 ${user.password}
 
+<jsp:include page="_footer.jsp"/>
 
 </body>
 </html>
