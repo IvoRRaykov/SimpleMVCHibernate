@@ -67,7 +67,7 @@ public class Product {
     }
 
     public String toString() {
-        return "code=" + code + ", name=" + name + ", price=" + price;
+        return "code=" + code + ", name=" + name + ", price=" + price + "User Name= " + userAccount.getUserName();
     }
 
 

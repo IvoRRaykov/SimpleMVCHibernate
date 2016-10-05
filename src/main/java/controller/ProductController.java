@@ -11,13 +11,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import service.ProductService;
+import service.UserService;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 public class ProductController {
 
     private ProductService productService;
+    private UserService userService;
 
     @Autowired(required = true)
     @Qualifier(value = "productService")
@@ -25,9 +28,14 @@ public class ProductController {
         this.productService = ps;
     }
 
+    @Autowired(required = true)
+    @Qualifier(value = "userService")
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 
     @RequestMapping(value = {"user/manageProducts", "admin/manageProducts"}, method = RequestMethod.GET)
-    public String listProducts(Model model, HttpSession session) {
+    public String manageProducts(Model model, HttpSession session) {
 
         UserAccount user = (UserAccount) session.getAttribute("loggedUser");
 
@@ -41,18 +49,15 @@ public class ProductController {
 
         return "manageProducts";
     }
-//zashto ne stava v service
-    @RequestMapping(value = "/product/update", method = RequestMethod.POST)
-    public String updateProduct(@ModelAttribute("product") Product product, HttpSession session, Model model) {
+
+    //zashto ne stava v service
+    @RequestMapping(value = "/product/update/{userId}", method = RequestMethod.POST)
+    public String updateProduct(@ModelAttribute("product") Product product,@PathVariable("userId") int userId, Model model, HttpSession session) {
         model.addAttribute("productToCreate", new Product());
 
-        UserAccount owner = this.productService.getProductByCode(product.getCode()).getUserAccount();
-        product.setUserAccount(owner);
+        product.setUserAccount(this.userService.getUserById(userId));
 
-        this.productService.updateProduct(product,session);
-
-        owner = this.productService.getProductByCode(product.getCode()).getUserAccount();
-        session.setAttribute("loggedUser", owner);
+        session.setAttribute("loggedUser", this.productService.updateProduct(product));
 
         return "redirect:/user/manageProducts";
     }
@@ -83,7 +88,7 @@ public class ProductController {
 
 
     @RequestMapping(value = {"/product/create"}, method = RequestMethod.POST)
-    public String createProduct(@ModelAttribute("productToCreate") Product product,Model model,  HttpSession session){
+    public String createProduct(@ModelAttribute("productToCreate") Product product, Model model, HttpSession session) {
         UserAccount user = (UserAccount) session.getAttribute("loggedUser");
         product.setUserAccount(user);
 
@@ -93,4 +98,19 @@ public class ProductController {
         return "redirect:/user/manageProducts";
     }
 
+    @RequestMapping(value = {"/marketplace"}, method = RequestMethod.GET)
+    public String marketplace(Model model, HttpSession session) {
+
+        model.addAttribute("productList", this.productService.findProductsForSale());
+
+        return "marketplace";
+    }
+
+    @RequestMapping(value = {"/buyProduct/{code}"}, method = RequestMethod.GET)
+    public String buyProduct(@PathVariable("code") String code, HttpSession session) {
+
+
+        session.setAttribute("loggedUser", this.productService.buyProduct(code, (UserAccount)session.getAttribute("loggedUser")));
+        return "redirect:/user/manageProducts";
+    }
 }

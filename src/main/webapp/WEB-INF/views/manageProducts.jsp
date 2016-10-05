@@ -61,8 +61,8 @@
 
                 <h1>Update Product</h1>
 
-                <c:url var="addAction" value="/product/update"/>
-                <form:form action="${addAction}" commandName="product">
+                <c:url var="actionUpdate" value="/product/update/${product.userAccount.id}"/>
+                <form:form action="${actionUpdate}" commandName="product">
                     <table>
 
                         <tr>
@@ -116,79 +116,79 @@
                                 <form:input path="forSale"/>
                             </td>
                         </tr>
-
                         <tr>
                             <td colspan="2">
                                 <input type="submit"
                                        value="<spring:message text="Edit Product"/>"/>
                             </td>
                         </tr>
+
                     </table>
 
                 </form:form>
             </c:if>
         </td>
         <td>
+            <c:if test="${not empty loggedUser.userName}">
             <h1>Create Product</h1>
+                <c:url var="addAction" value="/product/create"/>
+                <form:form action="${addAction}" commandName="productToCreate">
+                    <table>
 
-            <c:url var="addAction" value="/product/create"/>
-            <form:form action="${addAction}" commandName="productToCreate">
-                <table>
-
-                    <tr>
-                        <td>
-                            <form:label path="code">
-                                <spring:message text="Code"/>
-                            </form:label>
-                        </td>
-                        <td>
-                            <form:input path="code"/>
-                        </td>
+                        <tr>
+                            <td>
+                                <form:label path="code">
+                                    <spring:message text="Code"/>
+                                </form:label>
+                            </td>
+                            <td>
+                                <form:input path="code"/>
+                            </td>
 
 
-                    </tr>
-                    <tr>
-                        <td>
-                            <form:label path="name">
-                                <spring:message text="Product Name"/>
-                            </form:label>
-                        </td>
-                        <td>
-                            <form:input path="name"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <form:label path="price">
-                                <spring:message text="Price"/>
-                            </form:label>
-                        </td>
-                        <td>
-                            <form:input path="price"/>
-                        </td>
-                    </tr>
+                        </tr>
+                        <tr>
+                            <td>
+                                <form:label path="name">
+                                    <spring:message text="Product Name"/>
+                                </form:label>
+                            </td>
+                            <td>
+                                <form:input path="name"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <form:label path="price">
+                                    <spring:message text="Price"/>
+                                </form:label>
+                            </td>
+                            <td>
+                                <form:input path="price"/>
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td>
-                            <form:label path="forSale">
-                                <spring:message text="For Sale "/>
-                            </form:label>
-                        </td>
-                        <td>
-                            <form:input path="forSale"/>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                <form:label path="forSale">
+                                    <spring:message text="For Sale "/>
+                                </form:label>
+                            </td>
+                            <td>
+                                <form:input path="forSale"/>
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td colspan="2">
-                            <input type="submit"
-                                   value="<spring:message text="Create Product"/>"/>
-                        </td>
-                    </tr>
-                </table>
+                        <tr>
+                            <td colspan="2">
+                                <input type="submit"
+                                       value="<spring:message text="Create Product"/>"/>
+                            </td>
+                        </tr>
+                    </table>
 
-            </form:form>
-
+                </form:form>
+            </c:if>
         </td>
     </tr>
 </table>

@@ -3,6 +3,7 @@ package dao;
 import model.Product;
 
 import java.util.List;
+import java.util.Set;
 
 
 public interface ProductDAO {
@@ -12,5 +13,5 @@ public interface ProductDAO {
     public List<Product> listProduct();
     public Product getProductByCode(String code);
     public void removeProduct(String code);
-
+    public List<Product> findProductsForSale();
 }

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class ProductDAOImpl implements ProductDAO{
@@ -63,5 +64,16 @@ public class ProductDAOImpl implements ProductDAO{
             session.delete(product);
         }
         logger.info("Product deleted successfully, Product details=" + product);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Product> findProductsForSale() {
+        Session session = this.sessionFactory.getCurrentSession();
+        List<Product> productList = session.createQuery("from Product where forSale = true").list();
+        for (Product prduct : productList) {
+            logger.info("Product List::" + prduct);
+        }
+        return productList;
     }
 }

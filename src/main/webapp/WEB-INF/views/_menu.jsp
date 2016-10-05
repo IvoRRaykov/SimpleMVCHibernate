@@ -15,6 +15,11 @@
         <a href="${pageContext.request.contextPath}/user/userInfo">My Account Info</a>
     </c:if>
 
+    <c:if test="${!empty loggedUser.userName}">
+        |
+        <a href="${pageContext.request.contextPath}/marketplace">Marketplace</a>
+    </c:if>
+
     <c:if test="${empty loggedUser.userName}">
         |
         <a href="${pageContext.request.contextPath}/user/login">Login</a>
