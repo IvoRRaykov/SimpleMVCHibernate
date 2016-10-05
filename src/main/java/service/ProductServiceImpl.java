@@ -2,9 +2,11 @@ package service;
 
 import dao.ProductDAO;
 import model.Product;
+import model.UserAccount;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -30,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public void updateProduct(Product product) {
+    public void updateProduct(Product product, HttpSession session) {
         this.productDAO.updateProduct(product);
     }
 

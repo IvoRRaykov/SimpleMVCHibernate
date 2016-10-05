@@ -5,20 +5,61 @@
 <head>
     <title>User Page</title>
     <style type="text/css">
-        .tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}
-        .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}
-        .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}
-        .tg .tg-4eph{background-color:#f9f9f9}
+        .tg {
+            border-collapse: collapse;
+            border-spacing: 0;
+            border-color: #ccc;
+        }
+
+        .tg td {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            padding: 10px 5px;
+            border-style: solid;
+            border-width: 1px;
+            overflow: hidden;
+            word-break: normal;
+            border-color: #ccc;
+            color: #333;
+            background-color: #fff;
+        }
+
+        .tg th {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: normal;
+            padding: 10px 5px;
+            border-style: solid;
+            border-width: 1px;
+            overflow: hidden;
+            word-break: normal;
+            border-color: #ccc;
+            color: #333;
+            background-color: #f0f0f0;
+        }
+
+        .tg .tg-4eph {
+            background-color: #f9f9f9
+        }
     </style>
 </head>
 <body>
+<jsp:include page="_adminHeader.jsp"/>
 <jsp:include page="_adminMenu.jsp"/>
 
-<h1>
-    Register User
-</h1>
 
-<c:url var="addAction" value="/admin/register" />
+<c:if test="${empty user.userName}">
+    <h1>
+        Register User
+    </h1>
+</c:if>
+<c:if test="${!empty user.userName}">
+    <h1>
+        Update User
+    </h1>
+</c:if>
+
+<c:url var="addAction" value="/admin/registerUser"/>
 
 <form:form action="${addAction}" commandName="user">
     <table>
@@ -30,8 +71,8 @@
                     </form:label>
                 </td>
                 <td>
-                    <form:input path="id" readonly="true" size="8"  disabled="true" />
-                    <form:hidden path="id" />
+                    <form:input path="id" readonly="true" size="8" disabled="true"/>
+                    <form:hidden path="id"/>
                 </td>
             </tr>
         </c:if>
@@ -42,7 +83,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="userName" />
+                <form:input path="userName"/>
             </td>
         </tr>
         <tr>
@@ -52,7 +93,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="password" />
+                <form:input path="password"/>
             </td>
         </tr>
 
@@ -63,7 +104,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="money" />
+                <form:input path="money"/>
             </td>
         </tr>
 
@@ -74,7 +115,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="gender" />
+                <form:input path="gender"/>
             </td>
         </tr>
 
@@ -82,11 +123,11 @@
             <td colspan="2">
                 <c:if test="${!empty user.userName}">
                     <input type="submit"
-                           value="<spring:message text="Edit User"/>" />
+                           value="<spring:message text="Edit User"/>"/>
                 </c:if>
                 <c:if test="${empty user.userName}">
                     <input type="submit"
-                           value="<spring:message text="Register User"/>" />
+                           value="<spring:message text="Register User"/>"/>
                 </c:if>
             </td>
         </tr>
@@ -115,11 +156,14 @@
                 <td>${user.password}</td>
                 <td>${user.money}</td>
                 <td>${user.gender}</td>
-                <td><a href="<c:url value='/admin/editUser/${user.id}' />" >Edit</a></td>
-                <td><a href="<c:url value='/admin/removeUser/${user.id}' />" >Delete</a></td>
+                <td><a href="<c:url value='/admin/editUser/${user.id}' />">Edit</a></td>
+                <td><a href="<c:url value='/admin/removeUser/${user.id}' />">Delete</a></td>
             </tr>
         </c:forEach>
     </table>
 </c:if>
+
+<jsp:include page="_adminFooter.jsp"/>
+
 </body>
 </html>

@@ -72,11 +72,19 @@ public class UserController {
         }
     }
 
-
     @RequestMapping( value = {"/user/userInfo", "/userInfo"})
     public String loginUser(Model model, HttpSession session){
-        model.addAttribute("user", session.getAttribute("loggedUser"));
+        UserAccount user = (UserAccount) session.getAttribute("loggedUser");
+        model.addAttribute("user", user );
+        model.addAttribute("productList", user.getProducts());
         return "userInfo";
     }
+
+    @RequestMapping( value = {"/user/logout", "/logout"})
+    public String logoutUser( HttpSession session){
+        session.removeAttribute("loggedUser");
+        return "home";
+    }
+
 
 }

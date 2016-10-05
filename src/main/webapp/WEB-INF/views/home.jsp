@@ -7,6 +7,7 @@
 
 </head>
 <body>
+<jsp:include page="_header.jsp"/>
 <jsp:include page="_menu.jsp"/>
 <h1>
     Home
@@ -15,7 +16,7 @@
 ${user.userName}
 ${user.password}
 
-<jsp:include page="_footer.jsp"/>
+
 
 </body>
 </html>

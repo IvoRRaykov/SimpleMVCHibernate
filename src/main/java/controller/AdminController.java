@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import service.UserService;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class AdminController {
 
@@ -23,42 +25,46 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/users", method = RequestMethod.GET)
-    public String adminListUsers(Model model) {
+    public String adminListUsers(Model model, HttpSession session) {
+        session.removeAttribute("loggedUser");
         model.addAttribute("user", new UserAccount());
         model.addAttribute("listUsers", this.userService.listUsers());
-        return "adminUsers";
+        return "adminManageUsers";
     }
 
-    //For add and update user both
-    @RequestMapping(value = {"/admin/register"}, method = RequestMethod.POST)
-    public String adminRegisterUser(@ModelAttribute("user") UserAccount user){
+    @RequestMapping(value = {"/admin/registerUser"}, method = RequestMethod.POST)
+    public String adminRegisterUser(@ModelAttribute("user") UserAccount user, HttpSession session){
+        session.removeAttribute("loggedUser");
 
         if(user.getId() == 0){
-            //new user, add it
             this.userService.registerUser(user);
         }else{
-            //existing user, call update
             this.userService.updateUser(user);
         }
         return "redirect:/admin/users";
     }
 
     @RequestMapping("/admin/removeUser/{id}")
-    public String adminRemoveUser(@PathVariable("id") int id){
+    public String adminRemoveUser(@PathVariable("id") int id, HttpSession session){
+        session.removeAttribute("loggedUser");
 
         this.userService.removeUser(id);
         return "redirect:/admin/users";
     }
 
     @RequestMapping("/admin/editUser/{id}")
-    public String adminEditUser(@PathVariable("id") int id, Model model){
+    public String adminEditUser(@PathVariable("id") int id, Model model, HttpSession session){
+        session.removeAttribute("loggedUser");
+
         model.addAttribute("user", this.userService.getUserById(id));
         model.addAttribute("listUsers", this.userService.listUsers());
-        return "adminUsers";
+        return "adminManageUsers";
     }
 
     @RequestMapping("/admin/home")
-    public String adminHome(){
+    public String adminHome(HttpSession session){
+        session.removeAttribute("loggedUser");
+
         return "adminHome";
     }
 }

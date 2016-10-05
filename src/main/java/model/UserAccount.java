@@ -28,7 +28,7 @@ public class UserAccount {
     @Column(name = "money")
     private float money;
 
-    @OneToMany(mappedBy = "userAccount" , cascade=CascadeType.REMOVE)
+    @OneToMany(mappedBy = "userAccount" , fetch = FetchType.EAGER, cascade=CascadeType.REFRESH)
     private Set<Product> products = new HashSet<Product>(0);
 
     public float getMoney() {

@@ -7,12 +7,18 @@
     <title>User Info</title>
 </head>
 <body>
+<jsp:include page="_header.jsp"/>
 <jsp:include page="_menu.jsp"/>
+<br>
 USER INFO
 
-${user.userName}
-${user.gender}
-${user.money}
+<h1>${user.userName}</h1>
+<h1>${user.gender}</h1>
+<h1>${user.money}</h1>
+
+
+<br>
+<a href="${pageContext.request.contextPath}manageProducts">Manage My Products</a>
 
 
 <jsp:include page="_footer.jsp"/>
