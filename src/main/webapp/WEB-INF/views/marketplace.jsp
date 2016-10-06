@@ -22,19 +22,23 @@
             <th width="120">Product Price</th>
             <th width="120">Product Owner</th>
 
-            <th width="60">Buy</th>
+            <th width="60"></th>
         </tr>
         <c:forEach items="${productList}" var="product">
             <tr>
                 <td>${product.code}</td>
                 <td>${product.name}</td>
                 <td>
-                    <c:if test="${product.price <= loggedUser.money}">
-                        ${product.price}
+                    <c:if test="${product.price <= loggedUser.money }">
+                        <p>   ${product.price} <c:if test="${product.userAccount.userName != loggedUser.userName}"><a
+                                style="color: #19ac0a;"><sup> +<fmt:formatNumber
+                                value="${loggedUser.money-product.price - 0.0005}" maxFractionDigits="2"/></sup></a>
+                        </c:if></p>
                     </c:if>
                     <c:if test="${product.price > loggedUser.money}">
 
-                        <p style="color: #cf0007;">${product.price}<sup>    -<fmt:formatNumber value="${product.price-loggedUser.money - 0.0005}" maxFractionDigits="2"/></sup></p>
+                        <p style="color: #cf0007;">${product.price}<sup> -<fmt:formatNumber
+                                value="${product.price-loggedUser.money - 0.0005}" maxFractionDigits="2"/></sup></p>
                     </c:if>
                 </td>
                 <td>${product.userAccount.userName}</td>
