@@ -17,7 +17,7 @@
 </h1>
 
 <c:url var="addAction" value="/user/doLogin"/>
-<p style="color: red; font-weight: bold ">${errorString}</p>
+<p style="color: red; font-weight: bold ">${confirmedMessage}</p>
 <form:form action="${addAction}" commandName="user">
     <table>
         <tr>
