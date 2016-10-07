@@ -13,13 +13,14 @@
 USER INFO
 
 <h1>${user.userName}</h1>
-<h1>${user.gender}</h1>
-<h1>${user.money}</h1>
+<h2>${user.email}</h2>
+<h4>${user.gender}</h4>
+<h3>${user.money}</h3>
 
 
 <br>
 <a href="${pageContext.request.contextPath}manageProducts">Manage My Products</a>
-
+<br>
 
 <jsp:include page="_footer.jsp"/>
 

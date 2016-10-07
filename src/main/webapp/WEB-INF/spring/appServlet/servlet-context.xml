@@ -82,4 +82,6 @@
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
     </beans:bean>
 
+
+
 </beans:beans>

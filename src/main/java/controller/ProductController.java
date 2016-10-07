@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +15,7 @@ import service.ProductService;
 import service.UserService;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
+import javax.validation.Valid;
 
 @Controller
 public class ProductController {
@@ -52,8 +53,15 @@ public class ProductController {
 
     //zashto ne stava v service
     @RequestMapping(value = "/product/update/{userId}", method = RequestMethod.POST)
-    public String updateProduct(@ModelAttribute("product") Product product,@PathVariable("userId") int userId, Model model, HttpSession session) {
+    public String updateProduct(@Valid @ModelAttribute("product") Product product, BindingResult result, @PathVariable("userId") int userId, Model model, HttpSession session) {
         model.addAttribute("productToCreate", new Product());
+
+        if (result.hasErrors()) {
+            fillList(session, model);
+
+            return "manageProducts";
+
+        }
 
         product.setUserAccount(this.userService.getUserById(userId));
 
@@ -76,19 +84,18 @@ public class ProductController {
         model.addAttribute("product", this.productService.getProductByCode(code));
         model.addAttribute("productToCreate", new Product());
 
+        fillList(session, model);
 
-        UserAccount user = (UserAccount) session.getAttribute("loggedUser");
-        if (user == null) {
-            model.addAttribute("listProducts", this.productService.listProduct());
-        } else {
-            model.addAttribute("listProducts", user.getProducts());
-        }
         return "manageProducts";
     }
 
 
     @RequestMapping(value = {"/product/create"}, method = RequestMethod.POST)
-    public String createProduct(@ModelAttribute("productToCreate") Product product, Model model, HttpSession session) {
+    public String createProduct(@Valid @ModelAttribute("productToCreate") Product product, BindingResult result, Model model, HttpSession session) {
+        if(result.hasErrors()){
+            fillList(session, model);
+            return "manageProducts";
+        }
         UserAccount user = (UserAccount) session.getAttribute("loggedUser");
         product.setUserAccount(user);
 
@@ -99,7 +106,7 @@ public class ProductController {
     }
 
     @RequestMapping(value = {"/marketplace"}, method = RequestMethod.GET)
-    public String marketplace(Model model, HttpSession session) {
+    public String marketplace(Model model) {
 
         model.addAttribute("productList", this.productService.findProductsForSale());
 
@@ -110,7 +117,16 @@ public class ProductController {
     public String buyProduct(@PathVariable("code") String code, HttpSession session) {
 
 
-        session.setAttribute("loggedUser", this.productService.buyProduct(code, (UserAccount)session.getAttribute("loggedUser")));
+        session.setAttribute("loggedUser", this.productService.buyProduct(code, (UserAccount) session.getAttribute("loggedUser")));
         return "redirect:/user/manageProducts";
+    }
+
+    private void fillList(HttpSession session, Model model){
+        UserAccount user = (UserAccount) session.getAttribute("loggedUser");
+        if (user == null) {
+            model.addAttribute("listProducts", this.productService.listProduct());
+        } else {
+            model.addAttribute("listProducts", user.getProducts());
+        }
     }
 }

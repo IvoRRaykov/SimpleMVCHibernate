@@ -3,19 +3,24 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <html>
 <head>
-    <title>Product Page</title>
+    <style>
+        .error {
+            color: red; font-weight: bold;
+        }
+    </style>
+    <title>Edit User</title>
 
 </head>
 <body>
 <jsp:include page="_header.jsp"/>
 <jsp:include page="_menu.jsp"/>
 <h1>
-    Login
+    Edit User
 </h1>
 
 <c:url var="addAction" value="/user/doEditUser"/>
 
-<form:form action="${addAction}" commandName="user">
+<form:form method="post" action="${addAction}" commandName="user">
     <table>
         <c:if test="${!empty user.userName}">
             <tr>
@@ -39,6 +44,9 @@
             <td>
                 <form:input path="userName"/>
             </td>
+            <td>
+                <form:errors path="userName" cssClass="error"/>
+            </td>
         </tr>
         <tr>
             <td>
@@ -48,6 +56,22 @@
             </td>
             <td>
                 <form:input path="password"/>
+            </td>
+            <td>
+                <form:errors path="password" cssClass="error"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <form:label path="email">
+                    <spring:message text="Email"/>
+                </form:label>
+            </td>
+            <td>
+                <form:input path="email"/>
+            </td>
+            <td>
+                <form:errors path="email" cssClass="error"/>
             </td>
         </tr>
         <tr>
@@ -59,6 +83,9 @@
             <td>
                 <form:input path="money" />
             </td>
+            <td>
+                <form:errors path="money" cssClass="error"/>
+            </td>
         </tr>
 
         <tr>
@@ -69,6 +96,9 @@
             </td>
             <td>
                 <form:input path="gender" />
+            </td>
+            <td>
+                <form:errors path="gender" cssClass="error"/>
             </td>
         </tr>
 

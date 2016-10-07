@@ -3,6 +3,9 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <html>
 <head>
+    <style>
+
+    </style>
     <title>Log in</title>
 
 </head>
@@ -14,7 +17,7 @@
 </h1>
 
 <c:url var="addAction" value="/user/doLogin"/>
-
+<p style="color: red; font-weight: bold ">${errorString}</p>
 <form:form action="${addAction}" commandName="user">
     <table>
         <tr>

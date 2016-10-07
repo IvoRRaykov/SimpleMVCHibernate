@@ -4,9 +4,11 @@
 
 <html>
 <head>
-    <title>User Page</title>
+    <title>Register User</title>
     <style type="text/css">
-
+        .error {
+            color: red; font-weight: bold;
+        }
 
     </style>
 </head>
@@ -31,6 +33,9 @@
             <td>
                 <form:input path="userName"/>
             </td>
+            <td>
+                <form:errors path="userName" cssClass="error"/>
+            </td>
         </tr>
         <tr>
             <td>
@@ -41,8 +46,23 @@
             <td>
                 <form:input path="password"/>
             </td>
+            <td>
+                <form:errors path="password" cssClass="error"/>
+            </td>
         </tr>
-
+        <tr>
+            <td>
+                <form:label path="email">
+                    <spring:message text="Email"/>
+                </form:label>
+            </td>
+            <td>
+                <form:input path="email"/>
+            </td>
+            <td>
+                <form:errors path="email" cssClass="error"/>
+            </td>
+        </tr>
         <tr>
             <td>
                 <form:label path="money">
@@ -51,6 +71,9 @@
             </td>
             <td>
                 <form:input path="money"/>
+            </td>
+            <td>
+                <form:errors path="money" cssClass="error"/>
             </td>
         </tr>
 
@@ -62,6 +85,9 @@
             </td>
             <td>
                 <form:input path="gender"/>
+            </td>
+            <td>
+                <form:errors path="gender" cssClass="error"/>
             </td>
         </tr>
 

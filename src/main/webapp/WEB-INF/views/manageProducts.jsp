@@ -5,6 +5,10 @@
 <head>
     <title>Product Page</title>
     <style type="text/css">
+        .error {
+            font-weight: bold;
+            color: #ff0000;
+        }
         .tg {
             border-collapse: collapse;
             border-spacing: 0;
@@ -62,7 +66,7 @@
                 <h1>Update Product</h1>
 
                 <c:url var="actionUpdate" value="/product/update/${product.userAccount.id}"/>
-                <form:form action="${actionUpdate}" commandName="product">
+                <form:form method="post" action="${actionUpdate}" commandName="product">
                     <table>
 
                         <tr>
@@ -82,6 +86,9 @@
                                 <td>
                                     <form:input path="code"/>
                                 </td>
+                                <td>
+                                    <form:errors path="code" cssClass="error"/>
+                                </td>
                             </c:if>
 
                         </tr>
@@ -94,6 +101,9 @@
                             <td>
                                 <form:input path="name"/>
                             </td>
+                            <td>
+                                <form:errors path="name" cssClass="error"/>
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -103,6 +113,8 @@
                             </td>
                             <td>
                                 <form:input path="price"/>
+                                <form:errors path="price" cssClass="error"/>
+
                             </td>
                         </tr>
 
@@ -130,11 +142,10 @@
         </td>
         <td>
             <c:if test="${not empty loggedUser.userName}">
-            <h1>Create Product</h1>
+                <h1>Create Product</h1>
                 <c:url var="addAction" value="/product/create"/>
                 <form:form action="${addAction}" commandName="productToCreate">
                     <table>
-
                         <tr>
                             <td>
                                 <form:label path="code">
@@ -144,8 +155,9 @@
                             <td>
                                 <form:input path="code"/>
                             </td>
-
-
+                            <td>
+                                <form:errors path="code" cssClass="error"/>
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -156,6 +168,9 @@
                             <td>
                                 <form:input path="name"/>
                             </td>
+                            <td>
+                                <form:errors path="name" cssClass="error"/>
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -165,6 +180,10 @@
                             </td>
                             <td>
                                 <form:input path="price"/>
+                                <form:errors path="price" cssClass="error"/>
+                            </td>
+                            <td>
+                                <form:errors path="price" cssClass="error"/>
                             </td>
                         </tr>
 
