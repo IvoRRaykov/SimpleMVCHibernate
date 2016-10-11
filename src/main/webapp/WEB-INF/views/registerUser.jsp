@@ -18,9 +18,9 @@
 <h1>
     Register User
 </h1>
+<a style="color: red; font-weight: bold;">${errorString}</a>
 
 <c:url var="addAction" value="/user/doRegister"/>
-
 <form:form action="${addAction}" commandName="user">
     <table>
 

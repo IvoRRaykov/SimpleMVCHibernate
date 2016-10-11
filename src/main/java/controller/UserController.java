@@ -1,17 +1,15 @@
 package controller;
 
 
+import com.sun.deploy.net.HttpRequest;
 import model.UserAccount;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.*;
 import service.UserService;
 
 import javax.servlet.http.HttpSession;
@@ -27,6 +25,26 @@ public class UserController {
     @Qualifier(value = "userService")
     public void setUserService(UserService ps) {
         this.userService = ps;
+    }
+
+    @RequestMapping(value = {"/user/register", "/register"})
+    public String registerUser(Model model) {
+        model.addAttribute("user", new UserAccount());
+        return "registerUser";
+    }
+
+    @RequestMapping(value = {"/user/doRegister"}, method = RequestMethod.POST)
+    public String doRegisterUser(@Valid @ModelAttribute("user") UserAccount user, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "registerUser";
+        }
+        try {
+            this.userService.registerUser(user);
+        } catch (ConstraintViolationException e) {
+            model.addAttribute("errorString", "Account with this username or email already exists!");
+            return "registerUser";
+        }
+        return "redirect:/user/login";
     }
 
     @RequestMapping("/user/editUser")
@@ -52,22 +70,6 @@ public class UserController {
         return "userInfo";
     }
 
-    @RequestMapping(value = {"/user/register", "/register"})
-    public String registerUser(Model model) {
-        model.addAttribute("user", new UserAccount());
-        return "registerUser";
-    }
-
-    @RequestMapping(value = {"/user/doRegister"}, method = RequestMethod.POST)
-    public String doRegisterUser(@Valid @ModelAttribute("user") UserAccount user, BindingResult result) {
-        if (result.hasErrors()) {
-            return "registerUser";
-        }
-
-        this.userService.registerUser(user);
-        return "redirect:/user/login";
-    }
-
 
     @RequestMapping(value = {"/user/login", "/login"})
     public String loginUser(Model model) {
@@ -80,11 +82,16 @@ public class UserController {
     @RequestMapping(value = {"/user/doLogin"})
     public String doLoginUser(@ModelAttribute("user") UserAccount user, HttpSession session, Model model) {
 
-        UserAccount userAccount = this.userService.getUserByUserNameAndPassword(user.getUserName(), user.getPassword());
+        UserAccount userAccount = this.userService.loginUser(user.getUserName(), user.getPassword());
         if (userAccount == null) {
-            model.addAttribute("errorString", "UserName or password are wrong!");
+            model.addAttribute("errorString", "UserName or password are wrong");
             return "loginUser";
         } else {
+            if(!userAccount.getUserConfirmation().isUserEnabled()){
+                model.addAttribute("confirmedMessage", "This user is not confirmed!");
+                return "loginUser";
+            }
+
             session.setAttribute("loggedUser", userAccount);
             model.addAttribute("user", userAccount);
             return "redirect:/user/userInfo";
@@ -102,6 +109,15 @@ public class UserController {
     public String logoutUser(HttpSession session) {
         session.removeAttribute("loggedUser");
         return "home";
+    }
+
+    @RequestMapping(value = {"/user/confirm/{code}"})
+    public String confirmUser(@PathVariable(value = "code") String code, Model model){
+        model.addAttribute("user", new UserAccount());
+        model.addAttribute("confirmedMessage", "You have successfully confirmed your email!");
+        userService.updateUserConfirmation(code);
+
+        return "loginUser";
     }
 
 

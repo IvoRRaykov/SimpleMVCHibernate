@@ -1,26 +1,54 @@
 package service;
 
-import java.util.List;
-
+import dao.ConfirmationDAO;
 import dao.UserDAO;
 import model.UserAccount;
+import model.UserConfirmation;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+import java.io.UnsupportedEncodingException;
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private UserDAO userDAO;
+    private ConfirmationDAO confirmationDAO;
 
     public void setUserDAO(UserDAO userDAO) {
         this.userDAO = userDAO;
     }
 
+    public void setConfirmationDAO(ConfirmationDAO confirmationDAO) {
+        this.confirmationDAO = confirmationDAO;
+    }
+
     @Override
     @Transactional
-    public void registerUser(UserAccount user) {
+    public void registerUser(UserAccount user) throws ConstraintViolationException {
+        UserConfirmation confirmation = new UserConfirmation();
+        confirmation.setUserAccountRef(user);
+        confirmation.setConfirmationCode(UUID.randomUUID().toString());
+
         this.userDAO.registerUser(user);
+
+        this.sendEmail(confirmation.getConfirmationCode(), user.getEmail());
+
+        this.confirmationDAO.createConfirmation(confirmation);
     }
 
     @Override
@@ -49,7 +77,57 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserAccount getUserByUserNameAndPassword(String userName, String password) {
-        return this.userDAO.getUserByUserNameAndPassword(userName,password);
+    public void updateUserConfirmation(String code) {
+        UserConfirmation confirmation = this.confirmationDAO.getConfirmationByCode(code);
+        confirmation.setUserEnabled(true);
+
+        this.confirmationDAO.updateConfirmation(confirmation);
+
+    }
+
+    @Override
+    @Transactional
+    public UserAccount loginUser(String userName, String password) {
+        UserAccount user = this.userDAO.getUserByUserNameAndPassword(userName, password);
+        if (user == null) {
+            return null;
+        }
+
+        UserConfirmation userConfirmation = this.confirmationDAO.getConfirmationByUser(user);
+
+        user.setUserConfirmation(userConfirmation);
+        return user;
+    }
+
+    private void sendEmail(String text, String email)  {
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.socketFactory.class",
+                "javax.net.ssl.SSLSocketFactory");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.port", "465");
+
+        Session session = Session.getDefaultInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication("ivo.raykow@gmail.com","ivoqweasd");
+                    }
+                });
+
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("SpringMVCHibernateApp@localhost.com"));
+            message.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse(email));
+            message.setSubject("Account confirmation");
+            message.setText("Click the link to confirm your registration:   http://localhost:8080/user/confirm/" + text);
+
+            Transport.send(message);
+
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

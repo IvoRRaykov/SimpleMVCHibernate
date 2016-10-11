@@ -44,6 +44,7 @@
             <beans:list>
                 <beans:value>model.UserAccount</beans:value>
                 <beans:value>model.Product</beans:value>
+                <beans:value>model.UserConfirmation</beans:value>
             </beans:list>
         </beans:property>
         <beans:property name="hibernateProperties">
@@ -59,12 +60,18 @@
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
     </beans:bean>
 
+    <beans:bean id="confirmationDAO" class="dao.ConfirmationDAOImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
+    </beans:bean>
+
     <beans:bean id="productDAO" class="dao.ProductDAOImpl">
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
     </beans:bean>
 
     <beans:bean id="userService" class="service.UserServiceImpl">
         <beans:property name="userDAO" ref="userDAO"/>
+        <beans:property name="confirmationDAO" ref="confirmationDAO"/>
+
     </beans:bean>
 
     <beans:bean id="productService" class="service.ProductServiceImpl">

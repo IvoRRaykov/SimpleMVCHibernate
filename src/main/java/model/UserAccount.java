@@ -17,7 +17,7 @@ public class UserAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "user_name")
+    @Column(name = "user_name", unique = true)
     @Pattern(regexp = "^[a-zA-Z0-9]{5,}$", message = "Username should contain at least 5 letters or digits")
     @NotEmpty(message = "UserName is required")
     private String userName;
@@ -26,9 +26,6 @@ public class UserAccount {
     @Pattern(regexp = "^\\S+@\\S+$", message = "Email is not in a correct form")
     @NotEmpty(message = "Email is required")
     private String email;
-
-    @Column(name = "confirmed")
-    private boolean confirmed;
 
     @NotEmpty(message = "Gender is required")
     @Column(name = "gender")
@@ -45,6 +42,9 @@ public class UserAccount {
 
     @OneToMany(mappedBy = "userAccount", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private Set<Product> products = new HashSet<Product>(0);
+
+    @OneToOne(mappedBy = "userAccountRef", fetch = FetchType.LAZY , cascade = CascadeType.REFRESH)
+    private UserConfirmation userConfirmation;
 
     public float getMoney() {
         return money;
@@ -104,12 +104,12 @@ public class UserAccount {
         this.email = email;
     }
 
-    public boolean isConfirmed() {
-        return confirmed;
+    public UserConfirmation getUserConfirmation() {
+        return userConfirmation;
     }
 
-    public void setConfirmed(boolean confirmed) {
-        this.confirmed = confirmed;
+    public void setUserConfirmation(UserConfirmation userConfirmation) {
+        this.userConfirmation = userConfirmation;
     }
 
     @Override

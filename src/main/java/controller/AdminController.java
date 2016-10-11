@@ -1,6 +1,8 @@
 package controller;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import model.UserAccount;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import service.UserService;
 
 import javax.servlet.http.HttpSession;
+import java.sql.SQLException;
 
 @Controller
 public class AdminController {
@@ -33,11 +36,16 @@ public class AdminController {
     }
 
     @RequestMapping(value = {"/admin/registerUser"}, method = RequestMethod.POST)
-    public String adminRegisterUser(@ModelAttribute("user") UserAccount user, HttpSession session){
+    public String adminRegisterUser(@ModelAttribute("user") UserAccount user, HttpSession session, Model model){
         session.removeAttribute("loggedUser");
 
         if(user.getId() == 0){
-            this.userService.registerUser(user);
+            try {
+                this.userService.registerUser(user);
+            } catch (ConstraintViolationException e) {
+                model.addAttribute("errorString", "Account with this username or email already exists!");
+                return "registerUser";
+            }
         }else{
             this.userService.updateUser(user);
         }

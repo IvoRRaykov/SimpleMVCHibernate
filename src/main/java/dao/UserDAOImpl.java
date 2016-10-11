@@ -1,11 +1,14 @@
 package dao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import model.UserAccount;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -23,8 +26,9 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void registerUser(UserAccount user) {
+    public void registerUser(UserAccount user) throws ConstraintViolationException {
         Session session = this.sessionFactory.getCurrentSession();
+
         session.persist(user);
         logger.info("UserAccount saved successfully, UserAccount Details=" + user);
     }
