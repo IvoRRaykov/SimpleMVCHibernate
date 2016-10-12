@@ -54,6 +54,8 @@
         </c:forEach>
     </table>
 </c:if>
+<br>
+<a href="<c:url value='/downloadList/' />">Download List</a>
 
 
 <jsp:include page="_footer.jsp"/>

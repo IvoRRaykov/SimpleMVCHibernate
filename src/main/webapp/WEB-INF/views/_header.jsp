@@ -6,7 +6,7 @@
 
     Hello ${loggedUserId}
 
-    <c:if test="${loggedUserId != 0 or not empty loggedUserId}">
+    <c:if test="${not empty loggedUserId}">
         <a href="${pageContext.request.contextPath}/user/logout">Log out</a>
     </c:if>
 

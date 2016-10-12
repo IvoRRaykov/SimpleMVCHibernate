@@ -146,7 +146,7 @@
             <c:if test="${not empty loggedUserId}">
                 <h1>Create Product</h1>
                 <c:url var="addAction" value="/product/create"/>
-                <form:form action="${addAction}" commandName="productToCreate">
+                <form:form method="post" action="${addAction}" commandName="productToCreate">
                     <table>
                         <tr>
                             <td>

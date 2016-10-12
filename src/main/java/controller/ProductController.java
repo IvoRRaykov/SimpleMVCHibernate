@@ -2,6 +2,9 @@ package controller;
 
 import model.Product;
 import model.UserAccount;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -14,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import service.ProductService;
 import service.UserService;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -71,7 +76,7 @@ public class ProductController {
         return "redirect:/user/manageProducts";
     }
 
-    @RequestMapping("/product/update/{code}")
+    @RequestMapping(value = {"/product/update/{code}"}, method = RequestMethod.GET)
     public String updateProduct(@PathVariable("code") String code, Model model, HttpSession session) {
 
         model.addAttribute("productToUpdate", this.productService.getProductByCode(code));
@@ -100,7 +105,7 @@ public class ProductController {
         return "redirect:/user/manageProducts";
     }
 
-    @RequestMapping("/product/remove/{code}")
+    @RequestMapping(value = {"/product/remove/{code}"}, method = RequestMethod.GET)
     public String deleteProduct(@PathVariable("code") String code, Model model) {
 
         this.productService.removeProduct(code);
@@ -144,6 +149,16 @@ public class ProductController {
         return "redirect:/user/manageProducts";
     }
 
+    @RequestMapping(value = {"/downloadList"}, method = RequestMethod.GET)
+    public void downloadList(Model model, HttpServletResponse response){
+
+        try {
+            this.productService.downloadList(response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void fillList(HttpSession session, Model model){
         Object loggedUserIdObj =  session.getAttribute("loggedUserId");
 
@@ -154,4 +169,6 @@ public class ProductController {
             model.addAttribute("listProducts", productList);
         }
     }
+
+
 }

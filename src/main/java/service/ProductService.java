@@ -3,7 +3,9 @@ package service;
 import model.Product;
 import model.UserAccount;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -22,4 +24,5 @@ public interface ProductService {
     public List<Product> listProductsForUser(int userId);
     public UserAccount getUserByProductCode(String code);
 
+    void downloadList(HttpServletResponse response) throws IOException;
 }

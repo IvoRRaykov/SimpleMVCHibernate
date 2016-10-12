@@ -4,9 +4,15 @@ import dao.ProductDAO;
 import dao.UserDAO;
 import model.Product;
 import model.UserAccount;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -39,7 +45,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public void updateProduct(Product product) {this.productDAO.updateProduct(product);}
+    public void updateProduct(Product product) {
+        this.productDAO.updateProduct(product);
+    }
 
     @Override
     @Transactional
@@ -89,6 +97,44 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public UserAccount getUserByProductCode(String code) {
         return this.productDAO.getUserByProductCode(code);
+    }
+
+    @Override
+    @Transactional
+    public void downloadList(HttpServletResponse response) throws IOException {
+
+        List<Product> productsForSale = this.findProductsForSale();
+
+
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-Disposition", "attachment; filename=productList.xls");
+
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet("FirstSheet");
+
+        HSSFRow rowhead = sheet.createRow((short) 0);
+        rowhead.createCell(0).setCellValue("Code.");
+        rowhead.createCell(1).setCellValue("Name");
+        rowhead.createCell(2).setCellValue("Price");
+        rowhead.createCell(3).setCellValue("Owner");
+
+        short rowNumber = 1;
+        for (Product p : productsForSale) {
+
+            String ownerName = this.getUserByProductCode(p.getCode()).getUserName();
+
+            HSSFRow row = sheet.createRow(rowNumber++);
+            row.createCell(0).setCellValue(p.getCode());
+            row.createCell(1).setCellValue(p.getName());
+            row.createCell(2).setCellValue(p.getPrice());
+            row.createCell(3).setCellValue(ownerName);
+
+
+        }
+
+        workbook.write(response.getOutputStream());
+        workbook.close();
+
     }
 
     @Override
