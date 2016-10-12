@@ -9,8 +9,9 @@
 <body>
 <jsp:include page="_header.jsp"/>
 <jsp:include page="_menu.jsp"/>
+<h1>User Info</h1>
 <br>
-USER INFO
+
 
 <h1>${user.userName}</h1>
 <h2>${user.email}</h2>

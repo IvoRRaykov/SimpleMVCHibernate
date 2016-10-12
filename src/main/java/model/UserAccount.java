@@ -40,7 +40,7 @@ public class UserAccount {
     @Column(name = "money")
     private float money;
 
-    @OneToMany(mappedBy = "userAccount", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @OneToMany(mappedBy = "userAccount", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     private Set<Product> products = new HashSet<Product>(0);
 
     @OneToOne(mappedBy = "userAccountRef", fetch = FetchType.LAZY , cascade = CascadeType.REFRESH)

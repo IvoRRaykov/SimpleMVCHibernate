@@ -69,6 +69,7 @@
     </beans:bean>
 
     <beans:bean id="userService" class="service.UserServiceImpl">
+
         <beans:property name="userDAO" ref="userDAO"/>
         <beans:property name="confirmationDAO" ref="confirmationDAO"/>
 

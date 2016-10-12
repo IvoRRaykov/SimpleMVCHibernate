@@ -16,9 +16,10 @@
     Login
 </h1>
 
-<c:url var="addAction" value="/user/doLogin"/>
 <p style="color: red; font-weight: bold ">${confirmedMessage}</p>
-<form:form action="${addAction}" commandName="user">
+
+<c:url var="addAction" value="/user/login"/>
+<form:form method="post" action="${addAction}" commandName="user">
     <table>
         <tr>
             <td>

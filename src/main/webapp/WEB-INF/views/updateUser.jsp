@@ -18,9 +18,8 @@
     Edit User
 </h1>
 
-<c:url var="addAction" value="/user/doEditUser"/>
-
-<form:form method="post" action="${addAction}" commandName="user">
+<c:url var="addAction" value="/user/doUpdate"/>
+<form:form method="POST" action="${addAction}" commandName="user">
     <table>
         <c:if test="${!empty user.userName}">
             <tr>

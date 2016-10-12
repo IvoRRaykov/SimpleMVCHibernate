@@ -27,45 +27,60 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void registerUser(UserAccount user) throws ConstraintViolationException {
+
         Session session = this.sessionFactory.getCurrentSession();
 
         session.persist(user);
+
         logger.info("UserAccount saved successfully, UserAccount Details=" + user);
     }
 
     @Override
     public void updateUser(UserAccount user) {
+
         Session session = this.sessionFactory.getCurrentSession();
+
         session.update(user);
+
         logger.info("UserAccount updated successfully, UserAccount Details=" + user);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
+    @SuppressWarnings("unchecked")
     public List<UserAccount> listUsers() {
+
         Session session = this.sessionFactory.getCurrentSession();
+
         List<UserAccount> usersList = session.createQuery("from UserAccount").list();
         for (UserAccount user : usersList) {
             logger.info("UserAccount List::" + user);
         }
+
         return usersList;
     }
 
     @Override
     public UserAccount getUserById(int id) {
+
         Session session = this.sessionFactory.getCurrentSession();
+
         UserAccount user = (UserAccount) session.load(UserAccount.class, id);
+
         logger.info("UserAccount loaded successfully, UserAccount details=" + user);
+
         return user;
     }
 
     @Override
     public void removeUser(int id) {
+
         Session session = this.sessionFactory.getCurrentSession();
+
         UserAccount user = (UserAccount) session.load(UserAccount.class, id);
         if (null != user) {
             session.delete(user);
         }
+
         logger.info("UserAccount deleted successfully, user details=" + user);
     }
 
@@ -80,9 +95,10 @@ public class UserDAOImpl implements UserDAO {
                 .setString("password", password)
                 .list();
 
-        logger.info("UserAccount obtained successfully by , user details=" + userName + ", " + password);
-
         if (users.size() > 0) {
+
+            logger.info("UserAccount obtained successfully by , user details=" + userName + ", " + password);
+
             return users.get(0);
         } else {
             return null;

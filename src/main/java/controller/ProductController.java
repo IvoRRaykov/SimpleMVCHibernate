@@ -16,6 +16,7 @@ import service.UserService;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class ProductController {
@@ -38,95 +39,119 @@ public class ProductController {
     @RequestMapping(value = {"user/manageProducts", "admin/manageProducts"}, method = RequestMethod.GET)
     public String manageProducts(Model model, HttpSession session) {
 
-        UserAccount user = (UserAccount) session.getAttribute("loggedUser");
-
-        if (user == null) {
-            model.addAttribute("listProducts", this.productService.listProduct());
-        } else {
-            model.addAttribute("listProducts", user.getProducts());
-        }
-        model.addAttribute("product", new Product());
+        model.addAttribute("productToUpdate", new Product());
         model.addAttribute("productToCreate", new Product());
+
+        this.fillList(session,model);
 
         return "manageProducts";
     }
-
-    //zashto ne stava v service
-    @RequestMapping(value = "/product/update/{userId}", method = RequestMethod.POST)
-    public String updateProduct(@Valid @ModelAttribute("product") Product product, BindingResult result, @PathVariable("userId") int userId, Model model, HttpSession session) {
-        model.addAttribute("productToCreate", new Product());
-
-        if (result.hasErrors()) {
-            fillList(session, model);
-
-            return "manageProducts";
-
-        }
-
-        product.setUserAccount(this.userService.getUserById(userId));
-
-        session.setAttribute("loggedUser", this.productService.updateProduct(product));
-
-        return "redirect:/user/manageProducts";
-    }
-
-    @RequestMapping("/removeProduct/{code}")
-    public String deleteProduct(@PathVariable("code") String code, Model model) {
-        model.addAttribute("productToCreate", new Product());
-
-        this.productService.removeProduct(code);
-        return "redirect:/user/manageProducts";
-    }
-
-    @RequestMapping("/editProduct/{code}")
-    public String editProduct(@PathVariable("code") String code, Model model, HttpSession session) {
-
-        model.addAttribute("product", this.productService.getProductByCode(code));
-        model.addAttribute("productToCreate", new Product());
-
-        fillList(session, model);
-
-        return "manageProducts";
-    }
-
 
     @RequestMapping(value = {"/product/create"}, method = RequestMethod.POST)
-    public String createProduct(@Valid @ModelAttribute("productToCreate") Product product, BindingResult result, Model model, HttpSession session) {
+    public String doCreateProduct(@Valid @ModelAttribute("productToCreate") Product product, BindingResult result, Model model, HttpSession session) {
+
         if(result.hasErrors()){
             fillList(session, model);
             return "manageProducts";
         }
-        UserAccount user = (UserAccount) session.getAttribute("loggedUser");
+
+        Object loggedUserIdObj =  session.getAttribute("loggedUserId");
+
+        if (loggedUserIdObj == null) {
+            model.addAttribute("errorString", "You are not logged user");
+            fillList(session, model);
+            return "manageProducts";
+        }
+
+        UserAccount user = this.userService.getUserById((int)loggedUserIdObj);
         product.setUserAccount(user);
 
         this.productService.createProduct(product);
 
-        model.addAttribute("listProducts", user.getProducts().add(product));
+        return "redirect:/user/manageProducts";
+    }
+
+    @RequestMapping("/product/update/{code}")
+    public String updateProduct(@PathVariable("code") String code, Model model, HttpSession session) {
+
+        model.addAttribute("productToUpdate", this.productService.getProductByCode(code));
+        model.addAttribute("productToCreate", new Product());
+
+        this.fillList(session, model);
+
+        return "manageProducts";
+    }
+
+
+    @RequestMapping(value = "/product/doUpdate", method = RequestMethod.POST)
+    public String doUpdateProduct(@Valid @ModelAttribute("productToUpdate") Product product, BindingResult result, Model model, HttpSession session) {
+
+        if (result.hasErrors()) {
+
+            model.addAttribute("productToCreate", new Product());
+            this.fillList(session, model);
+            return "manageProducts";
+        }
+
+        product.setUserAccount( this.productService.getUserByProductCode(product.getCode()) );
+        this.productService.updateProduct(product);
+
+
+        return "redirect:/user/manageProducts";
+    }
+
+    @RequestMapping("/product/remove/{code}")
+    public String deleteProduct(@PathVariable("code") String code, Model model) {
+
+        this.productService.removeProduct(code);
+
         return "redirect:/user/manageProducts";
     }
 
     @RequestMapping(value = {"/marketplace"}, method = RequestMethod.GET)
-    public String marketplace(Model model) {
+    public String marketplace(Model model, HttpSession session) {
 
+        Object loggedUserIdObj =  session.getAttribute("loggedUserId");
+
+        if (loggedUserIdObj == null) {
+            model.addAttribute("loggedUserMoney", (int)9999999);
+            model.addAttribute("loggedUserName", "admin");
+            model.addAttribute("productList", this.productService.findProductsForSale());
+
+            return "marketplace";
+        }
+        UserAccount userAccount = this.userService.getUserById((int)loggedUserIdObj);
+        model.addAttribute("loggedUserMoney", userAccount.getMoney());
+        model.addAttribute("loggedUserName", userAccount.getUserName());
         model.addAttribute("productList", this.productService.findProductsForSale());
 
         return "marketplace";
     }
 
     @RequestMapping(value = {"/buyProduct/{code}"}, method = RequestMethod.GET)
-    public String buyProduct(@PathVariable("code") String code, HttpSession session) {
+    public String productTransaction(@PathVariable("code") String code, HttpSession session, Model model) {
 
+        Object loggedUserIdObj =  session.getAttribute("loggedUserId");
 
-        session.setAttribute("loggedUser", this.productService.buyProduct(code, (UserAccount) session.getAttribute("loggedUser")));
+        if (loggedUserIdObj == null) {
+            model.addAttribute("errorString", "You are not logged user");
+            model.addAttribute("productList", this.productService.findProductsForSale());
+            return "marketplace";
+        }
+
+        this.productService.buyProduct(code, (int)loggedUserIdObj);
+
         return "redirect:/user/manageProducts";
     }
 
     private void fillList(HttpSession session, Model model){
-        UserAccount user = (UserAccount) session.getAttribute("loggedUser");
-        if (user == null) {
+        Object loggedUserIdObj =  session.getAttribute("loggedUserId");
+
+        if (loggedUserIdObj == null) {
             model.addAttribute("listProducts", this.productService.listProduct());
         } else {
-            model.addAttribute("listProducts", user.getProducts());
+            List<Product> productList = this.productService.listProductsForUser((int)loggedUserIdObj);
+            model.addAttribute("listProducts", productList);
         }
     }
 }

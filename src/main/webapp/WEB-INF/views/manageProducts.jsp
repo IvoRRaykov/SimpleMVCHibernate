@@ -3,7 +3,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <html>
 <head>
-    <title>Product Page</title>
+    <title>Manage Products  Page</title>
     <style type="text/css">
         .error {
             font-weight: bold;
@@ -48,12 +48,12 @@
     </style>
 </head>
 <body>
-<c:if test="${empty loggedUser.userName}">
+<c:if test="${empty loggedUserId}">
     <jsp:include page="_adminHeader.jsp"/>
     <jsp:include page="_adminMenu.jsp"/>
 </c:if>
 
-<c:if test="${not empty loggedUser.userName}">
+<c:if test="${not empty loggedUserId}">
     <jsp:include page="_header.jsp"/>
     <jsp:include page="_menu.jsp"/>
 
@@ -61,12 +61,12 @@
 <table>
     <tr>
         <td>
-            <c:if test="${not empty product.code}">
+            <c:if test="${not empty productToUpdate.code}">
 
                 <h1>Update Product</h1>
 
-                <c:url var="actionUpdate" value="/product/update/${product.userAccount.id}"/>
-                <form:form method="post" action="${actionUpdate}" commandName="product">
+                <c:url var="actionUpdate" value="/product/doUpdate"/>
+                <form:form method="post" action="${actionUpdate}" commandName="productToUpdate">
                     <table>
 
                         <tr>
@@ -76,13 +76,13 @@
                                 </form:label>
                             </td>
 
-                            <c:if test="${!empty product.code}">
+                            <c:if test="${!empty productToUpdate.code}">
                                 <td>
                                     <form:input path="code" readonly="true" size="8" disabled="true"/>
                                     <form:hidden path="code"/>
                                 </td>
                             </c:if>
-                            <c:if test="${empty product.code}">
+                            <c:if test="${empty productToUpdate.code}">
                                 <td>
                                     <form:input path="code"/>
                                 </td>
@@ -140,8 +140,10 @@
                 </form:form>
             </c:if>
         </td>
+
+
         <td>
-            <c:if test="${not empty loggedUser.userName}">
+            <c:if test="${not empty loggedUserId}">
                 <h1>Create Product</h1>
                 <c:url var="addAction" value="/product/create"/>
                 <form:form action="${addAction}" commandName="productToCreate">
@@ -231,8 +233,8 @@
                 <td>${product.name}</td>
                 <td>${product.price}</td>
                 <td>${product.forSale}</td>
-                <td><a href="<c:url value='/editProduct/${product.code}' />">Edit</a></td>
-                <td><a href="<c:url value='/removeProduct/${product.code}' />">Delete</a></td>
+                <td><a href="<c:url value='/product/update/${product.code}' />">Edit</a></td>
+                <td><a href="<c:url value='/product/remove/${product.code}' />">Delete</a></td>
             </tr>
         </c:forEach>
     </table>

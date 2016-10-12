@@ -7,9 +7,7 @@ import model.UserAccount;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Ivo Raykov on 29.9.2016 г..
@@ -41,11 +39,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public UserAccount updateProduct(Product product) {
-
-        this.productDAO.updateProduct(product);
-        return this.userDAO.getUserById(product.getUserAccount().getId());
-    }
+    public void updateProduct(Product product) {this.productDAO.updateProduct(product);}
 
     @Override
     @Transactional
@@ -71,22 +65,37 @@ public class ProductServiceImpl implements ProductService {
         return this.productDAO.findProductsForSale();
     }
 
+    //to make logic with id not user
     @Override
     @Transactional
-    public UserAccount buyProduct(String code, UserAccount currentOwner) {
+    public void buyProduct(String code, int userId) {
         Product p = this.productDAO.getProductByCode(code);
+
         UserAccount previousOwner = p.getUserAccount();
+        UserAccount futureOwner = this.userDAO.getUserById(userId);
 
         previousOwner.setMoney(previousOwner.getMoney() + p.getPrice());
         userDAO.updateUser(previousOwner);
 
-        currentOwner.setMoney(currentOwner.getMoney() - p.getPrice());
-        userDAO.updateUser(currentOwner);
-        currentOwner.getProducts().add(p);
+        futureOwner.setMoney(futureOwner.getMoney() - p.getPrice());
+        userDAO.updateUser(futureOwner);
 
-        p.setUserAccount(currentOwner);
+        p.setUserAccount(futureOwner);
         p.setForSale(false);
         productDAO.updateProduct(p);
-        return currentOwner;
     }
+
+    @Override
+    @Transactional
+    public UserAccount getUserByProductCode(String code) {
+        return this.productDAO.getUserByProductCode(code);
+    }
+
+    @Override
+    @Transactional
+    public List<Product> listProductsForUser(int userId) {
+        return this.productDAO.listProductsForUser(userId);
+    }
+
+
 }

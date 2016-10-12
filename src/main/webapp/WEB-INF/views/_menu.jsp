@@ -6,28 +6,28 @@
 
     <a href="${pageContext.request.contextPath}/">Home</a>
 
-    <c:if test="${not empty loggedUser.userName}">
+    <c:if test="${not empty loggedUserId}">
         |
-        <a href="${pageContext.request.contextPath}/user/editUser">Edit User</a>
+        <a href="${pageContext.request.contextPath}/user/update">Edit User</a>
     </c:if>
-    <c:if test="${not empty loggedUser.userName}">
+    <c:if test="${not empty loggedUserId}">
         |
-        <a href="${pageContext.request.contextPath}/user/userInfo">My Account Info</a>
+        <a href="${pageContext.request.contextPath}/user/${loggedUserId}">My Account Info</a>
     </c:if>
 
-    <c:if test="${!empty loggedUser.userName}">
+    <c:if test="${not empty loggedUserId}">
         |
         <a href="${pageContext.request.contextPath}/marketplace">Marketplace</a>
     </c:if>
 
-    <c:if test="${empty loggedUser.userName}">
+    <c:if test="${loggedUserId == 0 or empty loggedUserId}">
         |
         <a href="${pageContext.request.contextPath}/user/login">Login</a>
     </c:if>
 
-    <c:if test="${empty loggedUser.userName}">
+    <c:if test="${loggedUserId == 0 or empty loggedUserId}">
         |
-        <a href="${pageContext.request.contextPath}/user/register">Register</a>
+        <a href="${pageContext.request.contextPath}/user/create">Register</a>
     </c:if>
 
 </div>

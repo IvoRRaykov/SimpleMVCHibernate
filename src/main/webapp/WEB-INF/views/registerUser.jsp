@@ -5,6 +5,7 @@
 <html>
 <head>
     <title>Register User</title>
+
     <style type="text/css">
         .error {
             color: red; font-weight: bold;
@@ -18,10 +19,11 @@
 <h1>
     Register User
 </h1>
+
 <a style="color: red; font-weight: bold;">${errorString}</a>
 
-<c:url var="addAction" value="/user/doRegister"/>
-<form:form action="${addAction}" commandName="user">
+<c:url var="addAction" value="/user/doCreate"/>
+<form:form method="POST" action="${addAction}" commandName="user">
     <table>
 
         <tr>

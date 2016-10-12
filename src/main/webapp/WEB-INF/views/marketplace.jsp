@@ -29,24 +29,24 @@
                 <td>${product.code}</td>
                 <td>${product.name}</td>
                 <td>
-                    <c:if test="${product.price <= loggedUser.money }">
-                        <p>   ${product.price} <c:if test="${product.userAccount.userName != loggedUser.userName}"><a
+                    <c:if test="${product.price <= loggedUserMoney }">
+                        <p>   ${product.price} <c:if test="${product.userAccount.userName != loggedUserName}"><a
                                 style="color: #19ac0a;"><sup> +<fmt:formatNumber
-                                value="${loggedUser.money-product.price - 0.0005}" maxFractionDigits="2"/></sup></a>
+                                value="${loggedUserMoney-product.price - 0.0005}" maxFractionDigits="2"/></sup></a>
                         </c:if></p>
                     </c:if>
-                    <c:if test="${product.price > loggedUser.money}">
+                    <c:if test="${product.price > loggedUserMoney}">
 
                         <p style="color: #cf0007;">${product.price}<sup> -<fmt:formatNumber
-                                value="${product.price-loggedUser.money - 0.0005}" maxFractionDigits="2"/></sup></p>
+                                value="${product.price-loggedUserMoney - 0.0005}" maxFractionDigits="2"/></sup></p>
                     </c:if>
                 </td>
                 <td>${product.userAccount.userName}</td>
                 <td>
-                    <c:if test="${product.userAccount.userName == loggedUser.userName}">
+                    <c:if test="${product.userAccount.userName == loggedUserName}">
                         <a style="color: #7a7a7a;">Buy</a>
                     </c:if>
-                    <c:if test="${product.userAccount.userName != loggedUser.userName}">
+                    <c:if test="${product.userAccount.userName != loggedUserName}">
                         <a href="<c:url value='/buyProduct/${product.code}' />">Buy</a>
                     </c:if>
                 </td>

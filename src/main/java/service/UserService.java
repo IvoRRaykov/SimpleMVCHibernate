@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface UserService {
 
-    public void registerUser(UserAccount user) throws ConstraintViolationException;
+    public void createUser(UserAccount user) throws ConstraintViolationException;
     public void updateUser(UserAccount user);
     public List<UserAccount> listUsers();
     public UserAccount getUserById(int id);

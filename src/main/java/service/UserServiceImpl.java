@@ -8,19 +8,12 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.UUID;
-import java.io.UnsupportedEncodingException;
-import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
+import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.List;
+import java.util.Properties;
+import java.util.UUID;
 
 
 @Service
@@ -39,8 +32,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void registerUser(UserAccount user) throws ConstraintViolationException {
+    public void createUser(UserAccount user) throws ConstraintViolationException {
+
         UserConfirmation confirmation = new UserConfirmation();
+
         confirmation.setUserAccountRef(user);
         confirmation.setConfirmationCode(UUID.randomUUID().toString());
 
@@ -77,7 +72,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    public UserAccount loginUser(String userName, String password) {
+
+        UserAccount user = this.userDAO.getUserByUserNameAndPassword(userName, password);
+        if (user == null) {
+            return null;
+        }
+
+        UserConfirmation userConfirmation = this.confirmationDAO.getConfirmationByUser(user);
+        user.setUserConfirmation(userConfirmation);
+
+        return user;
+    }
+
+    @Override
+    @Transactional
     public void updateUserConfirmation(String code) {
+
         UserConfirmation confirmation = this.confirmationDAO.getConfirmationByCode(code);
         confirmation.setUserEnabled(true);
 
@@ -85,21 +96,8 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    @Transactional
-    public UserAccount loginUser(String userName, String password) {
-        UserAccount user = this.userDAO.getUserByUserNameAndPassword(userName, password);
-        if (user == null) {
-            return null;
-        }
+    private void sendEmail(String text, String email) {
 
-        UserConfirmation userConfirmation = this.confirmationDAO.getConfirmationByUser(user);
-
-        user.setUserConfirmation(userConfirmation);
-        return user;
-    }
-
-    private void sendEmail(String text, String email)  {
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.socketFactory.port", "465");
@@ -111,7 +109,7 @@ public class UserServiceImpl implements UserService {
         Session session = Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication("ivo.raykow@gmail.com","ivoqweasd");
+                        return new PasswordAuthentication("ivo.raykow@gmail.com", "ivoqweasd");
                     }
                 });
 
