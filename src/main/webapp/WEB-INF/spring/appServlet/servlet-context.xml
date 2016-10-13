@@ -19,7 +19,7 @@
         up static resources in the ${webappRoot}/resources directory -->
     <resources mapping="/resources/**" location="webres/"/>
 
-    <!-- Resolves views selected for rendering by @Controllers to .jsp resources
+    <!-- Resolves views selected for rendering by @Controllers tou .jsp resources
         in the /WEB-INF/views directory -->
     <beans:bean
             class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -43,6 +43,7 @@
         <beans:property name="annotatedClasses">
             <beans:list>
                 <beans:value>model.UserAccount</beans:value>
+                <beans:value>model.Message</beans:value>
                 <beans:value>model.Product</beans:value>
                 <beans:value>model.UserConfirmation</beans:value>
             </beans:list>
@@ -68,6 +69,10 @@
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
     </beans:bean>
 
+    <beans:bean id="messageDAO" class="dao.MessageDAOImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
+    </beans:bean>
+
     <beans:bean id="userService" class="service.UserServiceImpl">
 
         <beans:property name="userDAO" ref="userDAO"/>
@@ -79,6 +84,13 @@
 
             <beans:property name="productDAO" ref="productDAO"/>
             <beans:property name="userDAO" ref="userDAO"/>
+
+    </beans:bean>
+
+    <beans:bean id="messageService" class="service.MessageServiceImpl">
+        <beans:property name="messageDAO" ref="messageDAO"/>
+        <beans:property name="userDAO" ref="userDAO"/>
+
 
     </beans:bean>
 

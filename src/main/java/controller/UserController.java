@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import service.MessageService;
 import service.ProductService;
 import service.UserService;
 
@@ -24,6 +25,7 @@ public class UserController {
 
     private UserService userService;
     private ProductService productService;
+    private MessageService messageService;
 
     @Autowired(required = true)
     @Qualifier(value = "userService")
@@ -35,7 +37,9 @@ public class UserController {
     @Qualifier(value = "productService")
     public void setProductService(ProductService productService) {this.productService = productService;}
 
-
+    @Autowired(required = true)
+    @Qualifier(value = "messageService")
+    public void setMessageService(MessageService messageService) { this.messageService = messageService; }
 
     @RequestMapping(value = {"/user/create"}, method = RequestMethod.GET)
     public String createUser(Model model) {
@@ -127,6 +131,7 @@ public class UserController {
         UserAccount user = this.userService.getUserById(userId);
 
         model.addAttribute("user", user);
+        model.addAttribute("unreadMessages", this.messageService.findAllUnreadMessagesCountToUserId(userId));
 
         return "userInfo";
     }

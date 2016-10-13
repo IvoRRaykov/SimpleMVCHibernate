@@ -71,6 +71,28 @@ public class UserDAOImpl implements UserDAO {
         return user;
     }
 
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public UserAccount getUserByName(String userName) {
+
+        List<UserAccount> users = new ArrayList<>();
+
+        users = sessionFactory.getCurrentSession()
+                .createQuery("from UserAccount where userName = :userName")
+                .setString("userName", userName)
+                .list();
+
+        if (users.size() > 0) {
+
+            logger.info("UserAccount obtained successfully by , user details=" + userName);
+
+            return users.get(0);
+        } else {
+            return null;
+        }
+    }
+
     @Override
     public void removeUser(int id) {
 
@@ -84,6 +106,7 @@ public class UserDAOImpl implements UserDAO {
         logger.info("UserAccount deleted successfully, user details=" + user);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public UserAccount getUserByUserNameAndPassword(String userName, String password) {
 
@@ -105,5 +128,48 @@ public class UserDAOImpl implements UserDAO {
         }
 
     }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<String> findSimilarNames(String to) {
+        List<String> names = new ArrayList<>();
+
+        names = sessionFactory.getCurrentSession()
+                .createQuery("select userName from UserAccount where userName like :userName")
+                .setString("userName", "%" + to + "%")
+                .list();
+
+        if (names.size() > 0) {
+
+            logger.info("names obtained successfully similar to " + to);
+
+            return names;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public String findUserNameFromId(int id) {
+
+        List<String> usersNames = new ArrayList<>();
+
+        usersNames = sessionFactory.getCurrentSession()
+                .createQuery("select userName from UserAccount where user_id = :userId")
+                .setInteger("userId", id)
+                .list();
+
+        if (usersNames.size() > 0) {
+
+            logger.info("UserName obtained successfully by , user id =" + id);
+
+            return usersNames.get(0);
+        } else {
+            return null;
+        }
+
+    }
+
 
 }

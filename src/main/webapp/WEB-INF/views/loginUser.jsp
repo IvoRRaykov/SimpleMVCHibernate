@@ -12,6 +12,8 @@
 <body>
 <jsp:include page="_header.jsp"/>
 <jsp:include page="_menu.jsp"/>
+<jsp:include page="_messageMenu.jsp"/>
+
 <h1>
     Login
 </h1>

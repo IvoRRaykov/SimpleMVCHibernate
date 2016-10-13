@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 @Table(name = "user_account")
@@ -45,6 +46,14 @@ public class UserAccount {
 
     @OneToOne(mappedBy = "userAccountRef", fetch = FetchType.LAZY , cascade = CascadeType.REFRESH)
     private UserConfirmation userConfirmation;
+
+    @OneToMany(mappedBy = "fromu", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    //@OrderBy("date_sent ASC ")
+    private Set<Message> messagesFrom = new TreeSet<>();
+
+    @OneToMany(mappedBy = "tou", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    //@OrderBy("date_sent ASC ")
+    private Set<Message> messagesTo = new TreeSet<>();
 
     public float getMoney() {
         return money;
@@ -89,6 +98,22 @@ public class UserAccount {
 
     public void setProducts(Set<Product> prducts) {
         this.products = prducts;
+    }
+
+    public Set<Message> getMessagesFrom() {
+        return messagesFrom;
+    }
+
+    public void setMessagesFrom(Set<Message> messagesFrom) {
+        this.messagesFrom = messagesFrom;
+    }
+
+    public Set<Message> getMessagesTo() {
+        return messagesTo;
+    }
+
+    public void setMessagesTo(Set<Message> messagesTo) {
+        this.messagesTo = messagesTo;
     }
 
     public Set<Product> getProducts() {

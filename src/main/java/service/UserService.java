@@ -14,7 +14,10 @@ public interface UserService {
     public void updateUser(UserAccount user);
     public List<UserAccount> listUsers();
     public UserAccount getUserById(int id);
+    public UserAccount getUserByName(String name);
     public void removeUser(int id);
-    public void updateUserConfirmation(String code);
     public UserAccount loginUser(String userName, String password);
+    public void updateUserConfirmation(String code);
+
+    public List<String> getSimilarNames(String to);
 }

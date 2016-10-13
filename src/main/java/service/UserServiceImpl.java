@@ -8,7 +8,10 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.*;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.List;
@@ -21,6 +24,7 @@ public class UserServiceImpl implements UserService {
 
     private UserDAO userDAO;
     private ConfirmationDAO confirmationDAO;
+
 
     public void setUserDAO(UserDAO userDAO) {
         this.userDAO = userDAO;
@@ -56,6 +60,12 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public List<UserAccount> listUsers() {
         return this.userDAO.listUsers();
+    }
+
+    @Override
+    @Transactional
+    public UserAccount getUserByName(String name) {
+        return this.userDAO.getUserByName(name);
     }
 
     @Override
@@ -96,6 +106,12 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    @Transactional
+    public List<String> getSimilarNames(String to) {
+        return this.userDAO.findSimilarNames(to);
+    }
+
     private void sendEmail(String text, String email) {
 
         Properties props = new Properties();
@@ -115,9 +131,9 @@ public class UserServiceImpl implements UserService {
 
         try {
 
-            Message message = new MimeMessage(session);
+            javax.mail.Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("SpringMVCHibernateApp@localhost.com"));
-            message.setRecipients(Message.RecipientType.TO,
+            message.setRecipients(javax.mail.Message.RecipientType.TO,
                     InternetAddress.parse(email));
             message.setSubject("Account confirmation");
             message.setText("Click the link to confirm your registration:   http://localhost:8080/user/confirm/" + text);

@@ -27,15 +27,9 @@ public class ProductServiceImpl implements ProductService {
     private UserDAO userDAO;
 
 
-    public void setProductDAO(ProductDAO productDAO) {
-        this.productDAO = productDAO;
+    public void setProductDAO(ProductDAO productDAO) {this.productDAO = productDAO;}
 
-    }
-
-    public void setUserDAO(UserDAO userDAO) {
-        this.userDAO = userDAO;
-
-    }
+    public void setUserDAO(UserDAO userDAO) {this.userDAO = userDAO;}
 
     @Override
     @Transactional

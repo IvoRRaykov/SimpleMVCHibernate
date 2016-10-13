@@ -51,11 +51,13 @@
 <c:if test="${empty loggedUserId}">
     <jsp:include page="_adminHeader.jsp"/>
     <jsp:include page="_adminMenu.jsp"/>
+
 </c:if>
 
 <c:if test="${not empty loggedUserId}">
     <jsp:include page="_header.jsp"/>
     <jsp:include page="_menu.jsp"/>
+    <jsp:include page="_messageMenu.jsp"/>
 
 </c:if>
 <table>
