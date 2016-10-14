@@ -18,6 +18,7 @@
     Login
 </h1>
 
+<p style="color: red; font-weight: bold ">${errorString}</p>
 <p style="color: red; font-weight: bold ">${confirmedMessage}</p>
 
 <c:url var="addAction" value="/user/login"/>

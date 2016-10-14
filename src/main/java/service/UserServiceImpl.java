@@ -5,6 +5,7 @@ import dao.UserDAO;
 import model.UserAccount;
 import model.UserConfirmation;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 import java.util.UUID;
 
 
@@ -52,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateUser(UserAccount user) {
+    public void updateUser(UserAccount user) throws ConstraintViolationException,DataIntegrityViolationException {
         this.userDAO.updateUser(user);
     }
 
@@ -104,6 +106,12 @@ public class UserServiceImpl implements UserService {
 
         this.confirmationDAO.updateConfirmation(confirmation);
 
+    }
+
+    @Override
+    public String getRandomAvatar() {
+        int random = new Random().nextInt(999) + 1;
+        return "http://api.adorable.io/avatar/200/" + random;
     }
 
     @Override

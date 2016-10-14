@@ -43,7 +43,7 @@
                                 value="${product.price-loggedUserMoney - 0.0005}" maxFractionDigits="2"/></sup></p>
                     </c:if>
                 </td>
-                <td>${product.userAccount.userName}</td>
+                <td><a href="user/${product.userAccount.id}">${product.userAccount.userName}</a> </td>
                 <td>
                     <c:if test="${product.userAccount.userName == loggedUserName}">
                         <a style="color: #7a7a7a;">Buy</a>
@@ -57,7 +57,7 @@
     </table>
 </c:if>
 <br>
-<a href="<c:url value='/downloadList/' />">Download List</a>
+<a href="<c:url value='/downloadList' />">Download List</a>
 
 
 <jsp:include page="_footer.jsp"/>

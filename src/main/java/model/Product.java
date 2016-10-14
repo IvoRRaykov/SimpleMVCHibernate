@@ -27,7 +27,7 @@ public class Product {
     @Column(name="for_sale")
     private boolean forSale;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private UserAccount userAccount;
 

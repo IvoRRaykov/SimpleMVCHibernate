@@ -26,13 +26,13 @@
 <%--
 <a style="color: red; font-weight: bold;">${errorString}</a>
 --%>
-
+<p style="color: red; font-weight: bold;">${errorString}</p>
 <form method="post" action="${pageContext.request.contextPath}/message/to">
     <table border="0">
         <tr>
             <td>To</td>
             <td><input type="text" name="to" value="${to}" <c:if test="${not empty to}"> disabled</c:if> /> </td>
-            <td><input type="submit" value= "find" /> </td>
+            <td><input type="submit" value= "find" <c:if test="${not empty to}"> disabled</c:if> /> </td>
         </tr>
     </table>
 </form>
@@ -42,11 +42,11 @@
 <br><br>
 
 <c:if test="${not empty to}">
-<form method="post" action="${pageContext.request.contextPath}/message/send/${to}">
+<form method="post" action="${pageContext.request.contextPath}/message/${to}">
     <table border="0">
         <tr>
             <td>Text</td>
-            <td><input type="text" name="text" /> </td>
+            <td><input type="text" name="text" width="500" height="300"/> </td>
             <td><input type="submit" value= "send" /> </td>
         </tr>
     </table>

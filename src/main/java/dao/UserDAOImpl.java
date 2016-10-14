@@ -11,6 +11,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
 
@@ -36,7 +37,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void updateUser(UserAccount user) {
+    public void updateUser(UserAccount user) throws ConstraintViolationException,DataIntegrityViolationException {
 
         Session session = this.sessionFactory.getCurrentSession();
 

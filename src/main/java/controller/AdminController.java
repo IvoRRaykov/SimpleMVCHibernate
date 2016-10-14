@@ -42,7 +42,7 @@ public class AdminController {
                 this.userService.createUser(user);
             } catch (ConstraintViolationException e) {
                 model.addAttribute("errorString", "Account with this username or email already exists!");
-                return "registerUser";
+                return "userRegister";
             }
         }else{
             this.userService.updateUser(user);

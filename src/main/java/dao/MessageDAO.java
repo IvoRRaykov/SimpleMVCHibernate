@@ -15,6 +15,7 @@ public interface MessageDAO {
     public String findFromuNameByMessageId(int messageId) ;
     public String findTouNameByMessageId(int messageId);
 
+    public void updateMessageSeen(int messageId);
     public void createMessage(Message message);
     public void deleteMessage(int messageId);
 

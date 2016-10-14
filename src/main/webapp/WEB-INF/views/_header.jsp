@@ -4,9 +4,10 @@
 
 <div style="padding: 50px; background: #86c0e0;">
 
-    Hello ${loggedUserId}
 
-    <c:if test="${not empty loggedUserId}">
+
+    <c:if test="${not empty loggedUserName}">
+        Hello ${loggedUserName}
         <a href="${pageContext.request.contextPath}/user/logout">Log out</a>
     </c:if>
 

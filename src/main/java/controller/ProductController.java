@@ -26,6 +26,11 @@ import java.util.List;
 @Controller
 public class ProductController {
 
+    /*
+
+        AWAITING SPRING SECURITY FULL INTEGRATION
+
+     */
     private ProductService productService;
     private UserService userService;
 
@@ -98,7 +103,6 @@ public class ProductController {
             return "manageProducts";
         }
 
-        product.setUserAccount( this.productService.getUserByProductCode(product.getCode()) );
         this.productService.updateProduct(product);
 
 
@@ -125,7 +129,9 @@ public class ProductController {
 
             return "marketplace";
         }
+
         UserAccount userAccount = this.userService.getUserById((int)loggedUserIdObj);
+
         model.addAttribute("loggedUserMoney", userAccount.getMoney());
         model.addAttribute("loggedUserName", userAccount.getUserName());
         model.addAttribute("productList", this.productService.findProductsForSale());
@@ -150,12 +156,12 @@ public class ProductController {
     }
 
     @RequestMapping(value = {"/downloadList"}, method = RequestMethod.GET)
-    public void downloadList(Model model, HttpServletResponse response){
+    public void downloadList(HttpServletResponse response){
 
         try {
             this.productService.downloadList(response);
         } catch (IOException e) {
-            e.printStackTrace();
+            //??
         }
     }
 

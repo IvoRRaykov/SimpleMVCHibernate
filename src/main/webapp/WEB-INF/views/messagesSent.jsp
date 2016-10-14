@@ -62,6 +62,7 @@
             <th width="80">Date sent</th>
             <th width="120">To</th>
             <th width="320">Text</th>
+            <th>Delete</th>
 
         </tr>
         <c:forEach items="${sentMessagesList}" var="entry">
@@ -69,6 +70,7 @@
                 <td>${entry.key.dateSent}</td>
                 <td><a href="${pageContext.request.contextPath}/message/to/${entry.value}">${entry.value}</a></td>
                 <td>${entry.key.text}</td>
+                <td><a href="${pageContext.request.contextPath}/message/s/${entry.key.messageId}">Delete</a></td>
 
                 <%--<td><a href="<c:url value='/product/update/${product.code}' />">Edit</a></td>
                 <td><a href="<c:url value='/product/remove/${product.code}' />">Delete</a></td>--%>

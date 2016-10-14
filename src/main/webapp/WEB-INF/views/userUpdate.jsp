@@ -20,9 +20,13 @@
     Edit User
 </h1>
 
-<c:url var="addAction" value="/user/doUpdate"/>
+<tr><td><img src="${avatar}"/></td></tr>
+
+<a style="color: red;">${errorString}</a>
+<c:url var="addAction" value="/user/doUpdate/${avatar.substring(34)}"/>
 <form:form method="POST" action="${addAction}" commandName="user">
     <table>
+
         <c:if test="${!empty user.userName}">
             <tr>
                 <td>
@@ -36,6 +40,7 @@
                 </td>
             </tr>
         </c:if>
+
         <tr>
             <td>
                 <form:label path="userName">

@@ -67,13 +67,12 @@ public class ProductServiceImpl implements ProductService {
         return this.productDAO.findProductsForSale();
     }
 
-    //to make logic with id not user
     @Override
     @Transactional
     public void buyProduct(String code, int userId) {
         Product p = this.productDAO.getProductByCode(code);
 
-        UserAccount previousOwner = p.getUserAccount();
+        UserAccount previousOwner = this.productDAO.getUserByProductCode(p.getCode());
         UserAccount futureOwner = this.userDAO.getUserById(userId);
 
         previousOwner.setMoney(previousOwner.getMoney() + p.getPrice());

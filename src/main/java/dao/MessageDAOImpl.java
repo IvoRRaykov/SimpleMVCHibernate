@@ -3,6 +3,7 @@ package dao;
 import model.Message;
 import model.Product;
 import model.UserAccount;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -49,7 +50,7 @@ public class MessageDAOImpl implements MessageDAO {
     public int findAllUnreadMessagesCountToUserId(int  userId) {
         Session session = this.sessionFactory.getCurrentSession();
 
-        List<Message> messageList = session.createQuery("from Message where tou = :tou")
+        List<Message> messageList = session.createQuery("from Message where tou = :tou and seen = false")
                 .setInteger("tou", userId)
                 .list();
 
@@ -122,11 +123,22 @@ public class MessageDAOImpl implements MessageDAO {
         }
     }
 
+    @Override
+    public void updateMessageSeen(int messageId) {
+        Query query = sessionFactory.getCurrentSession()
+                .createQuery("update Message set seen = :seen where message_id = :messageId");
+        query.setBoolean("seen", true);
+        query.setInteger("messageId", messageId);
+        query.executeUpdate();
+
+        logger.info("Message update successfully, Message Id=" + messageId);
+
+    }
+
 
     @Override
     public void createMessage(Message message) {
         Session session = this.sessionFactory.getCurrentSession();
-
 
         session.persist(message);
 

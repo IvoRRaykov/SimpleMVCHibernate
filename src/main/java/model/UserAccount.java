@@ -41,6 +41,9 @@ public class UserAccount {
     @Column(name = "money")
     private float money;
 
+    @Column(name = "avatar")
+    private String avatar;
+
     @OneToMany(mappedBy = "userAccount", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     private Set<Product> products = new HashSet<Product>(0);
 
@@ -135,6 +138,14 @@ public class UserAccount {
 
     public void setUserConfirmation(UserConfirmation userConfirmation) {
         this.userConfirmation = userConfirmation;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getAvatar() {
+        return avatar;
     }
 
     @Override

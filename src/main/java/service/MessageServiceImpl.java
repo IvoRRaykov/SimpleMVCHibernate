@@ -29,17 +29,14 @@ public class MessageServiceImpl implements MessageService {
         for(Message m: mList){
             String fromuName = this.messageDAO.findFromuNameByMessageId(m.getMessageId());
             nameToMessageMap.put(m, fromuName);
+
+            if(!m.isSeen()) {
+                this.messageDAO.updateMessageSeen(m.getMessageId());
+            }
         }
 
         return nameToMessageMap;
     }
-
-    @Override
-    @Transactional
-    public int findAllUnreadMessagesCountToUserId(int userId) {
-        return this.messageDAO.findAllUnreadMessagesCountToUserId(userId);
-    }
-
 
     @Override
     @Transactional
@@ -56,12 +53,6 @@ public class MessageServiceImpl implements MessageService {
         return nameToMessageMap;
     }
 
-    @Override
-    @Transactional
-    public void deleteMessage(int messageId) {
-
-        this.deleteMessage(messageId);
-    }
 
     @Override
     @Transactional
@@ -81,4 +72,16 @@ public class MessageServiceImpl implements MessageService {
 
         this.messageDAO.createMessage(message);
     }
+
+    @Override
+    @Transactional
+    public int findAllUnreadMessagesCountToUserId(int userId) {
+        return this.messageDAO.findAllUnreadMessagesCountToUserId(userId);
+    }
+
+
+    @Override
+    @Transactional
+    public void deleteMessage(int messageId) {this.messageDAO.deleteMessage(messageId);}
+
 }

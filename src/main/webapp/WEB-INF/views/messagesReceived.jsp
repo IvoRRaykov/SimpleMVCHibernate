@@ -61,7 +61,8 @@
         <tr>
             <th width="80">Date sent</th>
             <th width="120">From</th>
-            <th width="320">Text</th>
+            <th width="500">Text</th>
+            <th>Delete</th>
 
         </tr>
         <c:forEach items="${receivedMessagesList}" var="entry">
@@ -69,7 +70,7 @@
                 <td>${entry.key.dateSent}</td>
                 <td><a href="${pageContext.request.contextPath}/message/to/${entry.value}">${entry.value}</a></td>
                 <td>${entry.key.text}</td>
-
+                <td><a href="${pageContext.request.contextPath}/message/r/${entry.key.messageId}">Delete</a></td>
             </tr>
         </c:forEach>
     </table>

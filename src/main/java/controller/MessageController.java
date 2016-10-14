@@ -35,8 +35,11 @@ public class MessageController {
     @Qualifier(value = "userService")
     public void setUserService(UserService userService) {this.userService = userService; }
 
-    @RequestMapping(value = {"/message/create"}, method = RequestMethod.GET)
-    public String createUser(Model model) {
+
+
+
+    @RequestMapping(value = {"/message"}, method = RequestMethod.GET)
+    public String createMessage(Model model) {
 
         model.addAttribute("message", new Message());
 
@@ -44,7 +47,7 @@ public class MessageController {
     }
 
     @RequestMapping(value = {"/message/to"}, method = RequestMethod.POST)
-    public String findReciever(HttpServletRequest request, Model model) {
+    public String findReceiver(HttpServletRequest request, Model model) {
 
         String to = (String) request.getParameter("to");
 
@@ -65,10 +68,11 @@ public class MessageController {
     public String openTextField(@PathVariable(value = "name") String name, Model model) {
 
         model.addAttribute("to", name);
+
         return "messageCreate";
     }
 
-    @RequestMapping(value = {"/message/send/{name}"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/message/{name}"}, method = RequestMethod.POST)
     public String sendMessage(@PathVariable(value = "name") String name, HttpServletRequest request, HttpSession session, Model model) {
 
         String text = (String) request.getParameter("text");
@@ -77,7 +81,7 @@ public class MessageController {
 
         this.messageService.sendMessage(text,id,to);
 
-        return "messageCreate";
+        return "redirect:/message/sent";
     }
 
     @RequestMapping(value = {"/message/sent"}, method = RequestMethod.GET)
@@ -96,5 +100,20 @@ public class MessageController {
         return "messagesReceived";
     }
 
+    @RequestMapping(value = {"/message/{from}/{messageId}"}, method = RequestMethod.GET)
+    public String deleteMessage(@PathVariable(value = "from") String from, @PathVariable(value = "messageId") int messageId,HttpSession session, Model model) {
+
+        this.messageService.deleteMessage(messageId);
+
+        if(from.equals("s")){
+            return "redirect:/message/sent";
+        }else if(from.equals("r")){
+            return "redirect:/message/received";
+        }else{
+            return "home";
+        }
+
+
+    }
 
 }

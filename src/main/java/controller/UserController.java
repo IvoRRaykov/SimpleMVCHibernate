@@ -1,15 +1,18 @@
 package controller;
 
 
-import model.Product;
 import model.UserAccount;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import service.MessageService;
 import service.ProductService;
 import service.UserService;
@@ -17,7 +20,6 @@ import service.UserService;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.HashSet;
-import java.util.List;
 
 
 @Controller
@@ -35,57 +37,79 @@ public class UserController {
 
     @Autowired(required = true)
     @Qualifier(value = "productService")
-    public void setProductService(ProductService productService) {this.productService = productService;}
+    public void setProductService(ProductService productService) {
+        this.productService = productService;
+    }
 
     @Autowired(required = true)
     @Qualifier(value = "messageService")
-    public void setMessageService(MessageService messageService) { this.messageService = messageService; }
+    public void setMessageService(MessageService messageService) {
+        this.messageService = messageService;
+    }
+
 
     @RequestMapping(value = {"/user/create"}, method = RequestMethod.GET)
     public String createUser(Model model) {
 
+        model.addAttribute("avatar", this.userService.getRandomAvatar());
         model.addAttribute("user", new UserAccount());
 
-        return "registerUser";
+        return "userRegister";
     }
 
-    @RequestMapping(value = {"/user/doCreate"}, method = RequestMethod.POST)
-    public String doCreateUser(@Valid @ModelAttribute("user") UserAccount user, BindingResult result, Model model) {
+    @RequestMapping(value = {"/user/doCreate/{avatar}"}, method = RequestMethod.POST)
+    public String doCreateUser(@Valid @ModelAttribute("user") UserAccount user, BindingResult result, @PathVariable(value = "avatar") String avatar, Model model) {
 
         if (result.hasErrors()) {
-            return "registerUser";
+            model.addAttribute("avatar", "http://api.adorable.io/avatar/200/" + avatar);
+            return "userRegister";
         }
-        try {
-            this.userService.createUser(user);
-        } catch (ConstraintViolationException e) {
 
+        try {
+            user.setAvatar("http://api.adorable.io/avatar/200/" + avatar);
+            this.userService.createUser(user);
+
+        } catch (ConstraintViolationException e) {
+            model.addAttribute("avatar", "http://api.adorable.io/avatar/200/" + avatar);
             model.addAttribute("errorString", "Account with this username or email already exists!");
-            return "registerUser";
+            return "userRegister";
         }
         return "redirect:/user/login";
     }
 
-    @RequestMapping(value = {"/user/update"},  method = RequestMethod.GET)
+    @RequestMapping(value = {"/user/update"}, method = RequestMethod.GET)
     public String updateUser(Model model, HttpSession session) {
 
-            int userId = (int) session.getAttribute("loggedUserId");
-            UserAccount userAccount = this.userService.getUserById(userId);
+        int userId = (int) session.getAttribute("loggedUserId");
+        UserAccount user = this.userService.getUserById(userId);
 
-            model.addAttribute("user", userAccount);
+        model.addAttribute("user", user);
+        model.addAttribute("avatar", user.getAvatar());
 
-        return "updateUser";
+        return "userUpdate";
     }
 
-    @RequestMapping(value = {"/user/doUpdate"}, method = RequestMethod.POST)
-    public String doUpdateUser(@Valid @ModelAttribute("user") UserAccount userAccount, BindingResult result, Model model) {
+    //too much logic in controller
+    @RequestMapping(value = {"/user/doUpdate/{avatar}"}, method = RequestMethod.POST)
+    public String doUpdateUser(@Valid @ModelAttribute("user") UserAccount userAccount, BindingResult result, @PathVariable(value = "avatar") String avatar, HttpSession session, Model model) {
 
         if (result.hasErrors()) {
-            return "updateUser";
+            model.addAttribute("avatar", "http://api.adorable.io/avatar/200/" + avatar);
+            return "userUpdate";
         }
 
-        List<Product> list = this.productService.listProductsForUser(userAccount.getId());
-        userAccount.setProducts(new HashSet<>(list));
-        this.userService.updateUser(userAccount);
+
+        try {
+            userAccount.setAvatar("http://api.adorable.io/avatar/200/" + avatar);
+            this.userService.updateUser(userAccount);
+        } catch (ConstraintViolationException | DataIntegrityViolationException e) {
+
+            model.addAttribute("errorString", "This userName is already in use");
+            model.addAttribute("avatar", "http://api.adorable.io/avatar/200/" + avatar);
+            return "userUpdate";
+        }
+
+        session.setAttribute("loggedUserName", userAccount.getUserName());
 
         return "redirect:/user/" + userAccount.getId();
     }
@@ -96,7 +120,7 @@ public class UserController {
 
         model.addAttribute("user", new UserAccount());
 
-        return "loginUser";
+        return "userLogin";
 
     }
 
@@ -109,20 +133,22 @@ public class UserController {
 
             model.addAttribute("errorString", "UserName or password are incorrect");
 
-            return "loginUser";
+            return "userLogin";
 
-        } else {
-            if(!userAccount.getUserConfirmation().isUserEnabled()){
-
-                model.addAttribute("confirmedMessage", "This user is not confirmed!");
-
-                return "loginUser";
-            }
-
-            session.setAttribute("loggedUserId", userAccount.getId());
-
-            return "redirect:/user/" + userAccount.getId();
         }
+
+        if (!userAccount.getUserConfirmation().isUserEnabled()) {
+
+            model.addAttribute("confirmedMessage", "This user is not confirmed!");
+
+            return "userLogin";
+        }
+
+        session.setAttribute("loggedUserId", userAccount.getId());
+        session.setAttribute("loggedUserName", userAccount.getUserName());
+
+        return "redirect:/user/" + userAccount.getId();
+
     }
 
     @RequestMapping(value = {"/user/{userId}"}, method = RequestMethod.GET)
@@ -140,19 +166,20 @@ public class UserController {
     public String logoutUser(HttpSession session) {
 
         session.removeAttribute("loggedUserId");
+        session.removeAttribute("loggedUserName");
 
         return "home";
     }
 
     @RequestMapping(value = {"/user/confirm/{code}"})
-    public String confirmUser(@PathVariable(value = "code") String code, Model model){
+    public String confirmUser(@PathVariable(value = "code") String code, Model model) {
 
         model.addAttribute("user", new UserAccount());
         model.addAttribute("confirmedMessage", "You have successfully confirmed your email!");
 
         userService.updateUserConfirmation(code);
 
-        return "loginUser";
+        return "userLogin";
     }
 
 

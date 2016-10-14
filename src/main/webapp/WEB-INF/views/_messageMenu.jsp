@@ -5,8 +5,7 @@
 <div style="padding: 5px; background: #86c0e0;">
 
     <c:if test="${not empty loggedUserId}">
-        |
-        <a href="${pageContext.request.contextPath}/message/create">Create Message </a>
+        <a href="${pageContext.request.contextPath}/message">Create Message </a>
     </c:if>
     <c:if test="${not empty loggedUserId}">
         |

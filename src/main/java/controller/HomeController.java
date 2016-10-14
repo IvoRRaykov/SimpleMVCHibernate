@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 public class HomeController {
 
     @RequestMapping(value = {"/home", "/"}, method = RequestMethod.GET)
-    public String listProducts(Model model, HttpSession session) {
+    public String home(Model model, HttpSession session) {
 
         UserAccount user = (UserAccount) session.getAttribute("loggedUser");
         model.addAttribute("user", user);

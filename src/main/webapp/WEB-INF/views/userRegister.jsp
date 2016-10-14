@@ -22,9 +22,18 @@
     Register User
 </h1>
 
+
+<Table>
+    <tr>
+        <td>Pick avatar</td>
+        <td><a href="${pageContext.request.contextPath}/user/create"><img src="${avatar}"/></a></td>
+    </tr>
+
+</Table>
+
 <a style="color: red; font-weight: bold;">${errorString}</a>
 
-<c:url var="addAction" value="/user/doCreate"/>
+<c:url var="addAction" value="/user/doCreate/${avatar.substring(34)}"/>
 <form:form method="POST" action="${addAction}" commandName="user">
     <table>
 
