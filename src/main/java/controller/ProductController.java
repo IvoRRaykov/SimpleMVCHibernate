@@ -23,6 +23,8 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
+import static util.Constants.*;
+
 @Controller
 public class ProductController {
 
@@ -35,22 +37,24 @@ public class ProductController {
     private UserService userService;
 
     @Autowired(required = true)
-    @Qualifier(value = "productService")
+    @Qualifier(value = PRODUCT_SERVICE)
     public void setProductService(ProductService ps) {
         this.productService = ps;
     }
 
     @Autowired(required = true)
-    @Qualifier(value = "userService")
+    @Qualifier(value = USER_SERVICE)
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
+
+
     @RequestMapping(value = {"user/manageProducts", "admin/manageProducts"}, method = RequestMethod.GET)
     public String manageProducts(Model model, HttpSession session) {
 
-        model.addAttribute("productToUpdate", new Product());
-        model.addAttribute("productToCreate", new Product());
+        model.addAttribute(PRODUCT_TO_UPRADE_ATTRIBUTE, new Product());
+        model.addAttribute(PRODUCT_TO_CREATE_ATTRIBUTE, new Product());
 
         this.fillList(session,model);
 
@@ -58,17 +62,17 @@ public class ProductController {
     }
 
     @RequestMapping(value = {"/product/create"}, method = RequestMethod.POST)
-    public String doCreateProduct(@Valid @ModelAttribute("productToCreate") Product product, BindingResult result, Model model, HttpSession session) {
+    public String doCreateProduct(@Valid @ModelAttribute(PRODUCT_TO_CREATE_ATTRIBUTE) Product product, BindingResult result, Model model, HttpSession session) {
 
         if(result.hasErrors()){
             fillList(session, model);
             return "manageProducts";
         }
 
-        Object loggedUserIdObj =  session.getAttribute("loggedUserId");
+        Object loggedUserIdObj =  session.getAttribute(LOGGED_USER_ID_ATTRIBUTE);
 
         if (loggedUserIdObj == null) {
-            model.addAttribute("errorString", "You are not logged user");
+            model.addAttribute(ERROR_STRING_ATTRIBUTE, "You are not logged user");
             fillList(session, model);
             return "manageProducts";
         }
@@ -84,8 +88,8 @@ public class ProductController {
     @RequestMapping(value = {"/product/update/{code}"}, method = RequestMethod.GET)
     public String updateProduct(@PathVariable("code") String code, Model model, HttpSession session) {
 
-        model.addAttribute("productToUpdate", this.productService.getProductByCode(code));
-        model.addAttribute("productToCreate", new Product());
+        model.addAttribute(PRODUCT_TO_UPRADE_ATTRIBUTE, this.productService.getProductByCode(code));
+        model.addAttribute(PRODUCT_TO_CREATE_ATTRIBUTE, new Product());
 
         this.fillList(session, model);
 
@@ -94,11 +98,11 @@ public class ProductController {
 
 
     @RequestMapping(value = "/product/doUpdate", method = RequestMethod.POST)
-    public String doUpdateProduct(@Valid @ModelAttribute("productToUpdate") Product product, BindingResult result, Model model, HttpSession session) {
+    public String doUpdateProduct(@Valid @ModelAttribute(PRODUCT_TO_UPRADE_ATTRIBUTE) Product product, BindingResult result, Model model, HttpSession session) {
 
         if (result.hasErrors()) {
 
-            model.addAttribute("productToCreate", new Product());
+            model.addAttribute(PRODUCT_TO_CREATE_ATTRIBUTE, new Product());
             this.fillList(session, model);
             return "manageProducts";
         }
@@ -123,18 +127,18 @@ public class ProductController {
         Object loggedUserIdObj =  session.getAttribute("loggedUserId");
 
         if (loggedUserIdObj == null) {
-            model.addAttribute("loggedUserMoney", (int)9999999);
-            model.addAttribute("loggedUserName", "admin");
-            model.addAttribute("productList", this.productService.findProductsForSale());
+            model.addAttribute(LOGGED_USER_MONEY_ATTRIBUTE, (int)9999999);
+            model.addAttribute(LOGGED_USER_NAME_ATTRIBUTE, "admin");
+            model.addAttribute(PRODUCT_LIST_ATTRIBUTE, this.productService.findProductsForSale());
 
             return "marketplace";
         }
 
         UserAccount userAccount = this.userService.getUserById((int)loggedUserIdObj);
 
-        model.addAttribute("loggedUserMoney", userAccount.getMoney());
-        model.addAttribute("loggedUserName", userAccount.getUserName());
-        model.addAttribute("productList", this.productService.findProductsForSale());
+        model.addAttribute(PRODUCT_LIST_ATTRIBUTE, userAccount.getMoney());
+        model.addAttribute(LOGGED_USER_NAME_ATTRIBUTE, userAccount.getUserName());
+        model.addAttribute(PRODUCT_LIST_ATTRIBUTE, this.productService.findProductsForSale());
 
         return "marketplace";
     }
@@ -142,11 +146,11 @@ public class ProductController {
     @RequestMapping(value = {"/buyProduct/{code}"}, method = RequestMethod.GET)
     public String productTransaction(@PathVariable("code") String code, HttpSession session, Model model) {
 
-        Object loggedUserIdObj =  session.getAttribute("loggedUserId");
+        Object loggedUserIdObj =  session.getAttribute(LOGGED_USER_ID_ATTRIBUTE);
 
         if (loggedUserIdObj == null) {
-            model.addAttribute("errorString", "You are not logged user");
-            model.addAttribute("productList", this.productService.findProductsForSale());
+            model.addAttribute(PRODUCT_TO_CREATE_ATTRIBUTE, "You are not logged user");
+            model.addAttribute(PRODUCT_LIST_ATTRIBUTE, this.productService.findProductsForSale());
             return "marketplace";
         }
 

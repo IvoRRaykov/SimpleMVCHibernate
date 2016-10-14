@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+import static util.Constants.*;
+
 /**
  * Created by Ivo Raykov on 12.10.2016 г..
  */
@@ -26,13 +28,13 @@ public class MessageController {
     private UserService userService;
 
     @Autowired(required = true)
-    @Qualifier(value = "messageService")
+    @Qualifier(value = MESSAGE_SERVICE)
     public void setMessageService(MessageService messageService) {
         this.messageService = messageService;
     }
 
     @Autowired(required = true)
-    @Qualifier(value = "userService")
+    @Qualifier(value = USER_SERVICE)
     public void setUserService(UserService userService) {this.userService = userService; }
 
 
@@ -41,7 +43,7 @@ public class MessageController {
     @RequestMapping(value = {"/message"}, method = RequestMethod.GET)
     public String createMessage(Model model) {
 
-        model.addAttribute("message", new Message());
+        model.addAttribute(MESSAGE_ATTRIBUTE, new Message());
 
         return "messageCreate";
     }
@@ -54,11 +56,11 @@ public class MessageController {
         List<String> similarNames = this.userService.getSimilarNames(to);
 
         if(similarNames == null){
-            model.addAttribute("errorString", "No match in database");
+            model.addAttribute(ERROR_STRING_ATTRIBUTE, "No match in database");
             return "messageCreate";
         }
 
-        model.addAttribute("similarNames", similarNames);
+        model.addAttribute(SIMILAR_NAMES_ATTRIBUTE, similarNames);
 
 
         return "messageCreate";
@@ -67,7 +69,7 @@ public class MessageController {
     @RequestMapping(value = {"/message/to/{name}"}, method = RequestMethod.GET)
     public String openTextField(@PathVariable(value = "name") String name, Model model) {
 
-        model.addAttribute("to", name);
+        model.addAttribute(TO_ATTRIBUTE, name);
 
         return "messageCreate";
     }
@@ -75,8 +77,8 @@ public class MessageController {
     @RequestMapping(value = {"/message/{name}"}, method = RequestMethod.POST)
     public String sendMessage(@PathVariable(value = "name") String name, HttpServletRequest request, HttpSession session, Model model) {
 
-        String text = (String) request.getParameter("text");
-        int id = (int) session.getAttribute("loggedUserId");
+        String text = (String) request.getParameter(TEXT_ATTRIBUTE);
+        int id = (int) session.getAttribute(LOGGED_USER_ID_ATTRIBUTE);
         String to = name;
 
         this.messageService.sendMessage(text,id,to);
@@ -87,7 +89,7 @@ public class MessageController {
     @RequestMapping(value = {"/message/sent"}, method = RequestMethod.GET)
     public String viewSentMessages(HttpSession session, Model model) {
 
-        model.addAttribute("sentMessagesList", this.messageService.findAllMessagesFromUserId((int)session.getAttribute("loggedUserId")));
+        model.addAttribute(SENT_MESSAGES_LIST_ATTRIBUTE, this.messageService.findAllMessagesFromUserId((int)session.getAttribute(LOGGED_USER_ID_ATTRIBUTE)));
 
         return "messagesSent";
     }
@@ -95,7 +97,7 @@ public class MessageController {
     @RequestMapping(value = {"/message/received"}, method = RequestMethod.GET)
     public String viewReceivedMessages(HttpSession session, Model model) {
 
-        model.addAttribute("receivedMessagesList", this.messageService.findAllMessagesToUserId((int)session.getAttribute("loggedUserId")));
+        model.addAttribute(RECEIVED_MESSAGES_LIST_ATTRIBUTE, this.messageService.findAllMessagesToUserId((int)session.getAttribute(LOGGED_USER_ID_ATTRIBUTE)));
 
         return "messagesReceived";
     }
@@ -105,9 +107,9 @@ public class MessageController {
 
         this.messageService.deleteMessage(messageId);
 
-        if(from.equals("s")){
+        if(from.equals(SENT_URL_MARKER)){
             return "redirect:/message/sent";
-        }else if(from.equals("r")){
+        }else if(from.equals(RECEIVED_URL_MARKER)){
             return "redirect:/message/received";
         }else{
             return "home";

@@ -20,6 +20,8 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.UUID;
 
+import static util.Constants.AVATAR_PREFIX;
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -111,7 +113,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String getRandomAvatar() {
         int random = new Random().nextInt(999) + 1;
-        return "http://api.adorable.io/avatar/200/" + random;
+        return AVATAR_PREFIX + random;
     }
 
     @Override

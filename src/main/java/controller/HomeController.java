@@ -8,15 +8,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpSession;
 
+import static util.Constants.USER_ATTRIBUTE;
+
 
 @Controller
 public class HomeController {
 
     @RequestMapping(value = {"/home", "/"}, method = RequestMethod.GET)
-    public String home(Model model, HttpSession session) {
-
-        UserAccount user = (UserAccount) session.getAttribute("loggedUser");
-        model.addAttribute("user", user);
+    public String home() {
 
         return "home";
     }
