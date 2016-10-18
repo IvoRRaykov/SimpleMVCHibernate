@@ -49,7 +49,7 @@
                         <a style="color: #7a7a7a;">Buy</a>
                     </c:if>
                     <c:if test="${product.userAccount.userName != loggedUserName}">
-                        <a href="<c:url value='/buyProduct/${product.code}' />">Buy</a>
+                        <a href="<c:url value='/product/buy/${product.code}' />">Buy</a>
                     </c:if>
                 </td>
             </tr>
@@ -57,7 +57,7 @@
     </table>
 </c:if>
 <br>
-<a href="<c:url value='/downloadList' />">Download List</a>
+<a href="<c:url value='/product/downloadList' />">Download List</a>
 
 
 <jsp:include page="_footer.jsp"/>

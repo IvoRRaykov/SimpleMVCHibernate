@@ -46,6 +46,8 @@
                 <beans:value>model.Message</beans:value>
                 <beans:value>model.Product</beans:value>
                 <beans:value>model.UserConfirmation</beans:value>
+                <beans:value>model.UserRole</beans:value>
+
             </beans:list>
         </beans:property>
         <beans:property name="hibernateProperties">
@@ -65,6 +67,10 @@
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
     </beans:bean>
 
+    <beans:bean id="roleDAO" class="dao.RoleDAOImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
+    </beans:bean>
+
     <beans:bean id="productDAO" class="dao.ProductDAOImpl">
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
     </beans:bean>
@@ -77,6 +83,7 @@
 
         <beans:property name="userDAO" ref="userDAO"/>
         <beans:property name="confirmationDAO" ref="confirmationDAO"/>
+        <beans:property name="roleDAO" ref="roleDAO"/>
 
     </beans:bean>
 

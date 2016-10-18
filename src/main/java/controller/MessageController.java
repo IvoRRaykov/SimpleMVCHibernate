@@ -17,10 +17,6 @@ import java.util.List;
 
 import static util.Constants.*;
 
-/**
- * Created by Ivo Raykov on 12.10.2016 г..
- */
-
 @Controller
 public class MessageController {
 
@@ -36,8 +32,6 @@ public class MessageController {
     @Autowired(required = true)
     @Qualifier(value = USER_SERVICE)
     public void setUserService(UserService userService) {this.userService = userService; }
-
-
 
 
     @RequestMapping(value = {"/message"}, method = RequestMethod.GET)

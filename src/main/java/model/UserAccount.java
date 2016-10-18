@@ -28,10 +28,6 @@ public class UserAccount {
     @NotEmpty(message = "Email is required")
     private String email;
 
-    @NotEmpty(message = "Gender is required")
-    @Column(name = "gender")
-    private String gender;
-
     @Column(name = "password")
     @Pattern(regexp = "^[a-zA-Z0-9]{5,}$", message = "Password should contain at least 5 letters or digits")
     @NotEmpty(message = "Password is required")
@@ -41,8 +37,15 @@ public class UserAccount {
     @Column(name = "money")
     private float money;
 
+    @NotEmpty(message = "Gender is required")
+    @Column(name = "gender")
+    private String gender;
+
     @Column(name = "avatar")
     private String avatar;
+
+    @OneToMany(mappedBy = "userAccountInRole", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    private Set<UserRole> userRole = new HashSet<UserRole>(0);
 
     @OneToMany(mappedBy = "userAccount", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     private Set<Product> products = new HashSet<Product>(0);
@@ -147,6 +150,15 @@ public class UserAccount {
     public String getAvatar() {
         return avatar;
     }
+
+    public Set<UserRole> getUserRole() {
+        return this.userRole;
+    }
+
+    public void setUserRole(Set<UserRole> userRole) {
+        this.userRole = userRole;
+    }
+
 
     @Override
     public String toString() {

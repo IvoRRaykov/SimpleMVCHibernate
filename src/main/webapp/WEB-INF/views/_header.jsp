@@ -8,7 +8,7 @@
 
     <c:if test="${not empty loggedUserName}">
         Hello ${loggedUserName}
-        <a href="${pageContext.request.contextPath}/user/logout">Log out</a>
+        <a href="${pageContext.request.contextPath}/login?logout">Log out</a>
     </c:if>
 
 </div>

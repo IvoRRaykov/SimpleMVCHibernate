@@ -10,6 +10,8 @@ public interface Constants {
     public static final String MESSAGE_SERVICE = "messageService";
 
     public static final String USER_ATTRIBUTE = "user";
+    public static final String USER_ROLE = "ROLE_USER";
+    public static final String ADMIN_ROLE = "ROLE_ADMIN";
     public static final String CONFIRMED_MESSAGE_ATTRIBUTE = "confirmedMessage";
     public static final String AVATAR_ATTRIBUTE = "avatar";
     public static final String AVATAR_PREFIX = "http://api.adorable.io/avatar/200/";

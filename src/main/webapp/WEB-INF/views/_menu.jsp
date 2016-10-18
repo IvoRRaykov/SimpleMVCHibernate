@@ -17,17 +17,17 @@
 
     <c:if test="${not empty loggedUserId}">
         |
-        <a href="${pageContext.request.contextPath}/marketplace">Marketplace</a>
+        <a href="${pageContext.request.contextPath}/product/marketplace">Marketplace</a>
     </c:if>
 
     <c:if test="${loggedUserId == 0 or empty loggedUserId}">
         |
-        <a href="${pageContext.request.contextPath}/user/login">Login</a>
+        <a href="${pageContext.request.contextPath}/login">Login</a>
     </c:if>
 
     <c:if test="${loggedUserId == 0 or empty loggedUserId}">
         |
-        <a href="${pageContext.request.contextPath}/user/create">Register</a>
+        <a href="${pageContext.request.contextPath}/account/create">Register</a>
     </c:if>
 
 </div>

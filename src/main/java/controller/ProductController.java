@@ -49,7 +49,6 @@ public class ProductController {
     }
 
 
-
     @RequestMapping(value = {"user/manageProducts", "admin/manageProducts"}, method = RequestMethod.GET)
     public String manageProducts(Model model, HttpSession session) {
 
@@ -121,7 +120,7 @@ public class ProductController {
         return "redirect:/user/manageProducts";
     }
 
-    @RequestMapping(value = {"/marketplace"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/product/marketplace"}, method = RequestMethod.GET)
     public String marketplace(Model model, HttpSession session) {
 
         Object loggedUserIdObj =  session.getAttribute("loggedUserId");
@@ -143,7 +142,7 @@ public class ProductController {
         return "marketplace";
     }
 
-    @RequestMapping(value = {"/buyProduct/{code}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/product/buy/{code}"}, method = RequestMethod.GET)
     public String productTransaction(@PathVariable("code") String code, HttpSession session, Model model) {
 
         Object loggedUserIdObj =  session.getAttribute(LOGGED_USER_ID_ATTRIBUTE);
@@ -159,7 +158,7 @@ public class ProductController {
         return "redirect:/user/manageProducts";
     }
 
-    @RequestMapping(value = {"/downloadList"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/product/downloadList"}, method = RequestMethod.GET)
     public void downloadList(HttpServletResponse response){
 
         try {
