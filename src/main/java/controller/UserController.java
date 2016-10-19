@@ -56,7 +56,8 @@ public class UserController {
     public String updateUser(Model model, HttpSession session) {
 
         int userId = (int) session.getAttribute(LOGGED_USER_ID_ATTRIBUTE);
-        UserAccount user = this.userService.getUserById(userId);
+        UserAccount user = this.userService.getUserByIdForUpdate(userId);
+        user.setPassword("");
 
         model.addAttribute(USER_ATTRIBUTE, user);
         model.addAttribute(AVATAR_ATTRIBUTE, user.getAvatar());
