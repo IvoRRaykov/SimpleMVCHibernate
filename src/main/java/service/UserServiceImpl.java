@@ -7,6 +7,7 @@ import model.UserAccount;
 import model.UserConfirmation;
 import model.UserRole;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,7 @@ import javax.mail.internet.MimeMessage;
 import java.util.*;
 
 import static util.Constants.AVATAR_PREFIX;
+import static util.Constants.CONFIRM_PATH;
 import static util.Constants.USER_ROLE;
 
 
@@ -36,6 +39,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private UserDAO userDAO;
     private ConfirmationDAO confirmationDAO;
     private RoleDAO roleDAO;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     public void setUserDAO(UserDAO userDAO) {
         this.userDAO = userDAO;
@@ -51,28 +57,41 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional
     public void createUser(UserAccount user) throws ConstraintViolationException {
 
-        UserConfirmation confirmation = new UserConfirmation();
-        confirmation.setUserAccountRef(user);
-        confirmation.setConfirmationCode(UUID.randomUUID().toString());
+        UserConfirmation confirmation = this.createConfirmation(user);
+        UserRole role = this.createRole(user);
 
-        UserRole role = new UserRole();
-        role.setUserAccountInRole(user);
-        role.setRole(USER_ROLE);
-
-        user.setPassword(hashPassword(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         this.userDAO.registerUser(user);
 
         this.performOnBackgroundThread(confirmation.getConfirmationCode(), user.getEmail());
-        //this.sendEmail(confirmation.getConfirmationCode(), user.getEmail());
 
         this.confirmationDAO.createConfirmation(confirmation);
         this.roleDAO.createRole(role);
     }
 
+
+    @Override
+    @Transactional
+    public void createUser(UserAccount user, String role) {
+        UserConfirmation confirmation = this.createConfirmation(user);
+        confirmation.setUserEnabled(true);
+
+        UserRole userRole = this.createRole(user);
+        userRole.setRole(role);
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        this.userDAO.registerUser(user);
+
+        this.confirmationDAO.createConfirmation(confirmation);
+        this.roleDAO.createRole(userRole);
+    }
+
     @Override
     @Transactional
     public void updateUser(UserAccount user) throws ConstraintViolationException,DataIntegrityViolationException {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         this.userDAO.updateUser(user);
     }
 
@@ -96,23 +115,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public void removeUser(int id) {
-        this.userDAO.removeUser(id);
+    public UserAccount getUserByIdForUpdate(int id) {
+
+       return this.userDAO.getUserById(id);
     }
 
     @Override
     @Transactional
-    public UserAccount loginUser(String userName, String password) {
-
-        UserAccount user = this.userDAO.getUserByUserNameAndPassword(userName, password);
-        if (user == null) {
-            return null;
-        }
-
-        UserConfirmation userConfirmation = this.confirmationDAO.getConfirmationByUser(user);
-        user.setUserConfirmation(userConfirmation);
-
-        return user;
+    public void removeUser(int id) {
+        this.userDAO.removeUser(id);
     }
 
     @Override
@@ -143,8 +154,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
 
         model.UserAccount user = this.userDAO.getUserByName(username);
+
         UserConfirmation confirmation = this.confirmationDAO.getConfirmationByUser(user);
         user.setUserConfirmation(confirmation);
+
+        Set<UserRole> roles = this.roleDAO.getRoleByUser(user);
+        user.setUserRole(roles);
+
         List<GrantedAuthority> authorities = buildUserAuthority(user.getUserRole());
 
         return buildUserForAuthentication(user, authorities);
@@ -169,14 +185,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return Result;
     }
 
-    public static String hashPassword(String password) {
-        String salt = BCrypt.gensalt(12);
-        password = BCrypt.hashpw(password, salt);
-
-        return password;
+    private UserRole createRole(UserAccount user) {
+        UserRole role = new UserRole();
+        role.setUserAccountInRole(user);
+        role.setRole(USER_ROLE);
+        return role;
     }
 
-    public void performOnBackgroundThread(final String text, final String email) {
+    private UserConfirmation createConfirmation(UserAccount user) {
+
+        UserConfirmation confirmation = new UserConfirmation();
+        confirmation.setUserAccountRef(user);
+        confirmation.setConfirmationCode(UUID.randomUUID().toString());
+
+        return confirmation;
+    }
+
+    private void performOnBackgroundThread(final String text, final String email) {
         final Thread t = new Thread() {
             @Override
             public void run() {
@@ -210,7 +235,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             message.setRecipients(javax.mail.Message.RecipientType.TO,
                     InternetAddress.parse(email));
             message.setSubject("Account confirmation");
-            message.setText("Click the link to confirm your registration:   http://localhost:8080/account/confirm/" + text);
+            message.setText("Click the link to confirm your registration:   " + CONFIRM_PATH + text);
 
             Transport.send(message);
 

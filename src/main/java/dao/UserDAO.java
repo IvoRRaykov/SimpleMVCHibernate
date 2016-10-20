@@ -17,7 +17,6 @@ public interface UserDAO {
     public UserAccount getUserById(int id);
     public void removeUser(int id);
     public UserAccount getUserByUserNameAndPassword(String username, String Password);
-
     public UserAccount getUserByName(String name);
 
     public List<String> findSimilarNames(String to);

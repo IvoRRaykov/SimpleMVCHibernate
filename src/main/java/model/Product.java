@@ -75,7 +75,10 @@ public class Product {
     }
 
     public String toString() {
-        return "code=" + code + ", name=" + name + ", price=" + price + "User Name= " + userAccount.getUserName();
+
+        String sUserAccount = (this.userAccount == null) ? "NA" : this.userAccount.toString();
+
+        return "code=" + code + ", name=" + name + ", price=" + price +", forSale=" + this.forSale + ", userAccount" + sUserAccount;
     }
 
 

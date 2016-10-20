@@ -79,6 +79,7 @@
     </table>
 </c:if>
 
+<jsp:include page="_footer.jsp"/>
 
 </body>
 </html>

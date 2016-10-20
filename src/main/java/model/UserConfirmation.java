@@ -52,4 +52,10 @@ public class UserConfirmation {
     public void setUserAccountRef(UserAccount userAccount) {
         this.userAccountRef = userAccount;
     }
+
+    @Override
+    public String toString() {
+        String sUserAccount = (this.userAccountRef == null) ? "NA" : this.userAccountRef.toString();
+        return "confirmationId=" + this.id + ", confirmationCode=" + this.confirmationCode + ", enabled=" + this.userEnabled + ", user=" + sUserAccount;
+    }
 }

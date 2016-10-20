@@ -1,10 +1,5 @@
 package dao;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import model.UserAccount;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,6 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Repository
@@ -33,17 +31,17 @@ public class UserDAOImpl implements UserDAO {
 
         session.persist(user);
 
-        logger.info("UserAccount saved successfully, UserAccount Details=" + user);
+        logger.info("UserAccount saved successfully, UserAccount Details =" + user.toString());
     }
 
     @Override
-    public void updateUser(UserAccount user) throws ConstraintViolationException,DataIntegrityViolationException {
+    public void updateUser(UserAccount user) throws ConstraintViolationException, DataIntegrityViolationException {
 
         Session session = this.sessionFactory.getCurrentSession();
 
         session.update(user);
 
-        logger.info("UserAccount updated successfully, UserAccount Details=" + user);
+        logger.info("UserAccount updated successfully, UserAccount Details =" + user.toString());
     }
 
     @Override
@@ -53,8 +51,10 @@ public class UserDAOImpl implements UserDAO {
         Session session = this.sessionFactory.getCurrentSession();
 
         List<UserAccount> usersList = session.createQuery("from UserAccount").list();
+
+        logger.info("UserAccount List obtained successfully");
         for (UserAccount user : usersList) {
-            logger.info("UserAccount List::" + user);
+            logger.info("  user = " + user.toString());
         }
 
         return usersList;
@@ -67,7 +67,7 @@ public class UserDAOImpl implements UserDAO {
 
         UserAccount user = (UserAccount) session.load(UserAccount.class, id);
 
-        logger.info("UserAccount loaded successfully, UserAccount details=" + user);
+        logger.info("UserAccount loaded successfully by Id, user details = " + user.toString());
 
         return user;
     }
@@ -86,10 +86,13 @@ public class UserDAOImpl implements UserDAO {
 
         if (users.size() > 0) {
 
-            logger.info("UserAccount obtained successfully by , user details=" + userName);
+            logger.info("UserAccount loaded successfully by name=" + userName + ", user details = " + users.get(0).toString());
 
             return users.get(0);
         } else {
+
+            logger.info("UserAccount NOT loaded successfully by name = " + userName);
+
             return null;
         }
     }
@@ -104,7 +107,7 @@ public class UserDAOImpl implements UserDAO {
             session.delete(user);
         }
 
-        logger.info("UserAccount deleted successfully, user details=" + user);
+        logger.info("UserAccount deleted successfully, user id = " + id);
     }
 
     @Override
@@ -121,14 +124,17 @@ public class UserDAOImpl implements UserDAO {
 
         if (users.size() > 0) {
 
-            logger.info("UserAccount obtained successfully by , user details=" + userName + ", " + password);
+            logger.info("UserAccount obtained successfully by , userName and password, user details = " + users.get(0).toString());
 
             return users.get(0);
         } else {
+            logger.info("UserAccount NOT obtained successfully by , userName" + userName + "password" + password);
+
             return null;
         }
 
     }
+
 
     @Override
     @SuppressWarnings("unchecked")
@@ -142,10 +148,11 @@ public class UserDAOImpl implements UserDAO {
 
         if (names.size() > 0) {
 
-            logger.info("names obtained successfully similar to " + to);
+            logger.info("Similar names obtained successfully by name = " + to);
 
             return names;
         } else {
+            logger.info("Similar names NOT obtained successfully by name = " + to);
             return null;
         }
     }
@@ -163,10 +170,13 @@ public class UserDAOImpl implements UserDAO {
 
         if (usersNames.size() > 0) {
 
-            logger.info("UserName obtained successfully by , user id =" + id);
+            logger.info("UserName obtained successfully by id = " + id + ", userName = " + usersNames.get(0));
 
             return usersNames.get(0);
         } else {
+
+            logger.info("UserName NOT obtained successfully by id = " + id);
+
             return null;
         }
 

@@ -16,35 +16,33 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `message`
+-- Table structure for table `product`
 --
 
-DROP TABLE IF EXISTS `message`;
+DROP TABLE IF EXISTS `product`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `message` (
-  `message_id` int(11) NOT NULL AUTO_INCREMENT,
-  `text` varchar(200) NOT NULL,
-  `date_sent` datetime NOT NULL,
-  `fromu` int(11) NOT NULL,
-  `tou` int(11) NOT NULL,
-  `seen` bit(1) NOT NULL,
-  UNIQUE KEY `message_id_UNIQUE` (`message_id`),
-  KEY `to_fk_idx` (`tou`),
-  KEY `from_fk_idx` (`fromu`),
-  CONSTRAINT `from_fk` FOREIGN KEY (`fromu`) REFERENCES `user_account` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `to_fk` FOREIGN KEY (`tou`) REFERENCES `user_account` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+CREATE TABLE `product` (
+  `code` varchar(20) NOT NULL,
+  `name` varchar(128) NOT NULL,
+  `price` float NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `for_sale` bit(1) NOT NULL,
+  PRIMARY KEY (`code`),
+  UNIQUE KEY `code_UNIQUE` (`code`),
+  KEY `user_id_fk_idx` (`user_id`),
+  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `user_account` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `message`
+-- Dumping data for table `product`
 --
 
-LOCK TABLES `message` WRITE;
-/*!40000 ALTER TABLE `message` DISABLE KEYS */;
-INSERT INTO `message` VALUES (6,'tytytytty','2016-10-14 11:42:51',1,2,''),(7,'da tova nee shega','2016-10-14 17:08:16',44,15,'\0');
-/*!40000 ALTER TABLE `message` ENABLE KEYS */;
+LOCK TABLES `product` WRITE;
+/*!40000 ALTER TABLE `product` DISABLE KEYS */;
+INSERT INTO `product` VALUES ('354p4','vodchica',25,68,''),('b341','barbi sexy kukla',89.99,65,''),('c80080','C-3PO',54.88,73,''),('c9563','R2D2',65,63,'\0'),('p350','rakiq',20,74,'');
+/*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -56,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-17 16:34:57
+-- Dump completed on 2016-10-20 18:31:20

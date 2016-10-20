@@ -28,8 +28,8 @@
         <td>Pick avatar</td>
         <td><a href="${pageContext.request.contextPath}/account/create"><img src="${avatar}"/></a></td>
     </tr>
-
 </Table>
+
 
 <a style="color: red; font-weight: bold;">${errorString}</a>
 
@@ -108,9 +108,7 @@
             <td colspan="2">
                 <input type="submit"
                        value="<spring:message text="Register User"/>"/>
-                <input type="hidden"
-                       name="${_csrf.parameterName}"
-                       value="${_csrf.token}"/>
+
             </td>
         </tr>
     </table>

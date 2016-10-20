@@ -16,34 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `confirmation`
+-- Table structure for table `user_role`
 --
 
-DROP TABLE IF EXISTS `confirmation`;
+DROP TABLE IF EXISTS `user_role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `confirmation` (
-  `confirmation_id` int(11) NOT NULL AUTO_INCREMENT,
-  `confirmation_code` varchar(225) NOT NULL,
+CREATE TABLE `user_role` (
+  `user_role_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
-  `enabled` bit(1) NOT NULL,
-  PRIMARY KEY (`confirmation_id`),
-  UNIQUE KEY `confirmation_id_UNIQUE` (`confirmation_id`),
-  UNIQUE KEY `confirmation_code_UNIQUE` (`confirmation_code`),
-  UNIQUE KEY `user_id_UNIQUE` (`user_id`),
+  `role` varchar(45) NOT NULL,
+  PRIMARY KEY (`user_role_id`),
+  UNIQUE KEY `user_role_id_UNIQUE` (`user_role_id`),
   KEY `user_id_idx` (`user_id`),
-  CONSTRAINT `user_id_fk1` FOREIGN KEY (`user_id`) REFERENCES `user_account` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+  CONSTRAINT `role_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user_account` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `confirmation`
+-- Dumping data for table `user_role`
 --
 
-LOCK TABLES `confirmation` WRITE;
-/*!40000 ALTER TABLE `confirmation` DISABLE KEYS */;
-INSERT INTO `confirmation` VALUES (1,'1',1,''),(2,'2',2,''),(12,'386fb41d-bea1-454c-8e11-40ade6522b7e',41,''),(13,'919d593e-41f8-472d-b06f-f6393eb2999d',42,''),(14,'a147769b-2753-4c3d-90b6-b8f99bdb48b6',43,''),(15,'fa34c07b-27c7-481a-8d0e-09e3a932ff07',44,''),(16,'b862ab26-4d3a-4291-a678-78b0b02943e8',45,''),(17,'6cd9d2ea-ff84-49b7-937f-a2dc9102bdfb',46,''),(18,'8ede649f-5a4f-42e9-831f-13aa66374b10',47,'\0');
-/*!40000 ALTER TABLE `confirmation` ENABLE KEYS */;
+LOCK TABLES `user_role` WRITE;
+/*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
+INSERT INTO `user_role` VALUES (13,63,'ROLE_ADMIN'),(14,65,'ROLE_USER'),(15,68,'ROLE_USER'),(16,73,'ROLE_USER'),(17,74,'ROLE_USER'),(19,76,'ROLE_ADMIN');
+/*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -55,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-17 16:34:57
+-- Dump completed on 2016-10-20 18:31:20

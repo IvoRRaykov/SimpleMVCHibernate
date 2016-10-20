@@ -27,7 +27,7 @@
 
 
 <br>
-<a href="${pageContext.request.contextPath}/manageProducts">Manage My Products</a>
+<a href="${pageContext.request.contextPath}/product/manage">Manage My Products</a>
 <br>
 <br>
 <br>

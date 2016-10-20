@@ -28,17 +28,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.authorizeRequests().antMatchers(("/home"))
+        http.authorizeRequests().antMatchers("/home","/","/login","/register")
                 .access("permitAll");
 
         http.authorizeRequests().antMatchers("/admin/**")
-                .access("hasRole('ROLE_USER')").and().formLogin()
+                .access("hasRole('ROLE_ADMIN')").and().formLogin()
                 .loginPage("/login").failureUrl("/login?error")
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .and().logout().logoutSuccessUrl("/login?logout")
-                .and().csrf()
-                .and().exceptionHandling().accessDeniedPage("/403");
+                .and().exceptionHandling().accessDeniedPage("/403")
+                .and().csrf().disable();
 
 
         http.authorizeRequests().antMatchers("/user/**","/product/**")
@@ -47,8 +47,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .and().logout().logoutSuccessUrl("/login?logout")
-                .and().csrf()
-                .and().exceptionHandling().accessDeniedPage("/403");
+                .and().exceptionHandling().accessDeniedPage("/403")
+                .and().csrf().disable();
     }
 
     @Bean

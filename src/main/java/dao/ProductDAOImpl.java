@@ -31,7 +31,7 @@ public class ProductDAOImpl implements ProductDAO {
 
         session.persist(product);
 
-        logger.info("Product saved successfully, Product Details=" + product);
+        logger.info("Product saved successfully, Product Details=" + product.toString());
     }
 
     @Override
@@ -41,7 +41,7 @@ public class ProductDAOImpl implements ProductDAO {
 
         session.update(product);
 
-        logger.info("Product updated successfully, Product Details=" + product);
+        logger.info("Product updated successfully, Product Details=" + product.toString());
     }
 
     @Override
@@ -51,9 +51,12 @@ public class ProductDAOImpl implements ProductDAO {
         Session session = this.sessionFactory.getCurrentSession();
 
         List<Product> productList = session.createQuery("from Product").list();
-        for (Product prduct : productList) {
 
-            logger.info("Product List::" + prduct);
+        logger.info("Product list obtained successfully");
+
+        for (Product product : productList) {
+
+            logger.info("   product = " + product.toString());
 
         }
 
@@ -67,7 +70,7 @@ public class ProductDAOImpl implements ProductDAO {
 
         Product product = (Product) session.load(Product.class, code);
 
-        logger.info("Product loaded successfully, Product details=" + product);
+        logger.info("Product loaded successfully by code = " + code + ", Product details=" + product.toString());
 
         return product;
     }
@@ -83,7 +86,7 @@ public class ProductDAOImpl implements ProductDAO {
             session.delete(product);
         }
 
-        logger.info("Product deleted successfully, Product details=" + product);
+        logger.info("Product deleted successfully by code = " + code + ", product details = " + product.toString());
     }
 
     @Override
@@ -93,9 +96,12 @@ public class ProductDAOImpl implements ProductDAO {
         Session session = this.sessionFactory.getCurrentSession();
 
         List<Product> productList = session.createQuery("from Product where forSale = true").list();
-        for (Product prduct : productList) {
 
-            logger.info("Product List::" + prduct);
+        logger.info("Products for sale List");
+
+        for (Product product : productList) {
+
+            logger.info("   product = " + product.toString());
         }
 
         return productList;
@@ -113,8 +119,8 @@ public class ProductDAOImpl implements ProductDAO {
 
         logger.info("Product List for userId " + userId);
 
-        for (Product prduct : productList) {
-            logger.info("Product : " + prduct);
+        for (Product product : productList) {
+            logger.info("  product = " + product.toString());
         }
 
         return productList;
@@ -131,7 +137,7 @@ public class ProductDAOImpl implements ProductDAO {
                 .list();
 
 
-        logger.info("User Id obtained successfully by , product code =" + code);
+        logger.info("User Id = " + userIds.get(0) + " obtained successfully by , product code =" + code);
 
         return userIds.get(0);
     }

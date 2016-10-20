@@ -5,35 +5,44 @@ package util;
  */
 public interface Constants {
 
-    public static final String PRODUCT_SERVICE = "productService";
-    public static final String USER_SERVICE = "userService";
-    public static final String MESSAGE_SERVICE = "messageService";
+    String PRODUCT_SERVICE = "productService";
+    String USER_SERVICE = "userService";
+    String MESSAGE_SERVICE = "messageService";
 
-    public static final String USER_ATTRIBUTE = "user";
-    public static final String USER_ROLE = "ROLE_USER";
-    public static final String ADMIN_ROLE = "ROLE_ADMIN";
-    public static final String CONFIRMED_MESSAGE_ATTRIBUTE = "confirmedMessage";
-    public static final String AVATAR_ATTRIBUTE = "avatar";
-    public static final String AVATAR_PREFIX = "http://api.adorable.io/avatar/200/";
-    public static final String LOGGED_USER_NAME_ATTRIBUTE = "loggedUserName";
-    public static final String LOGGED_USER_ID_ATTRIBUTE = "loggedUserId";
+    String USER_ATTRIBUTE = "user";
+    String USER_ROLE = "ROLE_USER";
+    String ADMIN_ROLE = "ROLE_ADMIN";
+    String ROLES_ATTRIBUTE = "roles";
+    String CONFIRMED_MESSAGE_ATTRIBUTE = "confirmedMessage";
+    String AVATAR_ATTRIBUTE = "avatar";
+    String AVATAR_PREFIX = "http://api.adorable.io/avatar/200/";
+    String LOGGED_USER_NAME_ATTRIBUTE = "loggedUserName";
+    String LOGGED_USER_ID_ATTRIBUTE = "loggedUserId";
+    String USER_NAME_ATTRIBUTE = "username";
+    String LOGOUT_MESSAGE_ATTRIBUTE = "msg";
 
-    public static final String PRODUCT_TO_UPRADE_ATTRIBUTE = "productToUpdate";
-    public static final String PRODUCT_TO_CREATE_ATTRIBUTE = "productToCreate";
-    public static final String PRODUCT_LIST_ATTRIBUTE = "productList";
-    public static final String LOGGED_USER_MONEY_ATTRIBUTE = "loggedUserMoney";
+    String CONFIRM_PATH = "http://localhost:8080/account/confirm/";
 
-    public static final String MESSAGE_ATTRIBUTE = "message";
-    public static final String UNREAD_MESSAGES = "unreadMessages";
-    public static final String SIMILAR_NAMES_ATTRIBUTE = "similarNames";
-    public static final String TO_ATTRIBUTE = "to";
-    public static final String TEXT_ATTRIBUTE = "text";
-    public static final String SENT_MESSAGES_LIST_ATTRIBUTE = "sentMessagesList";
-    public static final String RECEIVED_MESSAGES_LIST_ATTRIBUTE = "receivedMessagesList";
-    public static final String SENT_URL_MARKER = "s";
-    public static final String RECEIVED_URL_MARKER = "r";
+    String PRODUCT_TO_UPRADE_ATTRIBUTE = "productToUpdate";
+    String PRODUCT_TO_CREATE_ATTRIBUTE = "productToCreate";
+    String PRODUCT_LIST_ATTRIBUTE = "productList";
+    String LOGGED_USER_MONEY_ATTRIBUTE = "loggedUserMoney";
+
+    String MESSAGE_ATTRIBUTE = "message";
+    String UNREAD_MESSAGES = "unreadMessages";
+    String SIMILAR_NAMES_ATTRIBUTE = "similarNames";
+    String TO_ATTRIBUTE = "to";
+    String TEXT_ATTRIBUTE = "text";
+    String SENT_MESSAGES_LIST_ATTRIBUTE = "sentMessagesList";
+    String RECEIVED_MESSAGES_LIST_ATTRIBUTE = "receivedMessagesList";
+    String SENT_URL_MARKER = "s";
+    String RECEIVED_URL_MARKER = "r";
+
+    String EMPTY = "";
+    String FILE_FOR_SAVE_NAME = "productList";
+
+    String USER_LIST_ATTRIBUTE = "listUsers";
 
 
-
-    public static final String ERROR_STRING_ATTRIBUTE = "errorString";
+    String ERROR_STRING_ATTRIBUTE = "errorString";
 }

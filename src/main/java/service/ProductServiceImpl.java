@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import static util.Constants.FILE_FOR_SAVE_NAME;
+
 /**
  * Created by Ivo Raykov on 29.9.2016 г..
  */
@@ -40,6 +42,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void updateProduct(Product product) {
+        UserAccount user = this.productDAO.getUserByProductCode(product.getCode());
+        product.setUserAccount(user);
         this.productDAO.updateProduct(product);
     }
 
@@ -76,14 +80,10 @@ public class ProductServiceImpl implements ProductService {
         UserAccount futureOwner = this.userDAO.getUserById(userId);
 
         previousOwner.setMoney(previousOwner.getMoney() + p.getPrice());
-        userDAO.updateUser(previousOwner);
-
         futureOwner.setMoney(futureOwner.getMoney() - p.getPrice());
-        userDAO.updateUser(futureOwner);
 
         p.setUserAccount(futureOwner);
         p.setForSale(false);
-        productDAO.updateProduct(p);
     }
 
     @Override
@@ -94,13 +94,19 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    public List<Product> listProductsForUser(int userId) {
+        return this.productDAO.listProductsForUser(userId);
+    }
+
+    @Override
+    @Transactional
     public void downloadList(HttpServletResponse response) throws IOException {
 
         List<Product> productsForSale = this.findProductsForSale();
 
 
         response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-Disposition", "attachment; filename=productList.xls");
+        response.setHeader("Content-Disposition", "attachment; filename=" + FILE_FOR_SAVE_NAME + ".xls");
 
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet("FirstSheet");
@@ -128,12 +134,6 @@ public class ProductServiceImpl implements ProductService {
         workbook.write(response.getOutputStream());
         workbook.close();
 
-    }
-
-    @Override
-    @Transactional
-    public List<Product> listProductsForUser(int userId) {
-        return this.productDAO.listProductsForUser(userId);
     }
 
 

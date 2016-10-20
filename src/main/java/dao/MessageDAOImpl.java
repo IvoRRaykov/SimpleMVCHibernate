@@ -35,11 +35,11 @@ public class MessageDAOImpl implements MessageDAO {
                 .setInteger("tou", userId)
                 .list();
 
-        logger.info("Message List from userId " + userId);
+        logger.info("Message List obtained successfully from userId " + userId);
 
         for (Message message : messageList) {
 
-            logger.info("Message :" + message);
+            logger.info("   message :" + message.toString());
         }
 
         return messageList;
@@ -55,7 +55,8 @@ public class MessageDAOImpl implements MessageDAO {
                 .list();
 
         int size = messageList.size();
-        logger.info("Unread Messages = " + size);
+
+        logger.info("Unread Messages size = " + size + "obtained successfully by userId = " + userId);
 
         return size;
     }
@@ -74,7 +75,7 @@ public class MessageDAOImpl implements MessageDAO {
 
         for (Message message : messageList) {
 
-            logger.info("Message :" + message);
+            logger.info("   message :" + message.toString());
         }
 
         return messageList;
@@ -94,7 +95,7 @@ public class MessageDAOImpl implements MessageDAO {
 
         if (usersIds.size() > 0) {
 
-            logger.info("Message obtained successfully by , message id =" + messageId);
+            logger.info("User Name obtained successfully by , message id =" + messageId);
 
             return usersIds.get(0).getUserName();
         } else {
@@ -125,13 +126,14 @@ public class MessageDAOImpl implements MessageDAO {
 
     @Override
     public void updateMessageSeen(int messageId) {
+
         Query query = sessionFactory.getCurrentSession()
                 .createQuery("update Message set seen = :seen where message_id = :messageId");
         query.setBoolean("seen", true);
         query.setInteger("messageId", messageId);
         query.executeUpdate();
 
-        logger.info("Message update successfully, Message Id=" + messageId);
+        logger.info("Message seen update successfully, message Id=" + messageId);
 
     }
 
@@ -142,7 +144,7 @@ public class MessageDAOImpl implements MessageDAO {
 
         session.persist(message);
 
-        logger.info("Message saved successfully, Message Details=" + message);
+        logger.info("Message saved successfully, Message Details=" + message.toString());
     }
 
     @Override
@@ -155,6 +157,6 @@ public class MessageDAOImpl implements MessageDAO {
             session.delete(message);
         }
 
-        logger.info("Message deleted successfully, Message details=" + message);
+        logger.info("Message deleted successfully, Message details=" + message.toString());
     }
 }

@@ -44,4 +44,8 @@ public class UserRole{
         this.role = role;
     }
 
+    @Override
+    public String toString() {
+        return "userRoleId=" + this.userRoleId + ", role=" + this.role + ", user = " + userAccountInRole;
+    }
 }

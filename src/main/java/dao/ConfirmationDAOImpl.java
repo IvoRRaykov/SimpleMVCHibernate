@@ -24,7 +24,8 @@ public class ConfirmationDAOImpl implements ConfirmationDAO{
     public void createConfirmation(UserConfirmation confirmation) {
         Session session = this.sessionFactory.getCurrentSession();
         session.persist(confirmation);
-        logger.info("Confirmation saved successfully, confirmation Details=" + confirmation);
+
+        logger.info("Confirmation saved successfully, confirmation Details=" + confirmation.toString());
 
     }
 
@@ -32,7 +33,8 @@ public class ConfirmationDAOImpl implements ConfirmationDAO{
     public void updateConfirmation(UserConfirmation confirmation) {
         Session session = this.sessionFactory.getCurrentSession();
         session.update(confirmation);
-        logger.info("Confirmation updated successfully, confirmation Details=" + confirmation);
+
+        logger.info("Confirmation updated successfully, confirmation details =" + confirmation.toString());
     }
 
     @Override
@@ -45,7 +47,7 @@ public class ConfirmationDAOImpl implements ConfirmationDAO{
                 .setInteger("userId", userAccount.getId())
                 .list();
 
-        logger.info("UserConfirmation obtained successfully by user = " +userAccount);
+        logger.info("UserConfirmation obtained successfully by user = " + userAccount.toString());
 
         if (confirmations.size() > 0) {
             return confirmations.get(0);

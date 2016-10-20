@@ -3,12 +3,13 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <html>
 <head>
-    <title>Manage Products  Page</title>
+    <title>Manage Products Page</title>
     <style type="text/css">
         .error {
             font-weight: bold;
             color: #ff0000;
         }
+
         .tg {
             border-collapse: collapse;
             border-spacing: 0;
@@ -48,18 +49,11 @@
     </style>
 </head>
 <body>
-<c:if test="${empty loggedUserId}">
-    <jsp:include page="_adminHeader.jsp"/>
-    <jsp:include page="_adminMenu.jsp"/>
 
-</c:if>
+<jsp:include page="_header.jsp"/>
+<jsp:include page="_menu.jsp"/>
+<jsp:include page="_messageMenu.jsp"/>
 
-<c:if test="${not empty loggedUserId}">
-    <jsp:include page="_header.jsp"/>
-    <jsp:include page="_menu.jsp"/>
-    <jsp:include page="_messageMenu.jsp"/>
-
-</c:if>
 <table>
     <tr>
         <td>
@@ -242,13 +236,9 @@
     </table>
 </c:if>
 
-<c:if test="${empty loggedUser.userName}">
-    <jsp:include page="_adminFooter.jsp"/>
-</c:if>
 
-<c:if test="${not empty loggedUser.userName}">
-    <jsp:include page="_footer.jsp"/>
-</c:if>
+<jsp:include page="_footer.jsp"/>
+
 
 </body>
 </html>

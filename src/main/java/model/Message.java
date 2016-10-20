@@ -11,7 +11,7 @@ import java.util.concurrent.Callable;
 public class Message implements Comparable<Message> {
 
     @Id
-    @Column(name="message_id")
+    @Column(name = "message_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int messageId;
 
@@ -85,11 +85,20 @@ public class Message implements Comparable<Message> {
 
     @Override
     public int compareTo(Message o) {
-        if(o.dateSent.after(this.dateSent)){
+        if (o.dateSent.after(this.dateSent)) {
             return 1;
-        }else if(this.dateSent.after(o.dateSent)){
+        } else if (this.dateSent.after(o.dateSent)) {
             return -1;
         }
         return 0;
+    }
+
+    @Override
+    public String toString() {
+        String sDateSent = (this.dateSent == null) ? "NA" : this.dateSent.toString();
+        String sFromu = (this.fromu == null) ? "NA" : this.fromu.toString();
+        String sTou = (this.tou == null) ? "NA" : this.tou.toString();
+
+        return "messageId=" + this.messageId + ", dateSent=" + sDateSent + ", text=" + text + ", tou=" + sTou + ", fromu" + sFromu + ", seen=" + this.seen;
     }
 }

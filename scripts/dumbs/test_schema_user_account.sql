@@ -26,15 +26,14 @@ CREATE TABLE `user_account` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_name` varchar(30) NOT NULL,
   `gender` varchar(1) NOT NULL,
-  `password` varchar(30) NOT NULL,
+  `password` varchar(65) NOT NULL,
   `money` float NOT NULL,
   `email` varchar(45) NOT NULL,
   `avatar` varchar(45) NOT NULL,
-  `user_accountcol` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`user_id`,`user_name`),
   UNIQUE KEY `id_UNIQUE` (`user_id`),
   UNIQUE KEY `user_name_UNIQUE` (`user_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +42,7 @@ CREATE TABLE `user_account` (
 
 LOCK TABLES `user_account` WRITE;
 /*!40000 ALTER TABLE `user_account` DISABLE KEYS */;
-INSERT INTO `user_account` VALUES (1,'ivoqwe','F','ivoasd',115,'ivo123_321@abv.bg','',NULL),(2,'ivoqwe1','M','ivoasd1',288,'ivo123_321@abv.bg','',NULL),(3,'newuser','M','newpassword',0,'','',NULL),(4,'newuser1','F','newpassword1',0,'','',NULL),(6,'ivoqwe11','M','ivoasd11',26,'','',NULL),(7,'newuser2','F','newuser2',100,'','',NULL),(9,'ivoqwe3','F','ivoasd3',242,'','',NULL),(11,'ivoqwe33','M','ivoasd33',12.99,'','',NULL),(13,'ivoqwe2','M','ivoasd2',77.99,'','',NULL),(15,'kolyo','M','terorista',1001,'','',NULL),(16,'adminUser69','F','12345',0.99,'','',NULL),(19,'adminUser3','F','12345',234,'','',NULL),(20,'kocho','M','mocho',20,'','',NULL),(21,'newuser691','M','newuser69',100,'','',NULL),(22,'sharan','M','maran',100,'shaan@gmail.com','',NULL),(28,'ivoqwe76','M','ivoasd76',100,'afaswf@abv.bg','',NULL),(41,'ivo123','M','ivo123',100,'ivo123_321@abv.bg','',NULL),(42,'donyyy','F','bonbony',69.99,'dpeneva9@gmail.com','',NULL),(43,'ivocarq','M','ivopicarq',85,'ivo123_321@abv.bg','',NULL),(44,'qazwsx','M','qazwsx',60,'ivo123_321@abv.bg','http://api.adorable.io/avatar/200/52',NULL),(45,'koljo','M','koljo',167,'ivo123_321@abv.bg','http://api.adorable.io/avatar/200/11',NULL),(46,'kokicha','M','mokicha',80,'ivo123_321@abv.bg','http://api.adorable.io/avatar/200/371',NULL),(47,'ivoqwe1111','M','ivoqwe33',100,'qwe@asdasd.bg','http://api.adorable.io/avatar/200/367',NULL);
+INSERT INTO `user_account` VALUES (63,'ivoqwe1','m','$2a$10$WoEQwyC1fy0BUfo0kymfvejNTMDoJuJejXq4B4j6uZuuLqM9rkiyG',35,'ivo123_321@abv.bg','http://api.adorable.io/avatar/200/972'),(65,'kamil','m','$2a$10$i8hVRTiI1oHktjPf6d.qCOl/RTHK8wR1CFjQoERt711ExP896iI.e',120,'ivo123_321@abv.bg','http://api.adorable.io/avatar/200/144'),(68,'ivoqwe','f','$2a$10$GBub7kBalIOWwO/UT0c9cOMPmbo7VZaJO29CoOO74g20cbphMmY5C',165,'ivo123_321@abv.bg','http://api.adorable.io/avatar/200/150'),(73,'ivoqwe11','m','$2a$10$sQdQFcFdwdpFo43GFvRgPuPuejHpNRlr6TpgcTyvaNdhdME3HrNlC',100,'ivo123_321@abv.bg','http://api.adorable.io/avatar/200/195'),(74,'malin','m','$2a$10$J.94m1iRgLPXDVAFpvZP9OtPvvSeMnIpXSbNLyOVnaAyquOwUawnW',80,'ivo123_321@abv.bg','http://api.adorable.io/avatar/200/865'),(76,'kolokolo','m','$2a$10$f3dY6nCuqYqC8Z3MJHgUjOifvgZkp.ohIgghKu77kCMHjISEXXD/e',100,'ivo123_321@abv.bg','http://api.adorable.io/avatar/200/575');
 /*!40000 ALTER TABLE `user_account` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-17 16:34:58
+-- Dump completed on 2016-10-20 18:31:19

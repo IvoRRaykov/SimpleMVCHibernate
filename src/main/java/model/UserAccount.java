@@ -28,9 +28,11 @@ public class UserAccount {
     @NotEmpty(message = "Email is required")
     private String email;
 
+
+    //TODO: DO VALIDATION IN FRONT END
     @Column(name = "password")
-    @Pattern(regexp = "^[a-zA-Z0-9]{5,}$", message = "Password should contain at least 5 letters or digits")
-    @NotEmpty(message = "Password is required")
+    //@Pattern(regexp = "^[a-zA-Z0-9]{5,}$", message = "Password should contain at least 5 letters or digits")
+   // @NotEmpty(message = "Password is required")
     private String password;
 
     @Range(min = 0, message = "Positive number is required")
@@ -44,20 +46,21 @@ public class UserAccount {
     @Column(name = "avatar")
     private String avatar;
 
-    @OneToMany(mappedBy = "userAccountInRole", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+
+    @OneToMany(mappedBy = "userAccountInRole", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<UserRole> userRole = new HashSet<UserRole>(0);
 
-    @OneToMany(mappedBy = "userAccount", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @OneToMany(mappedBy = "userAccount", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<Product> products = new HashSet<Product>(0);
 
-    @OneToOne(mappedBy = "userAccountRef", fetch = FetchType.LAZY , cascade = CascadeType.REFRESH)
+    @OneToOne(mappedBy = "userAccountRef", fetch = FetchType.LAZY , cascade = CascadeType.REMOVE)
     private UserConfirmation userConfirmation;
 
-    @OneToMany(mappedBy = "fromu", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @OneToMany(mappedBy = "fromu", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     //@OrderBy("date_sent ASC ")
     private Set<Message> messagesFrom = new TreeSet<>();
 
-    @OneToMany(mappedBy = "tou", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @OneToMany(mappedBy = "tou", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     //@OrderBy("date_sent ASC ")
     private Set<Message> messagesTo = new TreeSet<>();
 
@@ -159,9 +162,10 @@ public class UserAccount {
         this.userRole = userRole;
     }
 
-
     @Override
     public String toString() {
-        return super.toString();
+
+        return "userId= "+this.id+", userName= "+ this.userName + ", password= "+ this.password + ", email =" +this.email +", money ="+ this.money + ", avatar = "+ this.avatar + ", gender = "  +this.gender;
+
     }
 }

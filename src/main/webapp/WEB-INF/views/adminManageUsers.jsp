@@ -44,8 +44,9 @@
     </style>
 </head>
 <body>
-<jsp:include page="_adminHeader.jsp"/>
-<jsp:include page="_adminMenu.jsp"/>
+<jsp:include page="_header.jsp"/>
+<jsp:include page="_menu.jsp"/>
+<jsp:include page="_messageMenu.jsp"/>
 
 
 <c:if test="${empty user.userName}">
@@ -59,10 +60,26 @@
     </h1>
 </c:if>
 
-<c:url var="addAction" value="/admin/registerUser"/>
 
-<form:form action="${addAction}" commandName="user">
+<Table>
+    <tr>
+        <td>Pick avatar</td>
+        <td><a href="${pageContext.request.contextPath}/admin/users"><img src="${avatar}"/></a></td>
+    </tr>
+</Table>
+
+<select name="roles" form="submt">
+    <c:forEach items="${roles}" var="role">
+        <option value="${role.role}">${role.role}</option>
+    </c:forEach>
+</select>
+
+<c:url var="addAction" value="/admin/registerUser"/>
+<form:form method="post" action="${addAction}" commandName="user" id="submt">
     <table>
+        <form:hidden path="avatar" value="${avatar}"/>
+
+
         <c:if test="${!empty user.userName}">
             <tr>
                 <td>
@@ -96,6 +113,16 @@
                 <form:input path="password"/>
             </td>
         </tr>
+        <tr>
+            <td>
+                <form:label path="email">
+                    <spring:message text="Email"/>
+                </form:label>
+            </td>
+            <td>
+                <form:input path="email"/>
+            </td>
+        </tr>
 
         <tr>
             <td>
@@ -118,7 +145,9 @@
                 <form:input path="gender"/>
             </td>
         </tr>
+        </tr>
 
+        </tr>
         <tr>
             <td colspan="2">
                 <c:if test="${!empty user.userName}">
@@ -163,7 +192,7 @@
     </table>
 </c:if>
 
-<jsp:include page="_adminFooter.jsp"/>
+<jsp:include page="_footer.jsp"/>
 
 </body>
 </html>

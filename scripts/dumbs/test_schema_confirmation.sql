@@ -16,33 +16,34 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `product`
+-- Table structure for table `confirmation`
 --
 
-DROP TABLE IF EXISTS `product`;
+DROP TABLE IF EXISTS `confirmation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `product` (
-  `code` varchar(20) NOT NULL,
-  `name` varchar(128) NOT NULL,
-  `price` float NOT NULL,
+CREATE TABLE `confirmation` (
+  `confirmation_id` int(11) NOT NULL AUTO_INCREMENT,
+  `confirmation_code` varchar(225) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `for_sale` bit(1) NOT NULL,
-  PRIMARY KEY (`code`),
-  UNIQUE KEY `code_UNIQUE` (`code`),
-  KEY `user_id_fk_idx` (`user_id`),
-  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `user_account` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `enabled` bit(1) NOT NULL,
+  PRIMARY KEY (`confirmation_id`),
+  UNIQUE KEY `confirmation_id_UNIQUE` (`confirmation_id`),
+  UNIQUE KEY `confirmation_code_UNIQUE` (`confirmation_code`),
+  UNIQUE KEY `user_id_UNIQUE` (`user_id`),
+  KEY `user_id_idx` (`user_id`),
+  CONSTRAINT `user_id_fk1` FOREIGN KEY (`user_id`) REFERENCES `user_account` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `product`
+-- Dumping data for table `confirmation`
 --
 
-LOCK TABLES `product` WRITE;
-/*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES ('1223','product chushka',99,11,'\0'),('141213','nenzam',110,1,''),('asd1','kolichka',15,43,'\0'),('b100','bobec',100,46,''),('h6575','hurka',67,44,''),('K800','R2D2',50,9,''),('lolol','patlajdjan',10,15,''),('p1212','C-3PO',11,2,''),('p7876','lyuta chushka',24,6,'\0');
-/*!40000 ALTER TABLE `product` ENABLE KEYS */;
+LOCK TABLES `confirmation` WRITE;
+/*!40000 ALTER TABLE `confirmation` DISABLE KEYS */;
+INSERT INTO `confirmation` VALUES (33,'b07b7d9d-08e5-4c19-acfd-8945511829c6',63,''),(34,'66a6aaba-c3da-47fb-b830-66bace9e12de',65,''),(35,'f0741e4f-ef81-4180-bc72-1e643a123732',68,''),(36,'a2cc0fb7-ae48-4ef0-a50b-439610783360',73,''),(37,'999053f8-cea0-4c82-a5c6-bf66ca66eeef',74,''),(39,'cf3be292-0fff-4c3b-addf-c94a9072b024',76,'');
+/*!40000 ALTER TABLE `confirmation` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -54,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-17 16:34:57
+-- Dump completed on 2016-10-20 18:31:20

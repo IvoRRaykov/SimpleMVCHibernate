@@ -1,9 +1,11 @@
 package controller;
 
 import model.UserAccount;
+import model.UserRole;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -12,65 +14,110 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import service.UserService;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static util.Constants.*;
 
 @Controller
 public class AdminController {
 
     private UserService userService;
 
-    @Autowired(required=true)
-    @Qualifier(value="userService")
-    public void setUserService(UserService ps){
+    @Autowired(required = true)
+    @Qualifier(value = "userService")
+    public void setUserService(UserService ps) {
         this.userService = ps;
     }
 
-    @RequestMapping(value = "/admin/users", method = RequestMethod.GET)
-    public String adminListUsers(Model model, HttpSession session) {
-        session.removeAttribute("loggedUser");
-        model.addAttribute("user", new UserAccount());
-        model.addAttribute("listUsers", this.userService.listUsers());
+    @RequestMapping(value = {"/admin/users"}, method = RequestMethod.GET)
+    public String adminListUsers(Model model) {
+
+        model.addAttribute(ROLES_ATTRIBUTE, this.generateRoles());
+        model.addAttribute(AVATAR_ATTRIBUTE, this.userService.getRandomAvatar());
+        model.addAttribute(USER_ATTRIBUTE, new UserAccount());
+        model.addAttribute(USER_LIST_ATTRIBUTE, this.userService.listUsers());
+
         return "adminManageUsers";
     }
 
-    @RequestMapping(value = {"/admin/registerUser"}, method = RequestMethod.POST)
-    public String adminRegisterUser(@ModelAttribute("user") UserAccount user, HttpSession session, Model model){
-        session.removeAttribute("loggedUser");
 
-        if(user.getId() == 0){
+    @RequestMapping(value = {"/admin/registerUser"}, method = RequestMethod.POST)
+    public String adminRegisterUser(@ModelAttribute("user") UserAccount user, Model model, HttpServletRequest request) {
+
+        String role = request.getParameter(ROLES_ATTRIBUTE);
+
+        if (user.getId() == 0) {
             try {
-                this.userService.createUser(user);
+                this.userService.createUser(user,role);
             } catch (ConstraintViolationException e) {
-                model.addAttribute("errorString", "Account with this username or email already exists!");
-                return "register";
+
+                return this.generateErrors(model);
             }
-        }else{
-            this.userService.updateUser(user);
+        } else {
+            try {
+                this.userService.updateUser(user);
+            } catch (ConstraintViolationException | DataIntegrityViolationException e) {
+
+                return this.generateErrors(model);
+            }
         }
+
         return "redirect:/admin/users";
     }
 
-    @RequestMapping("/admin/removeUser/{id}")
-    public String adminRemoveUser(@PathVariable("id") int id, HttpSession session){
-        session.removeAttribute("loggedUser");
+
+    @RequestMapping(value = {"/admin/removeUser/{id}"}, method = RequestMethod.GET)
+    public String adminRemoveUser(@PathVariable("id") int id) {
 
         this.userService.removeUser(id);
+
         return "redirect:/admin/users";
     }
 
     @RequestMapping("/admin/editUser/{id}")
-    public String adminEditUser(@PathVariable("id") int id, Model model, HttpSession session){
-        session.removeAttribute("loggedUser");
+    public String adminEditUser(@PathVariable("id") int id, Model model) {
 
-        model.addAttribute("user", this.userService.getUserById(id));
-        model.addAttribute("listUsers", this.userService.listUsers());
+        UserAccount user = this.userService.getUserById(id);
+
+        model.addAttribute(AVATAR_ATTRIBUTE, user.getAvatar());
+        model.addAttribute(USER_ATTRIBUTE, user);
+        model.addAttribute(USER_LIST_ATTRIBUTE, this.userService.listUsers());
+
         return "adminManageUsers";
     }
 
     @RequestMapping("/admin/home")
-    public String adminHome(HttpSession session){
-        session.removeAttribute("loggedUser");
+    public String adminHome() {
 
         return "adminHome";
     }
+
+    private String generateErrors(Model model) {
+
+        model.addAttribute(USER_LIST_ATTRIBUTE, this.userService.listUsers());
+        model.addAttribute(ERROR_STRING_ATTRIBUTE, "Account with this username or email already exists!");
+        return "adminManageUsers";
+    }
+
+    private List<UserRole> generateRoles() {
+        List<UserRole> roles = new ArrayList<>();
+        UserRole ur1 = new UserRole();
+        ur1.setRole(USER_ROLE);
+        ur1.setUserAccountInRole(new UserAccount());
+
+
+        UserRole ur2 = new UserRole();
+        ur2.setRole(ADMIN_ROLE);
+        ur2.setUserAccountInRole(new UserAccount());
+
+        roles.add(ur1);
+        roles.add(ur2);
+        return roles;
+    }
+
+
 }

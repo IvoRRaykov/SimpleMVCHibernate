@@ -4,7 +4,6 @@ import model.UserAccount;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
@@ -79,7 +78,9 @@ public class MainController {
 
         } catch (ConstraintViolationException e) {
 
-            model.addAttribute(AVATAR_PREFIX + avatar);
+            user.setPassword("");
+            model.addAttribute(USER_ATTRIBUTE, user);
+            model.addAttribute(AVATAR_ATTRIBUTE , AVATAR_PREFIX + avatar);
             model.addAttribute(ERROR_STRING_ATTRIBUTE, "Account with this username or email already exists!");
 
             return "register";
@@ -88,16 +89,15 @@ public class MainController {
         return "redirect:/login";
     }
 
-
-
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(@RequestParam(value = "error", required = false) String error,
+                        @RequestParam(value = "confirm", required = false) String confirm,
                         @RequestParam(value = "logout", required = false) String logout, HttpServletRequest request, Model model, HttpServletResponse response) {
 
         HttpSession session = request.getSession();
 
         if (error != null) {
-            model.addAttribute("error", getErrorMessage(request, "SPRING_SECURITY_LAST_EXCEPTION"));
+            model.addAttribute(ERROR_STRING_ATTRIBUTE, getErrorMessage(request, "SPRING_SECURITY_LAST_EXCEPTION"));
         }
 
         if (logout != null) {
@@ -110,8 +110,11 @@ public class MainController {
                 new SecurityContextLogoutHandler().logout(request, response, auth);
             }
 
+            model.addAttribute(LOGOUT_MESSAGE_ATTRIBUTE, "You've been logged out successfully.");
+        }
 
-            model.addAttribute("msg", "You've been logged out successfully.");
+        if(confirm != null){
+            model.addAttribute(CONFIRMED_MESSAGE_ATTRIBUTE, "Your account is confirmed!");
         }
 
         return "login";
@@ -125,7 +128,7 @@ public class MainController {
 
         userService.updateUserConfirmation(code);
 
-        return "login";
+        return "redirect:/login?confirm";
     }
 
     @RequestMapping(value = "/403", method = RequestMethod.GET)
@@ -136,7 +139,7 @@ public class MainController {
             UserDetails userDetail = (UserDetails) auth.getPrincipal();
             System.out.println(userDetail);
 
-            model.addAttribute("username", userDetail.getUsername());
+            model.addAttribute(USER_NAME_ATTRIBUTE, userDetail.getUsername());
         }
 
         return "403";

@@ -57,7 +57,7 @@ public class UserController {
 
         int userId = (int) session.getAttribute(LOGGED_USER_ID_ATTRIBUTE);
         UserAccount user = this.userService.getUserByIdForUpdate(userId);
-        user.setPassword("");
+        user.setPassword(EMPTY);
 
         model.addAttribute(USER_ATTRIBUTE, user);
         model.addAttribute(AVATAR_ATTRIBUTE, user.getAvatar());
@@ -69,6 +69,7 @@ public class UserController {
     public String doUpdateUser(@Valid @ModelAttribute("user") UserAccount userAccount, BindingResult result, @PathVariable(value = "avatar") String avatar, HttpSession session, Model model) {
 
         if (result.hasErrors()) {
+            userAccount.setPassword(EMPTY);
             model.addAttribute(AVATAR_ATTRIBUTE, AVATAR_PREFIX + avatar);
 
             return "userUpdate";
@@ -79,6 +80,7 @@ public class UserController {
 
         } catch (ConstraintViolationException | DataIntegrityViolationException e) {
 
+            userAccount.setPassword(EMPTY);
             model.addAttribute(ERROR_STRING_ATTRIBUTE, "This userName is already in use");
             model.addAttribute(AVATAR_ATTRIBUTE, AVATAR_PREFIX + avatar);
 
