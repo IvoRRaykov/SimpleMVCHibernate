@@ -54,6 +54,8 @@
 <jsp:include page="_menu.jsp"/>
 <jsp:include page="_messageMenu.jsp"/>
 
+
+<p class="error"> ${errorString}</p>
 <table>
     <tr>
         <td>
@@ -140,10 +142,20 @@
 
         <td>
                 <h1>Create Product</h1>
-
+            <c:url var="download" value="/uploadFile"/>
+            <form method="POST" action="${download}" enctype="multipart/form-data">
+                File to upload: <input type="file" name="file"><br />
+                Name: <input type="text" name="name"><br /> <br />
+                <input type="submit" value="Upload">
+            </form>
+            <c:if test="${not empty productToCreate.pictureFilePath}">
+            <img src="file:///d:/apache-tomcat-7.0.70/bin/tmpFiles/123.jpg" style="height: 200px; width: 200px"/>
+            </c:if>
             <c:url var="addAction" value="/product/create"/>
                 <form:form method="post" action="${addAction}" commandName="productToCreate" id="updt">
                     <table>
+                        <form:hidden path="pictureFilePath" value="${productToCreate.pictureFilePath}"/>
+
                         <tr>
                             <td>
                                 <form:label path="code">

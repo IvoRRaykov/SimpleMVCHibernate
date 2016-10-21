@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import service.ProductService;
 import service.UserService;
 
@@ -24,6 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -89,6 +93,37 @@ public class ProductController {
 
         return "redirect:/product/manage";
     }
+//TODO: handle errors
+    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
+    public String uploadFileHandler(@RequestParam("name") String name,
+                                    @RequestParam("file") MultipartFile file,
+                                    Model model, HttpServletRequest request, HttpSession session) {
+
+        if (!file.isEmpty()) {
+            String pictureFilePath = this.productService.uploadPicture(name, file);
+            if (pictureFilePath != null) {
+
+                Product productToCreate = new Product();
+                productToCreate.setPictureFilePath(pictureFilePath);
+
+                model.addAttribute(PRODUCT_TO_UPRADE_ATTRIBUTE, new Product());
+                model.addAttribute(PRODUCT_TO_CREATE_ATTRIBUTE, productToCreate);
+                this.fillList(request, session, model);
+
+                if (!isInUserRole(request)) {
+                    model.addAttribute(USERS_NAMES_LIST_ATTRIBUTE, this.userService.listUsersNames());
+                }
+
+                return "manageProducts";
+            }
+            else{
+
+                return "403";
+            }
+        }
+        return "403";
+    }
+
 
     @RequestMapping(value = {"/product/update/{code}"}, method = RequestMethod.GET)
     public String updateProduct(@PathVariable("code") String code, Model model, HttpSession session, HttpServletRequest request) {

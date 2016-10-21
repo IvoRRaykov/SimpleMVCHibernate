@@ -9,8 +9,12 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -29,9 +33,13 @@ public class ProductServiceImpl implements ProductService {
     private UserDAO userDAO;
 
 
-    public void setProductDAO(ProductDAO productDAO) {this.productDAO = productDAO;}
+    public void setProductDAO(ProductDAO productDAO) {
+        this.productDAO = productDAO;
+    }
 
-    public void setUserDAO(UserDAO userDAO) {this.userDAO = userDAO;}
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
 
     @Override
     @Transactional
@@ -134,6 +142,28 @@ public class ProductServiceImpl implements ProductService {
         workbook.write(response.getOutputStream());
         workbook.close();
 
+    }
+
+    @Override
+    public String uploadPicture(String name, MultipartFile file) {
+        try {
+            byte[] bytes = file.getBytes();
+
+
+            File dir = new File("tmpFiles");
+
+            File serverFile = new File(dir.getAbsolutePath()
+                    + File.separator + name + ".jpg");
+            BufferedOutputStream stream = new BufferedOutputStream(
+                    new FileOutputStream(serverFile));
+            stream.write(bytes);
+            stream.close();
+
+            return dir.getAbsolutePath()
+                    + File.separator + name + ".jpg";
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 

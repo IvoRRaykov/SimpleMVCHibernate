@@ -2,6 +2,7 @@ package service;
 
 import model.Product;
 import model.UserAccount;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -25,4 +26,6 @@ public interface ProductService {
     public UserAccount getUserByProductCode(String code);
 
     void downloadList(HttpServletResponse response) throws IOException;
+
+    String uploadPicture(String name, MultipartFile file);
 }

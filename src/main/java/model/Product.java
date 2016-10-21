@@ -27,6 +27,9 @@ public class Product {
     @Column(name="for_sale")
     private boolean forSale;
 
+    @Column(name="picture_file_path")
+    private String pictureFilePath;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private UserAccount userAccount;
@@ -64,6 +67,14 @@ public class Product {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public String getPictureFilePath() {
+        return pictureFilePath;
+    }
+
+    public void setPictureFilePath(String pictureFilePath) {
+        this.pictureFilePath = pictureFilePath;
     }
 
     public UserAccount getUserAccount() {
