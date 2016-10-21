@@ -103,6 +103,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
+    public List<String> listUsersNames() {
+        return this.roleDAO.listUsersNames();
+    }
+
+
+    @Override
+    @Transactional
     public UserAccount getUserByName(String name) {
         return this.userDAO.getUserByName(name);
     }

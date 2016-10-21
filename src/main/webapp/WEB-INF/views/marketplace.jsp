@@ -43,8 +43,8 @@
                             value="${product.price-loggedUserMoney - 0.0005}" maxFractionDigits="2"/></sup></p>
                 </c:if>
             </td>
-            <td><img src="${product.userAccount.avatar}" style="width: 30px; height: 30px"> <a
-                    href="user/${product.userAccount.id}">${product.userAccount.userName}</a></td>
+            <td><img src="${product.userAccount.avatar}" style="width: 30px; height: 30px">
+                <a href="<c:url value='/user/${product.userAccount.id}'/> ">${product.userAccount.userName}</a></td>
             <td>
             <c:if test="${product.userAccount.userName == loggedUserName}">
                 <a style="color: #7a7a7a;">Buy</a>

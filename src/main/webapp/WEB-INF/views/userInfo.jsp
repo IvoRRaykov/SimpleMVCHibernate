@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <html>
 <head>
@@ -25,12 +26,17 @@
 <h4>gender: ${user.gender}</h4>
 <h3>money: ${user.money} BGN</h3>
 
-
+<sec:authorize access="hasRole('ROLE_ADMIN')">
+    <a href="${pageContext.request.contextPath}/admin/editUser/${user.id}">Edit this user</a>
+</sec:authorize>
 <br>
+<sec:authorize access="hasRole('ROLE_USER')">
 <a href="${pageContext.request.contextPath}/product/manage">Manage My Products</a>
+</sec:authorize>
 <br>
 <br>
 <br>
+
 <c:if test="${loggedUserId != user.id}"><a href="${pageContext.request.contextPath}/message/to/${user.userName}">Send
     mail</a></c:if>
 <br>

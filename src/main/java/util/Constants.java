@@ -42,6 +42,7 @@ public interface Constants {
     String FILE_FOR_SAVE_NAME = "productList";
 
     String USER_LIST_ATTRIBUTE = "listUsers";
+    String USERS_NAMES_LIST_ATTRIBUTE = "listUsersNames";
 
 
     String ERROR_STRING_ATTRIBUTE = "errorString";

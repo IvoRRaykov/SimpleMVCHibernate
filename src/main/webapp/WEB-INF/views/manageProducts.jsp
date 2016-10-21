@@ -139,10 +139,10 @@
 
 
         <td>
-            <c:if test="${not empty loggedUserId}">
                 <h1>Create Product</h1>
-                <c:url var="addAction" value="/product/create"/>
-                <form:form method="post" action="${addAction}" commandName="productToCreate">
+
+            <c:url var="addAction" value="/product/create"/>
+                <form:form method="post" action="${addAction}" commandName="productToCreate" id="updt">
                     <table>
                         <tr>
                             <td>
@@ -184,6 +184,14 @@
                                 <form:errors path="price" cssClass="error"/>
                             </td>
                         </tr>
+                        <tr>
+                           <td>Pick Owner</td>
+                           <td> <select name="listUsersNames" form="updt">
+                               <c:forEach items="${listUsersNames}" var="userName">
+                                   <option value="${userName}">${userName}</option>
+                               </c:forEach>
+                           </select></td>
+                        </tr>
 
                         <tr>
                             <td>
@@ -205,14 +213,13 @@
                     </table>
 
                 </form:form>
-            </c:if>
         </td>
     </tr>
 </table>
 
 <br>
 <h3>Product List</h3>
-<c:if test="${!empty listProducts}">
+<c:if test="${!empty productList}">
     <table class="tg">
         <tr>
             <th width="80">Product Code</th>
@@ -223,7 +230,7 @@
             <th width="60">Edit</th>
             <th width="60">Delete</th>
         </tr>
-        <c:forEach items="${listProducts}" var="product">
+        <c:forEach items="${productList}" var="product">
             <tr>
                 <td>${product.code}</td>
                 <td>${product.name}</td>

@@ -16,10 +16,7 @@ import org.springframework.security.web.servletapi.SecurityContextHolderAwareReq
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import service.ProductService;
 import service.UserService;
 
@@ -58,22 +55,34 @@ public class ProductController {
         model.addAttribute(PRODUCT_TO_UPRADE_ATTRIBUTE, new Product());
         model.addAttribute(PRODUCT_TO_CREATE_ATTRIBUTE, new Product());
 
+        if (!isInUserRole(request)) {
+            model.addAttribute(USERS_NAMES_LIST_ATTRIBUTE, this.userService.listUsersNames());
+        }
+
         this.fillList(request, session, model);
 
         return "manageProducts";
     }
 
     @RequestMapping(value = {"/product/create"}, method = RequestMethod.POST)
-    public String doCreateProduct(@Valid @ModelAttribute(PRODUCT_TO_CREATE_ATTRIBUTE) Product product, BindingResult result, Model model, HttpSession session, HttpServletRequest request) {
+    public String doCreateProduct(@Valid @ModelAttribute(PRODUCT_TO_CREATE_ATTRIBUTE) Product product, BindingResult result,
+                                  Model model, HttpSession session, HttpServletRequest request) {
 
         if (result.hasErrors()) {
             fillList(request, session, model);
             return "manageProducts";
         }
 
-        Object loggedUserIdObj = session.getAttribute(LOGGED_USER_ID_ATTRIBUTE);
+        UserAccount user = null;
 
-        UserAccount user = this.userService.getUserById((int) loggedUserIdObj);
+        if (isInUserRole(request)) {
+            Object loggedUserIdObj = session.getAttribute(LOGGED_USER_ID_ATTRIBUTE);
+            user = this.userService.getUserById((int) loggedUserIdObj);
+        } else {
+            String userName = request.getParameter(USERS_NAMES_LIST_ATTRIBUTE);
+            user = this.userService.getUserByName(userName);
+        }
+
         product.setUserAccount(user);
 
         this.productService.createProduct(product);
@@ -151,18 +160,21 @@ public class ProductController {
 
     private void fillList(HttpServletRequest request, HttpSession session, Model model) {
 
-        SecurityContextHolderAwareRequestWrapper wrapper = new SecurityContextHolderAwareRequestWrapper(request, EMPTY);
         List<Product> productList = null;
 
-        if (wrapper.isUserInRole(USER_ROLE)) {
+        if (isInUserRole(request)) {
             Object loggedUserIdObj = session.getAttribute(LOGGED_USER_ID_ATTRIBUTE);
             productList = this.productService.listProductsForUser((int) loggedUserIdObj);
-        }
-        else if(wrapper.isUserInRole(ADMIN_ROLE)){
+        } else {
             productList = this.productService.listProduct();
         }
 
-        model.addAttribute("listProducts", productList);
+        model.addAttribute(PRODUCT_LIST_ATTRIBUTE, productList);
+    }
+
+    private boolean isInUserRole(HttpServletRequest request) {
+        SecurityContextHolderAwareRequestWrapper wrapper = new SecurityContextHolderAwareRequestWrapper(request, EMPTY);
+        return wrapper.isUserInRole(USER_ROLE);
     }
 }
 

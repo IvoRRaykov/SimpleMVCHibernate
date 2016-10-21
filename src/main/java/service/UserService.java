@@ -31,4 +31,6 @@ public interface UserService {
 
     List<UserAccount> listUsers();
 
+    List<String> listUsersNames();
+
 }
