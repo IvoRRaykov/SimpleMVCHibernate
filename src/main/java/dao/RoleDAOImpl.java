@@ -44,7 +44,7 @@ public class RoleDAOImpl implements RoleDAO {
         Session session = this.sessionFactory.getCurrentSession();
 
         List<UserAccount> userList = session.createQuery("select userAccountInRole from UserRole where role=:role")
-                .setString("role",USER_ROLE)
+                .setString("role", USER_ROLE)
                 .list();
 
         List<String> userNamesList = new ArrayList<>();
@@ -60,7 +60,7 @@ public class RoleDAOImpl implements RoleDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Set<UserRole> getRoleByUser(UserAccount userAccount) {
+    public Set<UserRole> getRoles(UserAccount userAccount) {
         List<UserRole> roles = new ArrayList<>();
 
         roles = sessionFactory.getCurrentSession()

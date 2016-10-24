@@ -25,7 +25,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void registerUser(UserAccount user) throws ConstraintViolationException {
+    public void createUser(UserAccount user) throws ConstraintViolationException {
 
         Session session = this.sessionFactory.getCurrentSession();
 
@@ -62,7 +62,7 @@ public class UserDAOImpl implements UserDAO {
 
 
     @Override
-    public UserAccount getUserById(int id) {
+    public UserAccount getUser(int id) {
 
         Session session = this.sessionFactory.getCurrentSession();
 
@@ -76,7 +76,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public UserAccount getUserByName(String userName) {
+    public UserAccount getUser(String userName) {
 
         List<UserAccount> users = new ArrayList<>();
 
@@ -111,31 +111,6 @@ public class UserDAOImpl implements UserDAO {
         logger.info("UserAccount deleted successfully, user id = " + id);
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public UserAccount getUserByUserNameAndPassword(String userName, String password) {
-
-        List<UserAccount> users = new ArrayList<>();
-
-        users = sessionFactory.getCurrentSession()
-                .createQuery("from UserAccount where userName = :userName and password =  :password")
-                .setString("userName", userName)
-                .setString("password", password)
-                .list();
-
-        if (users.size() > 0) {
-
-            logger.info("UserAccount obtained successfully by , userName and password, user details = " + users.get(0).toString());
-
-            return users.get(0);
-        } else {
-            logger.info("UserAccount NOT obtained successfully by , userName" + userName + "password" + password);
-
-            return null;
-        }
-
-    }
-
 
     @Override
     @SuppressWarnings("unchecked")
@@ -156,31 +131,6 @@ public class UserDAOImpl implements UserDAO {
             logger.info("Similar names NOT obtained successfully by name = " + to);
             return null;
         }
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public String findUserNameFromId(int id) {
-
-        List<String> usersNames = new ArrayList<>();
-
-        usersNames = sessionFactory.getCurrentSession()
-                .createQuery("select userName from UserAccount where user_id = :userId")
-                .setInteger("userId", id)
-                .list();
-
-        if (usersNames.size() > 0) {
-
-            logger.info("UserName obtained successfully by id = " + id + ", userName = " + usersNames.get(0));
-
-            return usersNames.get(0);
-        } else {
-
-            logger.info("UserName NOT obtained successfully by id = " + id);
-
-            return null;
-        }
-
     }
 
 

@@ -19,6 +19,7 @@
 <c:if test="${!empty productList}">
     <table class="tg">
         <tr>
+            <th width="80">Product Image</th>
             <th width="80">Product Code</th>
             <th width="120">Product Name</th>
             <th width="120">Product Price</th>
@@ -28,6 +29,7 @@
         </tr>
         <c:forEach items="${productList}" var="product">
         <tr>
+            <td><img id="productPicture" style="width: 100px" height="100px" src="data:image/jpeg;base64,${product.pictureBase64String}"></td>
             <td>${product.code}</td>
             <td>${product.name}</td>
             <td>

@@ -83,7 +83,7 @@ public class MessageController {
     @RequestMapping(value = {"/message/sent"}, method = RequestMethod.GET)
     public String viewSentMessages(HttpSession session, Model model) {
 
-        model.addAttribute(SENT_MESSAGES_LIST_ATTRIBUTE, this.messageService.findAllMessagesFromUserId((int)session.getAttribute(LOGGED_USER_ID_ATTRIBUTE)));
+        model.addAttribute(SENT_MESSAGES_LIST_ATTRIBUTE, this.messageService.findMessagesFrom((int)session.getAttribute(LOGGED_USER_ID_ATTRIBUTE)));
 
         return "messagesSent";
     }
@@ -91,7 +91,7 @@ public class MessageController {
     @RequestMapping(value = {"/message/received"}, method = RequestMethod.GET)
     public String viewReceivedMessages(HttpSession session, Model model) {
 
-        model.addAttribute(RECEIVED_MESSAGES_LIST_ATTRIBUTE, this.messageService.findAllMessagesToUserId((int)session.getAttribute(LOGGED_USER_ID_ATTRIBUTE)));
+        model.addAttribute(RECEIVED_MESSAGES_LIST_ATTRIBUTE, this.messageService.getMessagesTo((int)session.getAttribute(LOGGED_USER_ID_ATTRIBUTE)));
 
         return "messagesReceived";
     }

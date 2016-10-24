@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Set;
 
 @Repository
 public class ProductDAOImpl implements ProductDAO {
@@ -46,7 +45,7 @@ public class ProductDAOImpl implements ProductDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Product> listProduct() {
+    public List<Product> findProducts() {
 
         Session session = this.sessionFactory.getCurrentSession();
 
@@ -64,7 +63,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public Product getProductByCode(String code) {
+    public Product getProduct(String code) {
 
         Session session = this.sessionFactory.getCurrentSession();
 
@@ -109,7 +108,7 @@ public class ProductDAOImpl implements ProductDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Product> listProductsForUser(int userId) {
+    public List<Product> findProducts(int userId) {
 
         Session session = this.sessionFactory.getCurrentSession();
 
@@ -128,7 +127,7 @@ public class ProductDAOImpl implements ProductDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public UserAccount getUserByProductCode(String code) {
+    public UserAccount getUser(String code) {
 
         Session session = sessionFactory.getCurrentSession();
 

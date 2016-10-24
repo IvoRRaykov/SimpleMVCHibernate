@@ -3,20 +3,24 @@ package dao;
 import model.Message;
 
 import java.util.List;
-import java.util.Set;
 
 
 public interface MessageDAO {
 
-    public List<Message> findAllMessagesToUserId(int userId);
-    public int findAllUnreadMessagesCountToUserId(int userId);
-    public List<Message> findAllMessagesFromUserId(int userId);
+    List<Message> findMessagesTo(int userId);
 
-    public String findFromuNameByMessageId(int messageId) ;
-    public String findTouNameByMessageId(int messageId);
+    int findUnreadMessagesCountTo(int userId);
 
-    public void updateMessageSeen(int messageId);
-    public void createMessage(Message message);
-    public void deleteMessage(int messageId);
+    List<Message> findMessagesFrom(int userId);
+
+    String findFromName(int messageId);
+
+    String findToName(int messageId);
+
+    void updateMessageSeen(int messageId);
+
+    void createMessage(Message message);
+
+    void deleteMessage(int messageId);
 
 }

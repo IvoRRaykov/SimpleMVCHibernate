@@ -5,27 +5,35 @@ import model.UserAccount;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Ivo Raykov on 29.9.2016 г..
  */
 public interface ProductService {
 
-    public void createProduct(Product product);
-    public void updateProduct(Product product);
-    public List<Product> listProduct();
-    public Product getProductByCode(String code);
-    public void removeProduct(String code);
-    public List<Product> findProductsForSale();
-    public void buyProduct(String code, int userId);
-    public List<Product> listProductsForUser(int userId);
-    public UserAccount getUserByProductCode(String code);
+    void createProduct(Product product);
+
+    void updateProduct(Product product);
+
+    Product getProduct(String code);
+
+    void removeProduct(String code);
+
+    List<Product> getProductsForSale();
+
+    void buyProduct(String code, int userId);
+
+    List<Product> listProductsForUser(int userId);
+
+    List<Product> listProducts();
+
+    UserAccount getUser(String code);
 
     void downloadList(HttpServletResponse response) throws IOException;
 
     String uploadPicture(String name, MultipartFile file);
+
+    String getPicture(String uri) throws IOException;
 }

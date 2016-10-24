@@ -7,7 +7,10 @@ import model.UserAccount;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -15,22 +18,26 @@ public class MessageServiceImpl implements MessageService {
     private MessageDAO messageDAO;
     private UserDAO userDAO;
 
-    public void setMessageDAO(MessageDAO messageDAO) {this.messageDAO = messageDAO;}
+    public void setMessageDAO(MessageDAO messageDAO) {
+        this.messageDAO = messageDAO;
+    }
 
-    public void setUserDAO(UserDAO userDAO) {this.userDAO = userDAO;}
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
 
     @Override
     @Transactional
-    public Map<Message, String> findAllMessagesToUserId(int userId) {
+    public Map<Message, String> getMessagesTo(int userId) {
 
         Map<Message, String> nameToMessageMap = new TreeMap<>();
-        List<Message> mList =  this.messageDAO.findAllMessagesToUserId(userId);
+        List<Message> mList = this.messageDAO.findMessagesTo(userId);
 
-        for(Message m: mList){
-            String fromuName = this.messageDAO.findFromuNameByMessageId(m.getMessageId());
+        for (Message m : mList) {
+            String fromuName = this.messageDAO.findFromName(m.getMessageId());
             nameToMessageMap.put(m, fromuName);
 
-            if(!m.isSeen()) {
+            if (!m.isSeen()) {
                 this.messageDAO.updateMessageSeen(m.getMessageId());
             }
         }
@@ -40,13 +47,13 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     @Transactional
-    public Map<Message, String> findAllMessagesFromUserId(int userId) {
+    public Map<Message, String> findMessagesFrom(int userId) {
 
         Map<Message, String> nameToMessageMap = new TreeMap<>();
-        List<Message> mList =  this.messageDAO.findAllMessagesFromUserId(userId);
+        List<Message> mList = this.messageDAO.findMessagesFrom(userId);
 
-        for(Message m: mList){
-            String touName = this.messageDAO.findTouNameByMessageId(m.getMessageId());
+        for (Message m : mList) {
+            String touName = this.messageDAO.findToName(m.getMessageId());
             nameToMessageMap.put(m, touName);
         }
 
@@ -56,11 +63,11 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     @Transactional
-    public  void sendMessage(String text, int fromId, String toName){
+    public void sendMessage(String text, int fromId, String toName) {
 
-        UserAccount fromUser = this.userDAO.getUserById(fromId);
+        UserAccount fromUser = this.userDAO.getUser(fromId);
 
-        UserAccount toUser = this.userDAO.getUserByName(toName);
+        UserAccount toUser = this.userDAO.getUser(toName);
 
         Message message = new Message();
 
@@ -75,13 +82,15 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     @Transactional
-    public int findAllUnreadMessagesCountToUserId(int userId) {
-        return this.messageDAO.findAllUnreadMessagesCountToUserId(userId);
+    public int getUnreadMessagesCountTo(int userId) {
+        return this.messageDAO.findUnreadMessagesCountTo(userId);
     }
 
 
     @Override
     @Transactional
-    public void deleteMessage(int messageId) {this.messageDAO.deleteMessage(messageId);}
+    public void deleteMessage(int messageId) {
+        this.messageDAO.deleteMessage(messageId);
+    }
 
 }

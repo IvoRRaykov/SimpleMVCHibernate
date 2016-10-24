@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,9 +27,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.*;
 
-import static util.Constants.AVATAR_PREFIX;
-import static util.Constants.CONFIRM_PATH;
-import static util.Constants.USER_ROLE;
+import static util.Constants.*;
 
 
 @Service
@@ -51,7 +48,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         this.confirmationDAO = confirmationDAO;
     }
 
-    public void setRoleDAO(RoleDAO roleDAO) {this.roleDAO = roleDAO;}
+    public void setRoleDAO(RoleDAO roleDAO) {
+        this.roleDAO = roleDAO;
+    }
 
     @Override
     @Transactional
@@ -62,7 +61,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        this.userDAO.registerUser(user);
+        this.userDAO.createUser(user);
 
         this.performOnBackgroundThread(confirmation.getConfirmationCode(), user.getEmail());
 
@@ -82,7 +81,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        this.userDAO.registerUser(user);
+        this.userDAO.createUser(user);
 
         this.confirmationDAO.createConfirmation(confirmation);
         this.roleDAO.createRole(userRole);
@@ -90,7 +89,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public void updateUser(UserAccount user) throws ConstraintViolationException,DataIntegrityViolationException {
+    public void updateUser(UserAccount user) throws ConstraintViolationException, DataIntegrityViolationException {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         this.userDAO.updateUser(user);
     }
@@ -110,21 +109,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public UserAccount getUserByName(String name) {
-        return this.userDAO.getUserByName(name);
+    public UserAccount getUser(String name) {
+        return this.userDAO.getUser(name);
     }
 
     @Override
     @Transactional
-    public UserAccount getUserById(int id) {
-        return this.userDAO.getUserById(id);
+    public UserAccount getUser(int id) {
+        return this.userDAO.getUser(id);
     }
 
     @Override
     @Transactional
-    public UserAccount getUserByIdForUpdate(int id) {
+    public UserAccount getUserForUpdate(int id) {
 
-       return this.userDAO.getUserById(id);
+        return this.userDAO.getUser(id);
     }
 
     @Override
@@ -137,7 +136,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional
     public void updateUserConfirmation(String code) {
 
-        UserConfirmation confirmation = this.confirmationDAO.getConfirmationByCode(code);
+        UserConfirmation confirmation = this.confirmationDAO.getConfirmation(code);
         confirmation.setUserEnabled(true);
 
         this.confirmationDAO.updateConfirmation(confirmation);
@@ -157,15 +156,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     @Override
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
 
-        model.UserAccount user = this.userDAO.getUserByName(username);
+        model.UserAccount user = this.userDAO.getUser(username);
 
-        UserConfirmation confirmation = this.confirmationDAO.getConfirmationByUser(user);
+        UserConfirmation confirmation = this.confirmationDAO.getConfirmation(user);
         user.setUserConfirmation(confirmation);
 
-        Set<UserRole> roles = this.roleDAO.getRoleByUser(user);
+        Set<UserRole> roles = this.roleDAO.getRoles(user);
         user.setUserRole(roles);
 
         List<GrantedAuthority> authorities = buildUserAuthority(user.getUserRole());
@@ -213,7 +212,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             @Override
             public void run() {
 
-               UserServiceImpl.this.sendEmail(text,email);
+                UserServiceImpl.this.sendEmail(text, email);
             }
         };
         t.start();

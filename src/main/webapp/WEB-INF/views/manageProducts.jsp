@@ -63,10 +63,21 @@
 
                 <h1>Update Product</h1>
 
-                <c:url var="actionUpdate" value="/product/doUpdate"/>
-                <form:form method="post" action="${actionUpdate}" commandName="productToUpdate">
-                    <table>
+                <c:url var="downloadu" value="/uploadPicture/u"/>
+                <form method="POST" action="${downloadu}" enctype="multipart/form-data">
+                    File to upload: <input type="file" name="file"><br />
+                    Name: <input type="text" name="name"><br /> <br />
+                    <input type="hidden" name="code" value="${productToUpdate.code}">
+                    <input type="submit" value="Upload">
+                </form>
+                <c:if test="${not empty productToUpdate.pictureFilePath}">
+                    <img id="productPicture1" style="height: 150px"; width="150px"; src="data:image/jpeg;base64,${productToUpdate.pictureBase64String}">
+                </c:if>
 
+                <c:url var="actionUpdate" value="/product/doUpdate"/>
+                <form:form method="post" action="${actionUpdate}" commandName="productToUpdate" >
+                    <table>
+                        <form:hidden path="pictureFilePath" value="${productToCreate.pictureFilePath}" id="updt"/>
                         <tr>
                             <td>
                                 <form:label path="code">
@@ -115,7 +126,14 @@
 
                             </td>
                         </tr>
-
+                        <tr>
+                            <td>Pick Owner</td>
+                            <td> <select name="listUsersNames" form="updt">
+                                <c:forEach items="${listUsersNames}" var="userName">
+                                    <option value="${userName}">${userName}</option>
+                                </c:forEach>
+                            </select></td>
+                        </tr>
                         <tr>
                             <td>
                                 <form:label path="forSale">
@@ -142,17 +160,18 @@
 
         <td>
                 <h1>Create Product</h1>
-            <c:url var="download" value="/uploadFile"/>
+
+            <c:url var="download" value="/uploadPicture/c"/>
             <form method="POST" action="${download}" enctype="multipart/form-data">
                 File to upload: <input type="file" name="file"><br />
                 Name: <input type="text" name="name"><br /> <br />
                 <input type="submit" value="Upload">
             </form>
             <c:if test="${not empty productToCreate.pictureFilePath}">
-            <img src="file:///d:/apache-tomcat-7.0.70/bin/tmpFiles/123.jpg" style="height: 200px; width: 200px"/>
+                <img id="productPicture" style="height: 150px"; width="150px"; src="data:image/jpeg;base64,${productToCreate.pictureBase64String}">
             </c:if>
             <c:url var="addAction" value="/product/create"/>
-                <form:form method="post" action="${addAction}" commandName="productToCreate" id="updt">
+                <form:form method="post" action="${addAction}" commandName="productToCreate" id="crt">
                     <table>
                         <form:hidden path="pictureFilePath" value="${productToCreate.pictureFilePath}"/>
 
@@ -198,7 +217,7 @@
                         </tr>
                         <tr>
                            <td>Pick Owner</td>
-                           <td> <select name="listUsersNames" form="updt">
+                           <td> <select name="listUsersNames" form="crt">
                                <c:forEach items="${listUsersNames}" var="userName">
                                    <option value="${userName}">${userName}</option>
                                </c:forEach>
@@ -234,6 +253,7 @@
 <c:if test="${!empty productList}">
     <table class="tg">
         <tr>
+            <th width="80">Product Picture</th>
             <th width="80">Product Code</th>
             <th width="120">Product Name</th>
             <th width="120">Product Price</th>
@@ -244,6 +264,7 @@
         </tr>
         <c:forEach items="${productList}" var="product">
             <tr>
+                <td><img id="productImage" style="width: 100px" height="100px" src="data:image/jpeg;base64,${product.pictureBase64String}"></td>
                 <td>${product.code}</td>
                 <td>${product.name}</td>
                 <td>${product.price}</td>

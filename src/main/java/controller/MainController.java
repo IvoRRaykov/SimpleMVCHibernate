@@ -45,7 +45,7 @@ public class MainController {
         if (!(auth instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetail = (UserDetails) auth.getPrincipal();
 
-            UserAccount user = this.userService.getUserByName(userDetail.getUsername());
+            UserAccount user = this.userService.getUser(userDetail.getUsername());
 
             session.setAttribute(LOGGED_USER_ID_ATTRIBUTE ,user.getId());
             session.setAttribute(LOGGED_USER_NAME_ATTRIBUTE ,user.getUserName());

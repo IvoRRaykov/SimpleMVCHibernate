@@ -39,7 +39,7 @@ public class ConfirmationDAOImpl implements ConfirmationDAO{
 
     @Override
     @SuppressWarnings("unchecked")
-    public UserConfirmation getConfirmationByUser(UserAccount userAccount) {
+    public UserConfirmation getConfirmation(UserAccount userAccount) {
         List<UserConfirmation> confirmations = new ArrayList<>();
 
         confirmations = sessionFactory.getCurrentSession()
@@ -58,7 +58,7 @@ public class ConfirmationDAOImpl implements ConfirmationDAO{
 
     @Override
     @SuppressWarnings("unchecked")
-    public UserConfirmation getConfirmationByCode(String code) {
+    public UserConfirmation getConfirmation(String code) {
         List<UserConfirmation> confirmations = new ArrayList<>();
 
         confirmations = sessionFactory.getCurrentSession()

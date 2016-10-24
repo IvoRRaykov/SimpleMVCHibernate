@@ -30,6 +30,9 @@ public class Product {
     @Column(name="picture_file_path")
     private String pictureFilePath;
 
+    @Transient
+    private String pictureBase64String;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private UserAccount userAccount;
@@ -83,6 +86,14 @@ public class Product {
 
     public void setUserAccount(UserAccount userAccount) {
         this.userAccount = userAccount;
+    }
+
+    public String getPictureBase64String() {
+        return pictureBase64String;
+    }
+
+    public void setPictureBase64String(String pictureBase64String) {
+        this.pictureBase64String = pictureBase64String;
     }
 
     public String toString() {

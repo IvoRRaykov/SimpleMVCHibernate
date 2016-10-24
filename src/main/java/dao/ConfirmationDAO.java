@@ -8,8 +8,11 @@ import model.UserConfirmation;
  */
 public interface ConfirmationDAO {
 
-    public void createConfirmation(UserConfirmation confirmation);
-    public void updateConfirmation(UserConfirmation confirmation);
-    public UserConfirmation getConfirmationByUser(UserAccount user);
-    public UserConfirmation getConfirmationByCode(String code);
+    void createConfirmation(UserConfirmation confirmation);
+
+    void updateConfirmation(UserConfirmation confirmation);
+
+    UserConfirmation getConfirmation(UserAccount user);
+
+    UserConfirmation getConfirmation(String code);
 }

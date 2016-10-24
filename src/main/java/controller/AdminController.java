@@ -16,9 +16,7 @@ import service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static util.Constants.*;
 
@@ -81,7 +79,7 @@ public class AdminController {
     @RequestMapping("/admin/editUser/{id}")
     public String adminEditUser(@PathVariable("id") int id, Model model) {
 
-        UserAccount user = this.userService.getUserById(id);
+        UserAccount user = this.userService.getUser(id);
 
         model.addAttribute(AVATAR_ATTRIBUTE, user.getAvatar());
         model.addAttribute(USER_ATTRIBUTE, user);

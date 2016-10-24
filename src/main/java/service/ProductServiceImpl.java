@@ -4,6 +4,7 @@ import dao.ProductDAO;
 import dao.UserDAO;
 import model.Product;
 import model.UserAccount;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -11,12 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.sql.SQLException;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.List;
 
 import static util.Constants.FILE_FOR_SAVE_NAME;
@@ -50,21 +49,30 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void updateProduct(Product product) {
-        UserAccount user = this.productDAO.getUserByProductCode(product.getCode());
+        UserAccount user = this.productDAO.getUser(product.getCode());
         product.setUserAccount(user);
         this.productDAO.updateProduct(product);
     }
 
     @Override
     @Transactional
-    public List<Product> listProduct() {
-        return this.productDAO.listProduct();
+    public List<Product> listProducts() {
+
+        List<Product> products = this.productDAO.findProducts();
+        this.convertPathToPictureForList(products);
+        return products;
     }
 
     @Override
     @Transactional
-    public Product getProductByCode(String code) {
-        return this.productDAO.getProductByCode(code);
+    public Product getProduct(String code) {
+        Product p = this.productDAO.getProduct(code);
+        try {
+            p.setPictureBase64String(getPicture(p.getPictureFilePath()));
+        } catch (IOException e) {
+            p.setPictureBase64String(null);
+        }
+        return p;
     }
 
     @Override
@@ -75,17 +83,19 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public List<Product> findProductsForSale() {
-        return this.productDAO.findProductsForSale();
+    public List<Product> getProductsForSale() {
+        List<Product> products = this.productDAO.findProductsForSale();
+        this.convertPathToPictureForList(products);
+        return products;
     }
 
     @Override
     @Transactional
     public void buyProduct(String code, int userId) {
-        Product p = this.productDAO.getProductByCode(code);
+        Product p = this.productDAO.getProduct(code);
 
-        UserAccount previousOwner = this.productDAO.getUserByProductCode(p.getCode());
-        UserAccount futureOwner = this.userDAO.getUserById(userId);
+        UserAccount previousOwner = this.productDAO.getUser(p.getCode());
+        UserAccount futureOwner = this.userDAO.getUser(userId);
 
         previousOwner.setMoney(previousOwner.getMoney() + p.getPrice());
         futureOwner.setMoney(futureOwner.getMoney() - p.getPrice());
@@ -96,21 +106,23 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public UserAccount getUserByProductCode(String code) {
-        return this.productDAO.getUserByProductCode(code);
+    public UserAccount getUser(String code) {
+        return this.productDAO.getUser(code);
     }
 
     @Override
     @Transactional
     public List<Product> listProductsForUser(int userId) {
-        return this.productDAO.listProductsForUser(userId);
+        List<Product> products = this.productDAO.findProducts(userId);
+        this.convertPathToPictureForList(products);
+        return products;
     }
 
     @Override
     @Transactional
     public void downloadList(HttpServletResponse response) throws IOException {
 
-        List<Product> productsForSale = this.findProductsForSale();
+        List<Product> productsForSale = this.getProductsForSale();
 
 
         response.setContentType("application/vnd.ms-excel");
@@ -128,7 +140,7 @@ public class ProductServiceImpl implements ProductService {
         short rowNumber = 1;
         for (Product p : productsForSale) {
 
-            String ownerName = this.getUserByProductCode(p.getCode()).getUserName();
+            String ownerName = this.getUser(p.getCode()).getUserName();
 
             HSSFRow row = sheet.createRow(rowNumber++);
             row.createCell(0).setCellValue(p.getCode());
@@ -163,6 +175,40 @@ public class ProductServiceImpl implements ProductService {
                     + File.separator + name + ".jpg";
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    @Override
+    public String getPicture(String uri) throws IOException {
+        byte[] imageInByte = new byte[]{};
+        try {
+
+            BufferedImage originalImage =
+                    ImageIO.read(new File(uri));
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(originalImage, "jpg", baos);
+            baos.flush();
+            imageInByte = baos.toByteArray();
+            baos.close();
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return new String(Base64.encodeBase64(imageInByte));
+    }
+
+    private void convertPathToPictureForList(List<Product> list) {
+        for (Product product : list) {
+            try {
+                if (product.getPictureFilePath() != null) {
+                    product.setPictureBase64String(this.getPicture(product.getPictureFilePath()));
+                }
+            } catch (IOException e) {
+                product.setPictureBase64String(null);
+                // e.printStackTrace();
+            }
         }
     }
 

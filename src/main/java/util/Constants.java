@@ -23,10 +23,11 @@ public interface Constants {
 
     String CONFIRM_PATH = "http://localhost:8080/account/confirm/";
 
-    String PRODUCT_TO_UPRADE_ATTRIBUTE = "productToUpdate";
+    String PRODUCT_TO_UPDATE_ATTRIBUTE = "productToUpdate";
     String PRODUCT_TO_CREATE_ATTRIBUTE = "productToCreate";
     String PRODUCT_LIST_ATTRIBUTE = "productList";
     String LOGGED_USER_MONEY_ATTRIBUTE = "loggedUserMoney";
+    String PRODUCT_PICTURE_ATTRIBUTE = "productPicture";
 
     String MESSAGE_ATTRIBUTE = "message";
     String UNREAD_MESSAGES = "unreadMessages";
@@ -37,6 +38,8 @@ public interface Constants {
     String RECEIVED_MESSAGES_LIST_ATTRIBUTE = "receivedMessagesList";
     String SENT_URL_MARKER = "s";
     String RECEIVED_URL_MARKER = "r";
+    String PRODUCT_CREATE_URL_MARKER = "c";
+    String PRODUCT_UPDATE_URL_MARKER = "u";
 
     String EMPTY = "";
     String FILE_FOR_SAVE_NAME = "productList";

@@ -13,8 +13,9 @@ public interface RoleDAO {
 
 
     void createRole(UserRole role);
-    public List<String> listUsersNames();
 
-    public Set<UserRole> getRoleByUser(UserAccount userAccount) ;
+    List<String> listUsersNames();
 
-    }
+    Set<UserRole> getRoles(UserAccount userAccount);
+
+}

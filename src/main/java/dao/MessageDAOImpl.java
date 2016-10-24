@@ -1,7 +1,6 @@
 package dao;
 
 import model.Message;
-import model.Product;
 import model.UserAccount;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Repository
 public class MessageDAOImpl implements MessageDAO {
@@ -28,7 +26,7 @@ public class MessageDAOImpl implements MessageDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Message> findAllMessagesToUserId(int userId) {
+    public List<Message> findMessagesTo(int userId) {
         Session session = this.sessionFactory.getCurrentSession();
 
         List<Message> messageList = session.createQuery("from Message where tou = :tou")
@@ -47,7 +45,7 @@ public class MessageDAOImpl implements MessageDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public int findAllUnreadMessagesCountToUserId(int  userId) {
+    public int findUnreadMessagesCountTo(int userId) {
         Session session = this.sessionFactory.getCurrentSession();
 
         List<Message> messageList = session.createQuery("from Message where tou = :tou and seen = false")
@@ -63,7 +61,7 @@ public class MessageDAOImpl implements MessageDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Message> findAllMessagesFromUserId(int userId) {
+    public List<Message> findMessagesFrom(int userId) {
         Session session = this.sessionFactory.getCurrentSession();
 
         List<Message> messageList = session.createQuery("from Message where fromu = :fromu")
@@ -83,7 +81,7 @@ public class MessageDAOImpl implements MessageDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public String findFromuNameByMessageId(int messageId) {
+    public String findFromName(int messageId) {
 
 
         List<UserAccount> usersIds = new ArrayList<>();
@@ -105,7 +103,7 @@ public class MessageDAOImpl implements MessageDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public String findTouNameByMessageId(int messageId) {
+    public String findToName(int messageId) {
 
         List<UserAccount> usersIds = new ArrayList<>();
 

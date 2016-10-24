@@ -19,11 +19,11 @@ public interface UserService {
 
     void removeUser(int id);
 
-    UserAccount getUserById(int id);
+    UserAccount getUser(int id);
 
-    UserAccount getUserByIdForUpdate(int id);
+    UserAccount getUserForUpdate(int id);
 
-    UserAccount getUserByName(String name);
+    UserAccount getUser(String name);
 
     List<String> getSimilarNames(String to);
 
