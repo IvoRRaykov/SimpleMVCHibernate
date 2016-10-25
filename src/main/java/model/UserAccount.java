@@ -20,7 +20,6 @@ public class UserAccount {
 
     @Column(name = "user_name", unique = true)
     @Pattern(regexp = "^[a-zA-Z0-9]{5,}$", message = "Username should contain at least 5 letters or digits")
-    @NotEmpty(message = "UserName is required")
     private String userName;
 
     @Column(name = "email")

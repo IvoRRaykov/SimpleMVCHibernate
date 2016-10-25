@@ -5,116 +5,110 @@
 <html>
 <head>
     <title>Register User</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css" type="text/css"/>
 
-    <style type="text/css">
-        .error {
-            color: red; font-weight: bold;
-        }
-
-    </style>
 </head>
 <body>
-<jsp:include page="_header.jsp"/>
 <jsp:include page="_menu.jsp"/>
-<jsp:include page="_messageMenu.jsp"/>
-
-<h1>
-    Register User
-</h1>
 
 
-<Table>
-    <tr>
-        <td>Pick avatar</td>
-        <td><a href="${pageContext.request.contextPath}/account/create"><img src="${avatar}"/></a></td>
-    </tr>
-</Table>
+<div id="content">
+    <div id="login-box">
+
+        <h3 style="margin-bottom: 30px" id="center_vertically" class="text">Register</h3>
+
+        <c:if test="${not empty errorString}">
+            <div style="margin-bottom: 30px; margin-top: 60px" class="error">${errorString}</div>
+        </c:if>
+        <c:if test="${empty errorString}">
+            <div style="margin-bottom: 30px; margin-top: 60px"></div>
+        </c:if>
 
 
-<a style="color: red; font-weight: bold;">${errorString}</a>
+        <Table style="margin-bottom: 20px">
+            <tr>
+                <td class="text">Pick avatar</td>
+                <td><a href="${pageContext.request.contextPath}/account/create"><img style="margin-left: 13px"
+                                                                                     src="${avatar}"/></a></td>
+            </tr>
+        </Table>
 
-<c:url var="addAction" value="/account/doCreate/${avatar.substring(34)}"/>
-<form:form method="post" action="${addAction}" commandName="user">
-    <table>
 
-        <tr>
-            <td>
-                <form:label path="userName">
-                    <spring:message text="User Name"/>
-                </form:label>
-            </td>
-            <td>
-                <form:input path="userName"/>
-            </td>
-            <td>
-                <form:errors path="userName" cssClass="error"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <form:label path="password">
-                    <spring:message text="Password"/>
-                </form:label>
-            </td>
-            <td>
-                <form:input path="password"/>
-            </td>
-            <td>
-                <form:errors path="password" cssClass="error"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <form:label path="email">
-                    <spring:message text="Email"/>
-                </form:label>
-            </td>
-            <td>
-                <form:input path="email"/>
-            </td>
-            <td>
-                <form:errors path="email" cssClass="error"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <form:label path="money">
-                    <spring:message text="Money"/>
-                </form:label>
-            </td>
-            <td>
-                <form:input path="money"/>
-            </td>
-            <td>
-                <form:errors path="money" cssClass="error"/>
-            </td>
-        </tr>
+        <c:url var="addAction" value="/account/doCreate/${avatar.substring(34)}"/>
+        <form:form method="post" action="${addAction}" commandName="user">
 
-        <tr>
-            <td>
-                <form:label path="gender">
-                    <spring:message text="Gender"/>
-                </form:label>
-            </td>
-            <td>
-                <form:input path="gender"/>
-            </td>
-            <td>
-                <form:errors path="gender" cssClass="error"/>
-            </td>
-        </tr>
+            <form:errors path="*" cssClass="error" element="div"/>
+            <table>
 
-        <tr>
-            <td colspan="2">
-                <input type="submit"
-                       value="<spring:message text="Register User"/>"/>
+                <tr>
+                    <td>
+                        <form:label path="userName">
+                            <a class="text">User Name:</a>
+                        </form:label>
+                    </td>
+                    <td>
+                        <form:input path="userName"/>
+                    </td>
 
-            </td>
-        </tr>
-    </table>
-</form:form>
+                </tr>
+                <tr>
+                    <td>
+                        <form:label path="password">
+                            <a class="text">Password:</a>
+                        </form:label>
+                    </td>
+                    <td>
+                        <form:input path="password"/>
+                    </td>
 
-<jsp:include page="_footer.jsp"/>
+                </tr>
+                <tr>
+                    <td>
+                        <form:label path="email">
+                            <a class="text">Email:</a>
+                        </form:label>
+                    </td>
+                    <td>
+                        <form:input path="email"/>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <form:label path="money">
+                            <a class="text">Money:</a>
+                        </form:label>
+                    </td>
+                    <td>
+                        <form:input path="money"/>
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td>
+                        <form:label path="gender">
+                            <a class="text">Gender:</a>
+                        </form:label>
+                    </td>
+                    <td>
+                        <form:input path="gender"/>
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+                        <input style="margin-top: 20px" class="button" type="submit"
+                               value="Register"/>
+
+                    </td>
+                </tr>
+            </table>
+        </form:form>
+    </div>
+</div>
+<div id="back"><jsp:include page="_footer.jsp"/></div>
 
 </body>
 </html>

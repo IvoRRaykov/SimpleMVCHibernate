@@ -4,20 +4,21 @@
 <html>
 <head>
     <title>home</title>
-
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css" type="text/css"/>
 </head>
 <body>
-<jsp:include page="_header.jsp"/>
-<jsp:include page="_menu.jsp"/>
-<jsp:include page="_messageMenu.jsp"/>
+    <jsp:include page="_menu.jsp"/>
+<div id="content">
 
 
-<h1>
-    Home
-</h1>
+    <h1>
+        Home
+    </h1>
 
-hallo hallo
+    hallo hallo
 
+</div>
+<div id="back"><jsp:include page="_footer.jsp"/></div>
 
 </body>
 </html>

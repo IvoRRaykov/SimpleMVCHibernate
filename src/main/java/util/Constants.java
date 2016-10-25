@@ -15,7 +15,7 @@ public interface Constants {
     String ROLES_ATTRIBUTE = "roles";
     String CONFIRMED_MESSAGE_ATTRIBUTE = "confirmedMessage";
     String AVATAR_ATTRIBUTE = "avatar";
-    String AVATAR_PREFIX = "http://api.adorable.io/avatar/200/";
+    String AVATAR_PREFIX = "http://api.adorable.io/avatar/150/";
     String LOGGED_USER_NAME_ATTRIBUTE = "loggedUserName";
     String LOGGED_USER_ID_ATTRIBUTE = "loggedUserId";
     String USER_NAME_ATTRIBUTE = "username";

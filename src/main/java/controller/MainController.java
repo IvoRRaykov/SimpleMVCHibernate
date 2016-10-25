@@ -78,7 +78,7 @@ public class MainController {
 
         } catch (ConstraintViolationException e) {
 
-            user.setPassword("");
+            user.setPassword(EMPTY);
             model.addAttribute(USER_ATTRIBUTE, user);
             model.addAttribute(AVATAR_ATTRIBUTE , AVATAR_PREFIX + avatar);
             model.addAttribute(ERROR_STRING_ATTRIBUTE, "Account with this username or email already exists!");

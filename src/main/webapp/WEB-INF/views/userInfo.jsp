@@ -6,44 +6,37 @@
 <html>
 <head>
     <title>User Info</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css" type="text/css"/>
+
 </head>
 <body>
-<jsp:include page="_header.jsp"/>
 <jsp:include page="_menu.jsp"/>
-<jsp:include page="_messageMenu.jsp"/>
 
-<h1>User Info</h1>
-<br>
-<c:if test="${loggedUserId == user.id}">
-    <c:if test="${unreadMessages != 0}">
-        <a href="${pageContext.request.contextPath}/message/received"><h1 style="color: #cf0007">You
-            Have ${unreadMessages} unread messages</h1></a>
+<div id="content">
+    <h1 class="text">User Info</h1>
+    <br>
+    <c:if test="${loggedUserId == user.id}">
+        <c:if test="${unreadMessages != 0}">
+            <div class="error">
+                <a href="${pageContext.request.contextPath}/message/received"><h1 style="color: #cf0007">You
+                Have ${unreadMessages} unread messages</h1></a>
+            </div>
+        </c:if>
     </c:if>
-</c:if>
-<img src="${user.avatar}"/>
-<h1>name: ${user.userName}</h1>
-<h2>email: ${user.email}</h2>
-<h4>gender: ${user.gender}</h4>
-<h3>money: ${user.money} BGN</h3>
+    <img src="${user.avatar}"/>
+    <h1 class="text">name: ${user.userName}</h1>
+    <h2 class="text">email: ${user.email}</h2>
+    <h4 class="text">gender: ${user.gender}</h4>
+    <h3 class="text">money: ${user.money} BGN</h3>
 
-<sec:authorize access="hasRole('ROLE_ADMIN')">
-    <a href="${pageContext.request.contextPath}/admin/editUser/${user.id}">Edit this user</a>
-</sec:authorize>
-<br>
-<sec:authorize access="hasRole('ROLE_USER')">
-<a href="${pageContext.request.contextPath}/product/manage">Manage My Products</a>
-</sec:authorize>
-<br>
-<br>
-<br>
 
-<c:if test="${loggedUserId != user.id}"><a href="${pageContext.request.contextPath}/message/to/${user.userName}">Send
-    mail</a></c:if>
-<br>
-<br>
-<br>
 
-<jsp:include page="_footer.jsp"/>
 
+    <c:if test="${loggedUserId != user.id}"><a href="${pageContext.request.contextPath}/message/to/${user.userName}">Send
+        mail</a></c:if>
+
+
+</div>
+<div id="back"><jsp:include page="_footer.jsp"/></div>
 </body>
 </html>
