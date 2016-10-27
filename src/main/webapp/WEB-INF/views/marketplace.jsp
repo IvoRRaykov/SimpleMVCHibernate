@@ -7,114 +7,89 @@
 <html>
 <head>
     <title>Marketplace</title>
-    <style type="text/css">
-        .error {
-            font-weight: bold;
-            color: #ff0000;
-        }
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css" type="text/css"/>
 
-        .tg {
-            border-collapse: collapse;
-            border-spacing: 0;
-            border-color: #ccc;
-        }
-
-        .tg td {
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-            padding: 10px 5px;
-            border-style: solid;
-            border-width: 1px;
-            overflow: hidden;
-            word-break: normal;
-            border-color: #ccc;
-            color: #333;
-            background-color: #fff;
-        }
-
-        .tg th {
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-            font-weight: normal;
-            padding: 10px 5px;
-            border-style: solid;
-            border-width: 1px;
-            overflow: hidden;
-            word-break: normal;
-            border-color: #ccc;
-            color: #333;
-            background-color: #f0f0f0;
-        }
-
-        .tg .tg-4eph {
-            background-color: #f9f9f9
-        }
-    </style>
 </head>
 <body>
-<jsp:include page="_header.jsp"/>
+
 <jsp:include page="_menu.jsp"/>
-<jsp:include page="_messageMenu.jsp"/>
-
-
-<br>
-<h3>Product List</h3>
-<c:if test="${!empty productList}">
-    <table class="tg">
-        <tr>
-            <th width="80">Product Image</th>
-            <th width="80">Product Code</th>
-            <th width="120">Product Name</th>
-            <th width="120">Product Price</th>
-            <th width="120">Product Owner</th>
-
-            <th width="60"></th>
-        </tr>
-        <c:forEach items="${productList}" var="product">
-        <tr>
-            <td><img id="productPicture" style="width: 100px" height="100px" src="data:image/jpeg;base64,${product.pictureBase64String}"></td>
-            <td>${product.code}</td>
-            <td>${product.name}</td>
-            <td>
-                <c:if test="${product.price <= loggedUserMoney }">
-                    <p>   ${product.price} <c:if test="${product.userAccount.userName != loggedUserName}"><a
-                            style="color: #19ac0a;"><sup> +<fmt:formatNumber
-                            value="${loggedUserMoney-product.price - 0.0005}" maxFractionDigits="2"/></sup></a>
-                    </c:if></p>
-                </c:if>
-                <c:if test="${product.price > loggedUserMoney}">
-
-                    <p style="color: #cf0007;">${product.price}<sup> -<fmt:formatNumber
-                            value="${product.price-loggedUserMoney - 0.0005}" maxFractionDigits="2"/></sup></p>
-                </c:if>
-            </td>
-            <td><img src="${product.userAccount.avatar}" style="width: 30px; height: 30px">
-                <a href="<c:url value='/user/${product.userAccount.id}'/> ">${product.userAccount.userName}</a></td>
-            <td>
-            <c:if test="${product.userAccount.userName == loggedUserName}">
-                <a style="color: #7a7a7a;">Buy</a>
-            </c:if>
-
-            <sec:authorize access="hasRole('ROLE_USER')">
-                <c:if test="${product.userAccount.userName != loggedUserName}">
-                    <a href="<c:url value='/product/buy/${product.code}' />">Buy</a>
-                </c:if>
-            </sec:authorize>
-            <sec:authorize access="hasRole('ROLE_ADMIN')">
-                <c:if test="${product.userAccount.userName != loggedUserName}">
-                    <a style="color: #7a7a7a;">Buy</a>
-                </c:if>
-            </sec:authorize>
-            </td>
+<div id="content">
+    <div id="login-box" style="border: 0; border-radius: 0">
+    <h3 class="text" align="center">Marketplace</h3>
+    <br>
+    <br>
+    <c:if test="${!empty productList}">
+        <table class="tg">
+            <tr>
+                <th width="80">Image</th>
+                <th width="80">Code</th>
+                <th width="120">Name</th>
+                <th width="120">Price</th>
+                <th width="120">Owner</th>
+                <th></th>
+                <th width="60"><a href="<c:url value='/product/downloadList' />"><img class="no_border" id="icon"
+                                                                                      src="${pageContext.request.contextPath}/../resources/icons/download.png"></a>
+                </th>
             </tr>
-        </c:forEach>
-    </table>
-</c:if>
-<br>
-<a href="<c:url value='/product/downloadList' />">Download List</a>
+            <c:forEach items="${productList}" var="product">
+                <tr>
+                    <td align="center"><img id="productPicture" class="no_border" style="width: 100px" height="100px"
+                                            src="data:image/jpeg;base64,${product.pictureBase64String}"></td>
+                    <td align="center">${product.code}</td>
+                    <td align="center" style="font: italic bold 12px/30px Georgia, serif;">${product.name}</td>
+                    <td align="center">
+                        <c:if test="${product.price <= loggedUserMoney }">
+                            <a>   ${product.price} <c:if test="${product.userAccount.userName != loggedUserName}"><a
+                                    style="color: #0ede1a;"><sup> +<fmt:formatNumber
+                                    value="${loggedUserMoney-product.price - 0.0005}" maxFractionDigits="2"/></sup></a>
+                            </c:if></a>
+                        </c:if>
+                        <c:if test="${product.price > loggedUserMoney}">
 
+                            <a style="color: #ec0013;">${product.price}<sup> -<fmt:formatNumber
+                                    value="${product.price-loggedUserMoney - 0.0005}" maxFractionDigits="2"/></sup></a>
+                        </c:if> $
+                    </td>
+                    <td align="center">
+                        <table>
+                            <tr style="border: 0;">
+                            <td style="border: 0;"><img src="${product.userAccount.avatar}" style="width: 30px; height: 30px"></td>
+                                <td style="border: 0;"><a href="<c:url value='/user/${product.userAccount.id}'/> ">${product.userAccount.userName}
+                                <c:if test="${product.userAccount.userName == loggedUserName}"><a class="text">
+                                (You)</a></c:if></a></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td align="center">
+                        <c:if test="${product.userAccount.userName == loggedUserName || product.price>loggedUserMoney }">
+                            <img class="no_border" id="icon"
+                                 src="${pageContext.request.contextPath}/../resources/icons/buyNo.png">
+                        </c:if>
 
-<jsp:include page="_footer.jsp"/>
+                        <sec:authorize access="hasRole('ROLE_USER')">
+                            <c:if test="${product.userAccount.userName != loggedUserName && product.price<=loggedUserMoney}">
+                                <a href="<c:url value='/product/buy/${product.code}' />"><img class="no_border" id="icon"
+                                                                                       src="${pageContext.request.contextPath}/../resources/icons/buy.png"></a>
+                            </c:if>
+                        </sec:authorize>
+                        <sec:authorize access="hasRole('ROLE_ADMIN')">
+                            <c:if test="${product.userAccount.userName != loggedUserName}">
+                                <img class="no_border" id="icon"
+                                     src="${pageContext.request.contextPath}/../resources/icons/buyNo.png">
+                            </c:if>
+                        </sec:authorize>
+                    </td>
+                </tr>
+            </c:forEach>
+        </table>
+    </c:if>
+    <br>
+
+    </div>
+</div>
+<div id="back">
+    <jsp:include page="_footer.jsp"/>
+</div>
 
 </body>
 </html>

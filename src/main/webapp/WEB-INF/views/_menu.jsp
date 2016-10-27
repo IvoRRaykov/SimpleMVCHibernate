@@ -5,8 +5,12 @@
 
 <div id="main_menu">
 
+    <div id="left_align" >
+        <a href="<c:url value='/' />"><img height="100%" class="no_border" src="${pageContext.request.contextPath}/../resources/icons/logo.png"></a>
+    </div>
+
     <c:if test="${not empty loggedUserName}">
-        <div id="right_align">
+        <div id="right_align" >
             <a class="text"> Hello ${loggedUserName}</a>
             <input class="button" type="button"
                    onclick="location.href='${pageContext.request.contextPath}/login?logout';"
@@ -14,9 +18,6 @@
         </div>
     </c:if>
     <div id="main_menu_inner">
-        <input class="button" type="button"
-               onclick="location.href='${pageContext.request.contextPath}/';"
-               value="Home"/>
 
         <c:if test="${not empty loggedUserId}">
             <div class="dropdown">

@@ -157,6 +157,11 @@ public class ProductController {
         if (result.hasErrors()) {
 
             model.addAttribute(PRODUCT_TO_CREATE_ATTRIBUTE, new Product());
+            try {
+                product.setPictureBase64String(this.productService.getPicture(product.getPictureFilePath()));
+            } catch (IOException e) {
+                return "_errorUpload";
+            }
             this.fillList(request, session, model);
             return "manageProducts";
         }

@@ -4,73 +4,40 @@
 <html>
 <head>
     <title>Sent Messages</title>
-    <style type="text/css">
-        .error {
-            font-weight: bold;
-            color: #ff0000;
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css" type="text/css"/>
+    <style>
+        table {
+            table-layout: fixed;
+            width: 310px;
         }
 
-        .tg {
-            border-collapse: collapse;
-            border-spacing: 0;
-            border-color: #ccc;
-        }
-
-        .tg td {
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-            padding: 10px 5px;
-            border-style: solid;
-            border-width: 1px;
-            overflow: hidden;
-            word-break: normal;
-            border-color: #ccc;
-            color: #333;
-            background-color: #fff;
-        }
-
-        .tg th {
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-            font-weight: normal;
-            padding: 10px 5px;
-            border-style: solid;
-            border-width: 1px;
-            overflow: hidden;
-            word-break: normal;
-            border-color: #ccc;
-            color: #333;
-            background-color: #f0f0f0;
-        }
-
-        .tg .tg-4eph {
-            background-color: #f9f9f9
+        table td {
+            width: 100px;
+            word-wrap: break-word;
         }
     </style>
 </head>
 <body>
 
 
-<jsp:include page="_header.jsp"/>
 <jsp:include page="_menu.jsp"/>
-<jsp:include page="_messageMenu.jsp"/>
 
-<h3>Sent messages</h3>
+<div id="content">
+<h3 class="text">Sent messages</h3>
 <c:if test="${!empty sentMessagesList}">
     <table class="tg">
         <tr>
             <th width="80">Date sent</th>
             <th width="120">To</th>
             <th width="320">Text</th>
-            <th>Delete</th>
 
         </tr>
         <c:forEach items="${sentMessagesList}" var="entry">
             <tr>
-                <td>${entry.key.dateSent}</td>
-                <td><a href="${pageContext.request.contextPath}/message/to/${entry.value}">${entry.value}</a></td>
-                <td>${entry.key.text}</td>
-                <td><a href="${pageContext.request.contextPath}/message/s/${entry.key.messageId}">Delete</a></td>
+                <td align="center">${entry.key.dateSent}</td>
+                <td align="center"><a href="${pageContext.request.contextPath}/message/to/${entry.value}">${entry.value}</a></td>
+                <td align="center">${entry.key.text}</td>
+                <td align="center"> <a href="<c:url value='${pageContext.request.contextPath}/message/s/${entry.key.messageId}' />"><img class="no_border" id="icon" src="${pageContext.request.contextPath}/../resources/icons/trash.png"></a></td>
 
                 <%--<td><a href="<c:url value='/product/update/${product.code}' />">Edit</a></td>
                 <td><a href="<c:url value='/product/remove/${product.code}' />">Delete</a></td>--%>
@@ -79,7 +46,8 @@
     </table>
 </c:if>
 
-<jsp:include page="_footer.jsp"/>
+</div>
+<div id="back"><jsp:include page="_footer.jsp"/></div>
 
 </body>
 </html>

@@ -27,13 +27,13 @@
     <h1 class="text">name: ${user.userName}</h1>
     <h2 class="text">email: ${user.email}</h2>
     <h4 class="text">gender: ${user.gender}</h4>
-    <h3 class="text">money: ${user.money} BGN</h3>
+    <h3 class="text">money: ${user.money} $</h3>
 
 
 
 
-    <c:if test="${loggedUserId != user.id}"><a href="${pageContext.request.contextPath}/message/to/${user.userName}">Send
-        mail</a></c:if>
+    <c:if test="${loggedUserId != user.id}"><a href="${pageContext.request.contextPath}/message/to/${user.userName}">
+        <img height="100%" class="no_border" style="height: 50px; width: 50px;" src="${pageContext.request.contextPath}/../resources/icons/mail.png"></a></c:if>
 
 
 </div>

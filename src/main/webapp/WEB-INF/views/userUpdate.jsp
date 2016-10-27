@@ -3,123 +3,124 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <html>
 <head>
-    <style>
-        .error {
-            color: red; font-weight: bold;
-        }
-    </style>
     <title>Edit User</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css" type="text/css"/>
+    <script>function validate(event) {
+        var myLength = document.getElementById("pass").value.length;
+        if (myLength < 6) {
+            alert("Password must contain at least 6 characters")
+            event.preventDefault();
+            return false;
 
+        } else {
+            var string = document.getElementById('pass').value;
+            var re = new RegExp("^[a-zA-Z0-9.]*$");
+            if (!re.test(string)) {
+                alert("Password must contain only letters and digits.")
+                event.preventDefault();
+                return false;
+            }
+        }
+    }</script>
 </head>
 <body>
-<jsp:include page="_header.jsp"/>
 <jsp:include page="_menu.jsp"/>
-<jsp:include page="_messageMenu.jsp"/>
+<div id="content">
+    <h1 class="text">
+        Edit User
+    </h1>
 
-<h1>
-    Edit User
-</h1>
+    <tr>
+        <td><img src="${avatar}"/></td>
+    </tr>
+    <c:if test="${not empty errorString}">
+        <div class="error"><a>${errorString}</a></div>
+    </c:if>
+    <c:url var="addAction" value="/user/doUpdate/${avatar.substring(34)}"/>
+    <form:form method="POST" action="${addAction}" commandName="user">
+        <form:errors path="*" cssClass="error" element="div"/>
+        <table>
+            <c:if test="${!empty user.userName}">
+                <tr>
+                    <td>
+                        <form:label path="id">
+                            <a class="text">Id:</a>
+                        </form:label>
+                    </td>
+                    <td>
+                        <form:input path="id" readonly="true" size="8" disabled="true"/>
+                        <form:hidden path="id"/>
+                    </td>
+                </tr>
+            </c:if>
 
-<tr><td><img src="${avatar}"/></td></tr>
-
-<a style="color: red;">${errorString}</a>
-<c:url var="addAction" value="/user/doUpdate/${avatar.substring(34)}"/>
-<form:form method="POST" action="${addAction}" commandName="user">
-    <table>
-
-        <c:if test="${!empty user.userName}">
             <tr>
                 <td>
-                    <form:label path="id">
-                        <spring:message text="ID"/>
+                    <form:label path="userName">
+                        <a class="text">User Name:</a>
                     </form:label>
                 </td>
                 <td>
-                    <form:input path="id" readonly="true" size="8"  disabled="true" />
-                    <form:hidden path="id" />
+                    <form:input path="userName"/>
                 </td>
             </tr>
-        </c:if>
+            <tr>
+                <td>
+                    <form:label path="password">
+                        <a class="text">Password:</a>
+                    </form:label>
+                </td>
+                <td>
+                    <form:input id="pass" path="password" placeholder="old/new password"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <form:label path="email">
+                        <a class="text">E-mail:</a>
+                    </form:label>
+                </td>
+                <td>
+                    <form:input path="email"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <form:label path="money">
+                        <a class="text">Money:</a>
+                    </form:label>
+                </td>
+                <td>
+                    <form:input path="money"/>
+                </td>
+            </tr>
 
-        <tr>
-            <td>
-                <form:label path="userName">
-                    <spring:message text="User Name"/>
-                </form:label>
-            </td>
-            <td>
-                <form:input path="userName"/>
-            </td>
-            <td>
-                <form:errors path="userName" cssClass="error"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <form:label path="password">
-                    <spring:message text="Password"/>
-                </form:label>
-            </td>
-            <td>
-                <form:input path="password"/>
-            </td>
-            <td>
-                <form:errors path="password" cssClass="error"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <form:label path="email">
-                    <spring:message text="Email"/>
-                </form:label>
-            </td>
-            <td>
-                <form:input path="email"/>
-            </td>
-            <td>
-                <form:errors path="email" cssClass="error"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <form:label path="money">
-                    <spring:message text="Money"/>
-                </form:label>
-            </td>
-            <td>
-                <form:input path="money" />
-            </td>
-            <td>
-                <form:errors path="money" cssClass="error"/>
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    <form:label path="gender">
+                        <a class="text">Gender:</a>
+                    </form:label>
+                </td>
+                <td>
+                    <form:input path="gender"/>
+                </td>
+            </tr>
 
-        <tr>
-            <td>
-                <form:label path="gender">
-                    <spring:message text="Gender"/>
-                </form:label>
-            </td>
-            <td>
-                <form:input path="gender" />
-            </td>
-            <td>
-                <form:errors path="gender" cssClass="error"/>
-            </td>
-        </tr>
+            <tr>
+                <td colspan="2">
 
-        <tr>
-            <td colspan="2">
+                    <input onclick="validate(event)" class="button" type="submit"
+                           value="Update Info"/>
 
-                <input type="submit"
-                       value="<spring:message text="Edit user"/>"/>
+                </td>
+            </tr>
+        </table>
+    </form:form>
 
-            </td>
-        </tr>
-    </table>
-</form:form>
-
-<jsp:include page="_footer.jsp"/>
+</div>
+<div id="back">
+    <jsp:include page="_footer.jsp"/>
+</div>
 
 </body>
 </html>
