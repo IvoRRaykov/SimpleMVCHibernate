@@ -63,7 +63,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public Product getProduct(String code) {
+    public Product findProduct(String code) {
 
         Session session = this.sessionFactory.getCurrentSession();
 
@@ -108,6 +108,44 @@ public class ProductDAOImpl implements ProductDAO {
 
     @Override
     @SuppressWarnings("unchecked")
+    public List<Product> findProductsForSale(String genre) {
+
+        Session session = this.sessionFactory.getCurrentSession();
+
+        List<Product> productList = session.createQuery("from Product where forSale = true and genre = :genre")
+                .setString("genre", genre)
+                .list();
+
+        logger.info("Products for sale for genre : " + genre + " List");
+
+        for (Product product : productList) {
+
+            logger.info("   product = " + product.toString());
+        }
+
+        return productList;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<String> findGenres() {
+        Session session = this.sessionFactory.getCurrentSession();
+
+        List<String> genreList = session.createQuery("select distinct genre from Product")
+                .list();
+
+        logger.info("Genres List :");
+
+        for (String genre : genreList) {
+
+            logger.info("   genre = " + genre);
+        }
+
+        return genreList;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public List<Product> findProducts(int userId) {
 
         Session session = this.sessionFactory.getCurrentSession();
@@ -127,7 +165,7 @@ public class ProductDAOImpl implements ProductDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public UserAccount getUser(String code) {
+    public UserAccount findUser(String code) {
 
         Session session = sessionFactory.getCurrentSession();
 
