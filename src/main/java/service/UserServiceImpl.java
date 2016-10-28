@@ -1,8 +1,8 @@
 package service;
 
-import dao.ConfirmationDAO;
-import dao.RoleDAO;
-import dao.UserDAO;
+import repository.ConfirmationDAO;
+import repository.RoleDAO;
+import repository.UserDAO;
 import model.UserAccount;
 import model.UserConfirmation;
 import model.UserRole;
@@ -110,20 +110,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public UserAccount getUser(String name) {
-        return this.userDAO.getUser(name);
+        return this.userDAO.findUser(name);
     }
 
     @Override
     @Transactional
     public UserAccount getUser(int id) {
-        return this.userDAO.getUser(id);
+        return this.userDAO.findUser(id);
     }
 
     @Override
     @Transactional
     public UserAccount getUserForUpdate(int id) {
 
-        return this.userDAO.getUser(id);
+        return this.userDAO.findUser(id);
     }
 
     @Override
@@ -159,7 +159,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
 
-        model.UserAccount user = this.userDAO.getUser(username);
+        model.UserAccount user = this.userDAO.findUser(username);
 
         UserConfirmation confirmation = this.confirmationDAO.getConfirmation(user);
         user.setUserConfirmation(confirmation);

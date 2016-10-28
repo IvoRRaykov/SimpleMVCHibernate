@@ -44,9 +44,7 @@
     </style>
 </head>
 <body>
-<jsp:include page="_header.jsp"/>
 <jsp:include page="_menu.jsp"/>
-<jsp:include page="_messageMenu.jsp"/>
 
 
 <c:if test="${empty user.userName}">

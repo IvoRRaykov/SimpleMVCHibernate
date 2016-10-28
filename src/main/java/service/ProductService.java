@@ -23,6 +23,10 @@ public interface ProductService {
 
     List<Product> getProductsForSale();
 
+    List<Product> getProductsForSale(String genre);
+
+    List<String> getGenres();
+
     void buyProduct(String code, int userId);
 
     List<Product> listProductsForUser(int userId);
@@ -36,4 +40,6 @@ public interface ProductService {
     String uploadPicture(String name, MultipartFile file);
 
     String getPicture(String uri) throws IOException;
+
+    void attachSongs(List<String> songs, String code);
 }

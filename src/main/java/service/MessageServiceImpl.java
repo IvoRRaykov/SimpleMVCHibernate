@@ -1,7 +1,7 @@
 package service;
 
-import dao.MessageDAO;
-import dao.UserDAO;
+import repository.MessageDAO;
+import repository.UserDAO;
 import model.Message;
 import model.UserAccount;
 import org.springframework.stereotype.Service;
@@ -65,9 +65,9 @@ public class MessageServiceImpl implements MessageService {
     @Transactional
     public void sendMessage(String text, int fromId, String toName) {
 
-        UserAccount fromUser = this.userDAO.getUser(fromId);
+        UserAccount fromUser = this.userDAO.findUser(fromId);
 
-        UserAccount toUser = this.userDAO.getUser(toName);
+        UserAccount toUser = this.userDAO.findUser(toName);
 
         Message message = new Message();
 

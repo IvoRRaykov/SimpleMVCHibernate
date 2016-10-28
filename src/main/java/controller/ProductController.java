@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import static util.Constants.*;
@@ -76,10 +77,21 @@ public class ProductController {
         }
 
         product.setUserAccount(user);
-
         this.productService.createProduct(product);
 
-        return "redirect:/product/manage";
+
+        model.addAttribute(PRODUCT_TO_UPDATE_ATTRIBUTE, new Product());
+        model.addAttribute(PRODUCT_TO_CREATE_ATTRIBUTE, new Product());
+
+        if (!isInUserRole(request)) {
+            model.addAttribute(USERS_NAMES_LIST_ATTRIBUTE, this.userService.listUsersNames());
+        }
+
+        this.fillList(request, session, model);
+
+        model.addAttribute(PRODUCT_TO_CREATE_CODE_ATTRIBUTE, product.getCode());
+
+        return "manageProducts";
     }
 
 
@@ -187,10 +199,26 @@ public class ProductController {
 
         model.addAttribute(LOGGED_USER_MONEY_ATTRIBUTE, userAccount.getMoney());
         model.addAttribute(LOGGED_USER_NAME_ATTRIBUTE, userAccount.getUserName());
+        model.addAttribute(GENRES_LIST_ATTRIBUTE, this.productService.getGenres());
         model.addAttribute(PRODUCT_LIST_ATTRIBUTE, this.productService.getProductsForSale());
 
         return "marketplace";
     }
+
+    @RequestMapping(value = {"/product/marketplace/{genre}"}, method = RequestMethod.GET)
+    public String marketplace(@PathVariable(value = "genre") String genre, Model model, HttpSession session) {
+
+        Object loggedUserIdObj = session.getAttribute(LOGGED_USER_ID_ATTRIBUTE);
+        UserAccount userAccount = this.userService.getUser((int) loggedUserIdObj);
+
+        model.addAttribute(LOGGED_USER_MONEY_ATTRIBUTE, userAccount.getMoney());
+        model.addAttribute(LOGGED_USER_NAME_ATTRIBUTE, userAccount.getUserName());
+        model.addAttribute(GENRES_LIST_ATTRIBUTE, this.productService.getGenres());
+        model.addAttribute(PRODUCT_LIST_ATTRIBUTE, this.productService.getProductsForSale(genre));
+
+        return "marketplace";
+    }
+
 
     @RequestMapping(value = {"/product/buy/{code}"}, method = RequestMethod.GET)
     public String productTransaction(@PathVariable("code") String code,
@@ -212,6 +240,20 @@ public class ProductController {
             //??
         }
     }
+
+    @RequestMapping(value = {"/holyFuck"}, method = RequestMethod.POST)
+    public String holyfuck(@RequestParam(value = "myArray[]", required = false) String[] myArray,
+                           @RequestParam(value = "product_code", required = false) String code) {
+
+        if (myArray != null) {
+            List<String> songs = Arrays.asList(myArray);
+            this.productService.attachSongs(songs, code);
+        } else {
+        }
+
+        return "redirect:product/manage";
+    }
+
 
     private void fillList(HttpServletRequest request, HttpSession session, Model model) {
 

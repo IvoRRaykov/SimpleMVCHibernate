@@ -25,6 +25,7 @@ public interface Constants {
 
     String PRODUCT_TO_UPDATE_ATTRIBUTE = "productToUpdate";
     String PRODUCT_TO_CREATE_ATTRIBUTE = "productToCreate";
+    String PRODUCT_TO_CREATE_CODE_ATTRIBUTE = "productToCreateCode";
     String PRODUCT_LIST_ATTRIBUTE = "productList";
     String LOGGED_USER_MONEY_ATTRIBUTE = "loggedUserMoney";
     String PRODUCT_PICTURE_ATTRIBUTE = "productPicture";
@@ -40,6 +41,7 @@ public interface Constants {
     String RECEIVED_URL_MARKER = "r";
     String PRODUCT_CREATE_URL_MARKER = "c";
     String PRODUCT_UPDATE_URL_MARKER = "u";
+    String GENRES_LIST_ATTRIBUTE = "genresList";
 
     String EMPTY = "";
     String FILE_FOR_SAVE_NAME = "productList";

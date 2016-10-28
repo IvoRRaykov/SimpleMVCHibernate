@@ -1,4 +1,4 @@
-package dao;
+package repository;
 
 import model.Product;
 import model.UserAccount;
@@ -14,11 +14,15 @@ public interface ProductDAO {
 
     void removeProduct(String code);
 
-    Product getProduct(String code);
+    Product findProduct(String code);
 
-    UserAccount getUser(String code);
+    UserAccount findUser(String code);
 
     List<Product> findProductsForSale();
+
+    List<Product> findProductsForSale(String genre);
+
+    List<String> findGenres();
 
     List<Product> findProducts(int userId);
 

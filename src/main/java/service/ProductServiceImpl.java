@@ -1,7 +1,9 @@
 package service;
 
-import dao.ProductDAO;
-import dao.UserDAO;
+import model.Song;
+import repository.ProductDAO;
+import repository.SongDAO;
+import repository.UserDAO;
 import model.Product;
 import model.UserAccount;
 import org.apache.commons.codec.binary.Base64;
@@ -16,7 +18,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.List;
+import java.util.*;
 
 import static util.Constants.FILE_FOR_SAVE_NAME;
 
@@ -30,7 +32,9 @@ public class ProductServiceImpl implements ProductService {
 
     private ProductDAO productDAO;
     private UserDAO userDAO;
+    private SongDAO songDAO;
 
+    public void setSongDAO(SongDAO songDAO) {this.songDAO = songDAO;}
 
     public void setProductDAO(ProductDAO productDAO) {
         this.productDAO = productDAO;
@@ -44,12 +48,17 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public void createProduct(Product product) {
         this.productDAO.createProduct(product);
+
+        /*for(Song song: product.getSongs() ){
+            //song.setProduct(product);
+            this.songDAO.createSong(song);
+        }*/
     }
 
     @Override
     @Transactional
     public void updateProduct(Product product) {
-        UserAccount user = this.productDAO.getUser(product.getCode());
+        UserAccount user = this.productDAO.findUser(product.getCode());
         product.setUserAccount(user);
         this.productDAO.updateProduct(product);
     }
@@ -60,13 +69,19 @@ public class ProductServiceImpl implements ProductService {
 
         List<Product> products = this.productDAO.findProducts();
         this.convertPathToPictureForList(products);
+        this.fillSongs(products);
         return products;
     }
 
     @Override
     @Transactional
     public Product getProduct(String code) {
-        Product p = this.productDAO.getProduct(code);
+        Product p = this.productDAO.findProduct(code);
+
+        Set<Song> songs = new TreeSet<>();
+        songs.addAll((this.songDAO.findSongs(code)));
+        p.setSongs(songs);
+
         try {
             p.setPictureBase64String(getPicture(p.getPictureFilePath()));
         } catch (IOException e) {
@@ -86,16 +101,32 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getProductsForSale() {
         List<Product> products = this.productDAO.findProductsForSale();
         this.convertPathToPictureForList(products);
+        this.fillSongs(products);
         return products;
     }
 
     @Override
     @Transactional
-    public void buyProduct(String code, int userId) {
-        Product p = this.productDAO.getProduct(code);
+    public List<Product> getProductsForSale(String genre) {
+        List<Product> products = this.productDAO.findProductsForSale(genre);
+        this.convertPathToPictureForList(products);
+        this.fillSongs(products);
+        return products;
+    }
 
-        UserAccount previousOwner = this.productDAO.getUser(p.getCode());
-        UserAccount futureOwner = this.userDAO.getUser(userId);
+    @Override
+    @Transactional
+    public List<String> getGenres() {
+        return this.productDAO.findGenres();
+    }
+
+    @Override
+    @Transactional
+    public void buyProduct(String code, int userId) {
+        Product p = this.productDAO.findProduct(code);
+
+        UserAccount previousOwner = this.productDAO.findUser(p.getCode());
+        UserAccount futureOwner = this.userDAO.findUser(userId);
 
         previousOwner.setMoney(previousOwner.getMoney() + p.getPrice());
         futureOwner.setMoney(futureOwner.getMoney() - p.getPrice());
@@ -107,7 +138,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public UserAccount getUser(String code) {
-        return this.productDAO.getUser(code);
+        return this.productDAO.findUser(code);
     }
 
     @Override
@@ -115,6 +146,7 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> listProductsForUser(int userId) {
         List<Product> products = this.productDAO.findProducts(userId);
         this.convertPathToPictureForList(products);
+        this.fillSongs(products);
         return products;
     }
 
@@ -199,6 +231,22 @@ public class ProductServiceImpl implements ProductService {
         return new String(Base64.encodeBase64(imageInByte));
     }
 
+    @Override
+    @Transactional
+    public void attachSongs(List<String> songs, String code) {
+        Product p = this.productDAO.findProduct(code);
+        Set<Song> songsSet = new TreeSet<>();
+        for(String songName : songs){
+            Song song = new Song();
+            song.setSongName(songName);
+            song.setProduct(p);
+            this.songDAO.createSong(song);
+
+            songsSet.add(song);
+        }
+        p.setSongs(songsSet);
+    }
+
     private void convertPathToPictureForList(List<Product> list) {
         for (Product product : list) {
             try {
@@ -209,6 +257,14 @@ public class ProductServiceImpl implements ProductService {
                 product.setPictureBase64String(null);
                 // e.printStackTrace();
             }
+        }
+    }
+
+    private void fillSongs(List<Product> list) {
+        for (Product product : list) {
+            Set<Song> songs = new TreeSet<>();
+            songs.addAll(this.songDAO.findSongs(product.getCode()));
+            product.setSongs(songs);
         }
     }
 

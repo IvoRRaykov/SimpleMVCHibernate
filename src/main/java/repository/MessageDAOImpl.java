@@ -1,4 +1,4 @@
-package dao;
+package repository;
 
 import model.Message;
 import model.UserAccount;

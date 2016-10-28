@@ -57,6 +57,7 @@
                 <beans:value>model.Product</beans:value>
                 <beans:value>model.UserConfirmation</beans:value>
                 <beans:value>model.UserRole</beans:value>
+                <beans:value>model.Song</beans:value>
 
             </beans:list>
         </beans:property>
@@ -69,23 +70,27 @@
         </beans:property>
     </beans:bean>
 
-    <beans:bean id="userDAO" class="dao.UserDAOImpl">
+    <beans:bean id="userDAO" class="repository.UserDAOImpl">
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
     </beans:bean>
 
-    <beans:bean id="confirmationDAO" class="dao.ConfirmationDAOImpl">
+    <beans:bean id="confirmationDAO" class="repository.ConfirmationDAOImpl">
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
     </beans:bean>
 
-    <beans:bean id="roleDAO" class="dao.RoleDAOImpl">
+    <beans:bean id="roleDAO" class="repository.RoleDAOImpl">
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
     </beans:bean>
 
-    <beans:bean id="productDAO" class="dao.ProductDAOImpl">
+    <beans:bean id="productDAO" class="repository.ProductDAOImpl">
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
     </beans:bean>
 
-    <beans:bean id="messageDAO" class="dao.MessageDAOImpl">
+    <beans:bean id="messageDAO" class="repository.MessageDAOImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
+    </beans:bean>
+
+    <beans:bean id="songDAO" class="repository.SongDAOImpl">
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
     </beans:bean>
 
@@ -101,6 +106,7 @@
 
             <beans:property name="productDAO" ref="productDAO"/>
             <beans:property name="userDAO" ref="userDAO"/>
+            <beans:property name="songDAO" ref="songDAO"/>
 
     </beans:bean>
 

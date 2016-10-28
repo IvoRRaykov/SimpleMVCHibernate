@@ -1,4 +1,4 @@
-package dao;
+package repository;
 
 import model.UserAccount;
 import org.hibernate.exception.ConstraintViolationException;
@@ -15,9 +15,9 @@ public interface UserDAO {
 
     List<UserAccount> listUsers();
 
-    UserAccount getUser(int id);
+    UserAccount findUser(int id);
 
-    UserAccount getUser(String name);
+    UserAccount findUser(String name);
 
     void removeUser(int id);
 

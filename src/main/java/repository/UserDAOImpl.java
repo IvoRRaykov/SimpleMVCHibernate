@@ -1,4 +1,4 @@
-package dao;
+package repository;
 
 import model.UserAccount;
 import org.hibernate.Session;
@@ -62,7 +62,7 @@ public class UserDAOImpl implements UserDAO {
 
 
     @Override
-    public UserAccount getUser(int id) {
+    public UserAccount findUser(int id) {
 
         Session session = this.sessionFactory.getCurrentSession();
 
@@ -76,7 +76,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public UserAccount getUser(String userName) {
+    public UserAccount findUser(String userName) {
 
         List<UserAccount> users = new ArrayList<>();
 
