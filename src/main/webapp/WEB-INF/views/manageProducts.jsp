@@ -140,8 +140,12 @@
 
             <td>
                 <div class="border">
+                    <c:if test="${not empty message}">
+                        <div class="msg">${message}</div>
+                    </c:if>
                     <div class="heading">
                         <h1 class="text" style="margin-bottom: 0px" >Create Product</h1>
+
                         <c:if test="${empty productToCreate.pictureFilePath && empty productToCreateCode}">
                             <img class="no_border" style="height: 47px;" src="${pageContext.request.contextPath}/../resources/icons/1.png">
                         </c:if>

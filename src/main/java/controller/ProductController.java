@@ -43,7 +43,7 @@ public class ProductController {
 
 
     @RequestMapping(value = {"product/manage"}, method = RequestMethod.GET)
-    public String manageProducts(Model model, HttpSession session, HttpServletRequest request) {
+    public String manageProducts(@RequestParam(value = "message", required = false) String message, Model model, HttpSession session, HttpServletRequest request) {
 
         model.addAttribute(PRODUCT_TO_UPDATE_ATTRIBUTE, new Product());
         model.addAttribute(PRODUCT_TO_CREATE_ATTRIBUTE, new Product());
@@ -53,6 +53,10 @@ public class ProductController {
         }
 
         this.fillList(request, session, model);
+
+        if (message != null) {
+            model.addAttribute(MESSAGE_ATTRIBUTE, "Product created successfully");
+        }
 
         return "manageProducts";
     }
@@ -241,14 +245,13 @@ public class ProductController {
         }
     }
 
-    @RequestMapping(value = {"/holyFuck"}, method = RequestMethod.POST)
-    public String holyfuck(@RequestParam(value = "myArray[]", required = false) String[] myArray,
-                           @RequestParam(value = "product_code", required = false) String code) {
+    @RequestMapping(value = {"/attachSongs"}, method = RequestMethod.POST)
+    public String attachSongs(@RequestParam(value = "myArray[]", required = false) String[] myArray,
+                              @RequestParam(value = "product_code", required = false) String code) {
 
         if (myArray != null) {
             List<String> songs = Arrays.asList(myArray);
             this.productService.attachSongs(songs, code);
-        } else {
         }
 
         return "redirect:product/manage";

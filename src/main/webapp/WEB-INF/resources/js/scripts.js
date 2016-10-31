@@ -1,6 +1,5 @@
 $(document).ready(function () {
 
-
     var listA = [];
     $('#btn').click(function () {
 
@@ -8,35 +7,49 @@ $(document).ready(function () {
         $("#input").val("");
         $("ul").append("<li style='list-style: none'><span><i></i></span><a class='text' >" + todoText + "</a></li>");
         listA.push(todoText);
-        console.log(listA)
 
 
     });
 
+
+
     $("#submitbutton").click(function () {
         var code = document.getElementById("codeHandler").value;
-        console.log(code);
 
         $.ajax({
             type : "POST",
-            url : "/holyFuck",
+            url : "/attachSongs",
             data : {
                 myArray: listA,
                 product_code: code
             },
-            success : function(response) {
-                console.log(response);
-                    window.location.href = response;
+            complete: function() {
+                window.location.replace("/product/manage?message");
+            },
+            success : function(data) {
+                if (data.redicrect) {
+                    window.location.replace("/product/manage?message");
+                }
 
             },
             error: function(xhr, response) {
-                console.log(response);
-                alert('Error!  Status = ' + xhr.status);
+                window.location.replace("/product/manage?message");
             }
 
         });
         }
     );
 
+    $('.wtf').click(function(){
+        var id = $(this).attr("id");
+        $('#dpc'.concat(id)).toggle(function () {
+            var test = ($(this).css('display') == 'none')? "none" : "block";
+            $(this).css('display', test);
+
+        });
+    });
+
 
 });
+
+

@@ -39,7 +39,7 @@ public class SongDAOImpl implements SongDAO {
                 .setString("code", code )
                 .list();
 
-        logger.info("Songs List obtained successfully");
+        logger.info("Songs List obtained successfully for product code = " + code);
        /* for (Song song : songsList) {
             logger.info("  song = " + song.toString());
         }*/
