@@ -1,6 +1,7 @@
 package model;
 
 import javax.persistence.*;
+import java.util.Arrays;
 
 @Entity
 @Table(name = "song")
@@ -52,6 +53,7 @@ public class Song implements Comparable<Song>{
 
     @Override
     public int compareTo(Song o) {
-        return this.songName.compareTo(o.getSongName());
+
+        return Integer.valueOf(this.songName.split("\\.")[0]).compareTo(Integer.valueOf(o.getSongName().split("\\.")[0]));
     }
 }

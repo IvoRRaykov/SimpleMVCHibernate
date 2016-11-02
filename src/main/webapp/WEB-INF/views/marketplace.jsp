@@ -11,11 +11,11 @@
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css" type="text/css"/>
 
-    <script src="../resources/js/jquery-3.1.1.min.js"></script>
-    <script type="text/javascript" src="../resources/js/scripts.js"></script>
+    <script src="${pageContext.request.contextPath}/../resources/js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/../resources/js/scripts.js"></script>
 </head>
 <body>
-
+<script>var ctx = "${pageContext.request.contextPath}"</script>
 <jsp:include page="_menu.jsp"/>
 <div id="content">
     <div id="login-box" style="border: 0; border-radius: 0">
@@ -99,10 +99,12 @@
                             </table>
                         </td>
                         <td style="border-bottom: 0;" align="center">
+                            <sec:authorize access="hasRole('ROLE_USER')">
                             <c:if test="${product.userAccount.userName == loggedUserName || product.price>loggedUserMoney }">
                                 <img class="no_border" id="icon"
                                      src="${pageContext.request.contextPath}/../resources/icons/buyNo.png">
                             </c:if>
+                            </sec:authorize>
 
                             <sec:authorize access="hasRole('ROLE_USER')">
                                 <c:if test="${product.userAccount.userName != loggedUserName && product.price<=loggedUserMoney}">

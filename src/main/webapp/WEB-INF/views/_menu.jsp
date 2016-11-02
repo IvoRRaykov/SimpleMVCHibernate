@@ -5,12 +5,13 @@
 
 <div id="main_menu">
 
-    <div id="left_align" >
-        <a href="<c:url value='/' />"><img height="100%" class="no_border" src="${pageContext.request.contextPath}/../resources/icons/logo.png"></a>
+    <div id="left_align">
+        <a href="<c:url value='/' />"><img height="100%" class="no_border"
+                                           src="${pageContext.request.contextPath}/../resources/icons/logo.png"></a>
     </div>
 
     <c:if test="${not empty loggedUserName}">
-        <div id="right_align" >
+        <div id="right_align">
             <a class="text"> Hello ${loggedUserName}</a>
             <input class="button" type="button"
                    onclick="location.href='${pageContext.request.contextPath}/login?logout';"
@@ -30,10 +31,12 @@
                            class="button" type="button"
                            onclick="location.href='${pageContext.request.contextPath}/user/update';"
                            value="Edit"/>
-                    <input style="margin-top: 3px"
-                           class="button" type="button"
-                           onclick="location.href='${pageContext.request.contextPath}/product/manage';"
-                           value="My Products"/>
+                    <sec:authorize access="hasRole('ROLE_USER')">
+                        <input style="margin-top: 3px"
+                               class="button" type="button"
+                               onclick="location.href='${pageContext.request.contextPath}/product/manage';"
+                               value="My Products"/>
+                    </sec:authorize>
 
                 </div>
             </div>
@@ -81,13 +84,16 @@
         </c:if>
 
         <sec:authorize access="hasRole('ROLE_ADMIN')">
-            |
-            <a href="${pageContext.request.contextPath}/admin/users">Manage Users</a>
+            <input class="button" type="button"
+                   onclick="location.href='${pageContext.request.contextPath}/admin/users';"
+                   value="Manage Users"/>
         </sec:authorize>
 
         <sec:authorize access="hasRole('ROLE_ADMIN')">
-            |
-            <a href="${pageContext.request.contextPath}/product/manage">Manage Products</a>
+            <input class="button" type="button"
+                   onclick="location.href='${pageContext.request.contextPath}/product/manage';"
+                   value="Manage Products"/>
+
         </sec:authorize>
     </div>
 

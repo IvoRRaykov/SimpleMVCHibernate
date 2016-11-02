@@ -42,6 +42,7 @@ public interface Constants {
     String PRODUCT_CREATE_URL_MARKER = "c";
     String PRODUCT_UPDATE_URL_MARKER = "u";
     String GENRES_LIST_ATTRIBUTE = "genresList";
+    String ATTACH_SONGS_ATTRIBUTE = "attach";
 
     String EMPTY = "";
     String FILE_FOR_SAVE_NAME = "productList";

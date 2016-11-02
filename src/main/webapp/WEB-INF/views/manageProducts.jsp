@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css" type="text/css"/>
 
 
-    <script src="../resources/js/jquery-3.1.1.min.js"></script>
-    <script type="text/javascript" src="../resources/js/scripts.js"></script>
+    <script src="${pageContext.request.contextPath}/../resources/js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/../resources/js/scripts.js"></script>
 
 </head>
 <body>
-
+<script>var ctx = "${pageContext.request.contextPath}"</script>
 
 <jsp:include page="_menu.jsp"/>
 <div id="content">
@@ -143,19 +143,25 @@
                     <c:if test="${not empty message}">
                         <div class="msg">${message}</div>
                     </c:if>
-                    <div class="heading">
-                        <h1 class="text" style="margin-bottom: 0px" >Create Product</h1>
 
-                        <c:if test="${empty productToCreate.pictureFilePath && empty productToCreateCode}">
-                            <img class="no_border" style="height: 47px;" src="${pageContext.request.contextPath}/../resources/icons/1.png">
-                        </c:if>
-                        <c:if test="${not empty productToCreate.pictureFilePath && empty productToCreateCode}">
-                            <img class="no_border" style="height: 47px;" src="${pageContext.request.contextPath}/../resources/icons/2.png">
-                        </c:if>
-                        <c:if test="${not empty productToCreateCode}">
-                            <img class="no_border" style="height: 47px;" src="${pageContext.request.contextPath}/../resources/icons/3.png">
-                        </c:if>
-                    </div>
+                    <c:if test="${empty attach}">
+                        <div class="heading">
+                            <h1 class="text" style="margin-bottom: 0px">Create Product</h1>
+
+                            <c:if test="${empty productToCreate.pictureFilePath && empty productToCreateCode}">
+                                <img class="no_border" style="height: 47px;"
+                                     src="${pageContext.request.contextPath}/../resources/icons/1.png">
+                            </c:if>
+                            <c:if test="${not empty productToCreate.pictureFilePath && empty productToCreateCode}">
+                                <img class="no_border" style="height: 47px;"
+                                     src="${pageContext.request.contextPath}/../resources/icons/2.png">
+                            </c:if>
+                            <c:if test="${not empty productToCreateCode}">
+                                <img class="no_border" style="height: 47px;"
+                                     src="${pageContext.request.contextPath}/../resources/icons/3.png">
+                            </c:if>
+                        </div>
+                    </c:if>
 
                     <c:if test="${empty productToCreate.pictureFilePath && empty productToCreateCode}">
                         <div id="pictureDiv">
@@ -304,6 +310,7 @@
                 <th width="120">Product Price</th>
                 <th width="120">Product For Sale</th>
 
+                <th width="60">Add Songs</th>
                 <th width="60">Edit</th>
                 <th width="60">Delete</th>
             </tr>
@@ -321,6 +328,9 @@
                         <c:if test="${product.forSale!=true}"><img class="no_border" id="icon"
                                                                    src="${pageContext.request.contextPath}/../resources/icons/x.png"></c:if>
                     </td>
+                    <td align="center"><a href="<c:url value='/product/attachSongs/${product.code}' />"><img
+                            class="no_border" id="icon"
+                            src="${pageContext.request.contextPath}/../resources/icons/plus-song.png"></a></td>
                     <td align="center"><a href="<c:url value='/product/update/${product.code}' />"><img
                             class="no_border" id="icon"
                             src="${pageContext.request.contextPath}/../resources/icons/settings.ico"></a></td>

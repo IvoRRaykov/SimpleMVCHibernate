@@ -15,25 +15,25 @@ $(document).ready(function () {
 
     $("#submitbutton").click(function () {
         var code = document.getElementById("codeHandler").value;
-
+        console.log(ctx);
         $.ajax({
             type : "POST",
-            url : "/attachSongs",
+            url : ctx.concat("/product/doAttachSongs"),
             data : {
                 myArray: listA,
                 product_code: code
             },
             complete: function() {
-                window.location.replace("/product/manage?message");
+                window.location.replace(ctx.concat("/product/manage?message"));
             },
             success : function(data) {
                 if (data.redicrect) {
-                    window.location.replace("/product/manage?message");
+                    window.location.replace(ctx.concat("/product/manage?message"));
                 }
 
             },
             error: function(xhr, response) {
-                window.location.replace("/product/manage?message");
+                window.location.replace(ctx.concat("/product/manage?message"));
             }
 
         });

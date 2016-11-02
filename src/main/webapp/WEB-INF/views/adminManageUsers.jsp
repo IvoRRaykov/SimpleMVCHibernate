@@ -4,56 +4,21 @@
 <html>
 <head>
     <title>User Page</title>
-    <style type="text/css">
-        .tg {
-            border-collapse: collapse;
-            border-spacing: 0;
-            border-color: #ccc;
-        }
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css" type="text/css"/>
 
-        .tg td {
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-            padding: 10px 5px;
-            border-style: solid;
-            border-width: 1px;
-            overflow: hidden;
-            word-break: normal;
-            border-color: #ccc;
-            color: #333;
-            background-color: #fff;
-        }
-
-        .tg th {
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-            font-weight: normal;
-            padding: 10px 5px;
-            border-style: solid;
-            border-width: 1px;
-            overflow: hidden;
-            word-break: normal;
-            border-color: #ccc;
-            color: #333;
-            background-color: #f0f0f0;
-        }
-
-        .tg .tg-4eph {
-            background-color: #f9f9f9
-        }
-    </style>
 </head>
 <body>
 <jsp:include page="_menu.jsp"/>
 
+<div id="content">
 
 <c:if test="${empty user.userName}">
-    <h1>
+    <h1 class="text">
         Register User
     </h1>
 </c:if>
 <c:if test="${!empty user.userName}">
-    <h1>
+    <h1 class="text">
         Update User
     </h1>
 </c:if>
@@ -61,7 +26,7 @@
 
 <Table>
     <tr>
-        <td>Pick avatar</td>
+        <td class="text" >Pick avatar</td>
         <td><a href="${pageContext.request.contextPath}/admin/users"><img src="${avatar}"/></a></td>
     </tr>
 </Table>
@@ -82,7 +47,7 @@
             <tr>
                 <td>
                     <form:label path="id">
-                        <spring:message text="ID"/>
+                        <a class="text">Id:</a>
                     </form:label>
                 </td>
                 <td>
@@ -94,7 +59,7 @@
         <tr>
             <td>
                 <form:label path="userName">
-                    <spring:message text="User Name"/>
+                    <a class="text">User Name:</a>
                 </form:label>
             </td>
             <td>
@@ -104,7 +69,7 @@
         <tr>
             <td>
                 <form:label path="password">
-                    <spring:message text="Password"/>
+                    <a class="text">Password:</a>
                 </form:label>
             </td>
             <td>
@@ -114,7 +79,7 @@
         <tr>
             <td>
                 <form:label path="email">
-                    <spring:message text="Email"/>
+                    <a class="text">Email:</a>
                 </form:label>
             </td>
             <td>
@@ -125,7 +90,7 @@
         <tr>
             <td>
                 <form:label path="money">
-                    <spring:message text="Money"/>
+                    <a class="text">Money:</a>
                 </form:label>
             </td>
             <td>
@@ -136,7 +101,7 @@
         <tr>
             <td>
                 <form:label path="gender">
-                    <spring:message text="Gender"/>
+                    <a class="text">Gender:</a>
                 </form:label>
             </td>
             <td>
@@ -149,11 +114,11 @@
         <tr>
             <td colspan="2">
                 <c:if test="${!empty user.userName}">
-                    <input type="submit"
+                    <input type="submit" class="button"
                            value="<spring:message text="Edit User"/>"/>
                 </c:if>
                 <c:if test="${empty user.userName}">
-                    <input type="submit"
+                    <input type="submit" class="button"
                            value="<spring:message text="Register User"/>"/>
                 </c:if>
             </td>
@@ -163,7 +128,7 @@
 
 
 <br>
-<h3>User List</h3>
+<h3 class="text">User List</h3>
 <c:if test="${!empty listUsers}">
     <table class="tg">
         <tr>
@@ -190,7 +155,8 @@
     </table>
 </c:if>
 
-<jsp:include page="_footer.jsp"/>
+</div>
+<div id="back"><jsp:include page="_footer.jsp"/></div>
 
 </body>
 </html>

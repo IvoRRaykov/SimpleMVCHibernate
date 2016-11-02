@@ -2,6 +2,7 @@ package controller;
 
 import model.Product;
 import model.UserAccount;
+import org.omg.CORBA.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
@@ -55,7 +56,7 @@ public class ProductController {
         this.fillList(request, session, model);
 
         if (message != null) {
-            model.addAttribute(MESSAGE_ATTRIBUTE, "Product created successfully");
+            model.addAttribute(MESSAGE_ATTRIBUTE, "Songs attached successfully!");
         }
 
         return "manageProducts";
@@ -206,6 +207,7 @@ public class ProductController {
         model.addAttribute(GENRES_LIST_ATTRIBUTE, this.productService.getGenres());
         model.addAttribute(PRODUCT_LIST_ATTRIBUTE, this.productService.getProductsForSale());
 
+        
         return "marketplace";
     }
 
@@ -245,8 +247,8 @@ public class ProductController {
         }
     }
 
-    @RequestMapping(value = {"/attachSongs"}, method = RequestMethod.POST)
-    public String attachSongs(@RequestParam(value = "myArray[]", required = false) String[] myArray,
+    @RequestMapping(value = {"/product/doAttachSongs"}, method = RequestMethod.POST)
+    public String doAttachSongs(@RequestParam(value = "myArray[]", required = false) String[] myArray,
                               @RequestParam(value = "product_code", required = false) String code) {
 
         if (myArray != null) {
@@ -255,6 +257,25 @@ public class ProductController {
         }
 
         return "redirect:product/manage";
+    }
+
+    @RequestMapping(value = {"/product/attachSongs/{code}"}, method = RequestMethod.GET)
+    public String attachSongs(@PathVariable(value = "code") String code,
+                              Model model, HttpServletRequest request, HttpSession session){
+
+        model.addAttribute(PRODUCT_TO_UPDATE_ATTRIBUTE, new Product());
+        model.addAttribute(PRODUCT_TO_CREATE_ATTRIBUTE, new Product());
+
+        if (!isInUserRole(request)) {
+            model.addAttribute(USERS_NAMES_LIST_ATTRIBUTE, this.userService.listUsersNames());
+        }
+
+        this.fillList(request, session, model);
+
+        model.addAttribute(PRODUCT_TO_CREATE_CODE_ATTRIBUTE, code);
+        model.addAttribute(ATTACH_SONGS_ATTRIBUTE, "yes");
+
+        return "manageProducts";
     }
 
 
