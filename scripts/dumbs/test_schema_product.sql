@@ -28,6 +28,8 @@ CREATE TABLE `product` (
   `price` float NOT NULL,
   `user_id` int(11) NOT NULL,
   `for_sale` bit(1) NOT NULL,
+  `picture_file_path` varchar(80) DEFAULT NULL,
+  `genre` varchar(45) NOT NULL,
   PRIMARY KEY (`code`),
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `user_id_fk_idx` (`user_id`),
@@ -41,7 +43,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES ('354p4','vodchica',25,68,''),('b341','barbi sexy kukla',89.99,65,''),('c80080','C-3PO',54.88,73,''),('c9563','R2D2',65,63,'\0'),('p350','rakiq',20,74,'');
+INSERT INTO `product` VALUES ('b6969','Wild Light',16,77,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover1.jpg','Art Punk'),('c73823','Vampire Weekend',29,68,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover21.jpg','Disco'),('c7676','Clever Girl Goes Alone',17,73,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover4.jpg','Alternative Rock'),('c8765','Foals - Holy Fire',76,68,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover8.jpg','Disco'),('c8767','Ginger',15,65,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover24.jpg','Pop'),('ch132','The Welacharid Orchestra',220,68,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover2.jpg','Punk'),('d2123','Daughter',78,78,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover26.jpg','Jazz'),('d2717','Devils Trap',67,68,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover6.jpg','Classic Blues'),('e7878','Evocations Antiques',99,68,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover7.jpg','Classic Blues'),('i9076','Leaking Lakes',100,65,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover5.jpg','Alternative Rock'),('j73623','Day Dreams',80,68,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover20.jpg','Jazz'),('l3223','Lost Hopes',29,68,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover15.jpg','Disco'),('l4443','Linking Parking',100,68,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover17.jpg','Punk'),('l8976','Little Dreams',7,74,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover3.jpg','Punk'),('m343','Mars',100,68,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover11.jpg','Disco'),('p923','Push The Sky Away',44,68,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover9.jpg','Disco'),('p999','Pronit',23,78,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover12.jpg','Disco'),('p9991','Peter Gabriel',23,68,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover18.jpg','Punk'),('r2239','Razerblades',15,68,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\.jpg','Alternative Rock'),('r2323','Relapse',299,68,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover23.jpg','Rap'),('r8512','Riverdale',89,78,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover25.jpg','Disco'),('robld','Royal Blood',44,68,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover19.jpg','Jazz'),('t3423','The Dark Side Of The Moon',369,68,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover13.jpg','Rock'),('x2222','Project X',34,68,'','D:\\apache-tomcat-7.0.70\\bin\\tmpFiles\\cover14.jpg','Disco');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-20 18:31:20
+-- Dump completed on 2016-11-18 14:51:06

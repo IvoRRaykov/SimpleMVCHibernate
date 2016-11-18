@@ -34,7 +34,7 @@ CREATE TABLE `message` (
   KEY `from_fk_idx` (`fromu`),
   CONSTRAINT `from_fk` FOREIGN KEY (`fromu`) REFERENCES `user_account` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `to_fk` FOREIGN KEY (`tou`) REFERENCES `user_account` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +43,7 @@ CREATE TABLE `message` (
 
 LOCK TABLES `message` WRITE;
 /*!40000 ALTER TABLE `message` DISABLE KEYS */;
-INSERT INTO `message` VALUES (9,'zdr ko pr','2016-10-19 18:08:32',73,68,''),(10,'WAZAp','2016-10-19 18:18:27',74,68,''),(11,'dont read!','2016-10-19 18:18:57',68,63,'');
+INSERT INTO `message` VALUES (9,'zdr ko pr','2016-10-19 18:08:32',73,68,''),(10,'WAZAp','2016-10-19 18:18:27',74,68,''),(11,'dont read!','2016-10-19 18:18:57',68,63,''),(12,'dadada','2016-10-25 18:03:00',63,68,''),(13,'dsgsgdf','2016-10-26 18:58:35',68,63,''),(14,'fhfhfhfhfhfhffhfhfhfhfhfhfhfhfhfhffhfhfhfhfhfhfhfhfhfhffhfhfhfhfhfhfhfhfhfhffhfhfhfhfhfhfhfhfhfhfhfhfhfhfhfh','2016-10-26 18:59:33',68,68,''),(15,'fasdfdsf','2016-10-27 12:04:34',68,63,''),(16,'dadada','2016-10-27 12:04:55',68,77,''),(17,'Hello....','2016-11-02 10:58:42',78,77,'');
 /*!40000 ALTER TABLE `message` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-20 18:31:19
+-- Dump completed on 2016-11-18 14:51:07
