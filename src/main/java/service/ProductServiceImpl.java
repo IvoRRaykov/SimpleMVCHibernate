@@ -20,7 +20,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
 
-import static util.Constants.FILE_FOR_SAVE_NAME;
+import static util.Constants.*;
 
 /**
  * Created by Ivo Raykov on 29.9.2016 г..
@@ -156,18 +156,17 @@ public class ProductServiceImpl implements ProductService {
 
         List<Product> productsForSale = this.getProductsForSale();
 
-
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "attachment; filename=" + FILE_FOR_SAVE_NAME + ".xls");
 
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("FirstSheet");
+        HSSFSheet sheet = workbook.createSheet(SHEET_NAME);
 
         HSSFRow rowhead = sheet.createRow((short) 0);
-        rowhead.createCell(0).setCellValue("Code.");
-        rowhead.createCell(1).setCellValue("Name");
-        rowhead.createCell(2).setCellValue("Price");
-        rowhead.createCell(3).setCellValue("Owner");
+        rowhead.createCell(0).setCellValue(TABLE_COLUMN_CODE);
+        rowhead.createCell(1).setCellValue(TABLE_COLUMN_NAME);
+        rowhead.createCell(2).setCellValue(TABLE_COLUMN_PRICE);
+        rowhead.createCell(3).setCellValue(TABLE_COLUMN_OWNER);
 
         short rowNumber = 1;
         for (Product p : productsForSale) {
@@ -179,8 +178,6 @@ public class ProductServiceImpl implements ProductService {
             row.createCell(1).setCellValue(p.getName());
             row.createCell(2).setCellValue(p.getPrice());
             row.createCell(3).setCellValue(ownerName);
-
-
         }
 
         workbook.write(response.getOutputStream());
@@ -194,17 +191,17 @@ public class ProductServiceImpl implements ProductService {
             byte[] bytes = file.getBytes();
 
 
-            File dir = new File("tmpFiles");
+            File dir = new File(SAVE_TO_DIRECTORY);
 
             File serverFile = new File(dir.getAbsolutePath()
-                    + File.separator + name + ".jpg");
+                    + File.separator + name + FORMAT_JPG);
             BufferedOutputStream stream = new BufferedOutputStream(
                     new FileOutputStream(serverFile));
             stream.write(bytes);
             stream.close();
 
             return dir.getAbsolutePath()
-                    + File.separator + name + ".jpg";
+                    + File.separator + name + FORMAT_JPG;
         } catch (Exception e) {
             return null;
         }

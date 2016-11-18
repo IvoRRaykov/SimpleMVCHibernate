@@ -27,8 +27,6 @@ public class UserAccount {
     @NotEmpty(message = "Email is required")
     private String email;
 
-
-    //TODO: DO VALIDATION IN FRONT END
     @Column(name = "password")
     //@Pattern(regexp = "^[a-zA-Z0-9]{5,}$", message = "Password should contain at least 5 letters or digits")
    // @NotEmpty(message = "Password is required")
@@ -62,6 +60,8 @@ public class UserAccount {
     @OneToMany(mappedBy = "tou", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     //@OrderBy("date_sent ASC ")
     private Set<Message> messagesTo = new TreeSet<>();
+
+
 
     public float getMoney() {
         return money;

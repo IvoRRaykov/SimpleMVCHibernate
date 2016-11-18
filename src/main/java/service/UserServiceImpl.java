@@ -33,12 +33,12 @@ import static util.Constants.*;
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     private UserDAO userDAO;
     private ConfirmationDAO confirmationDAO;
     private RoleDAO roleDAO;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
 
     public void setUserDAO(UserDAO userDAO) {
         this.userDAO = userDAO;
@@ -52,47 +52,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         this.roleDAO = roleDAO;
     }
 
-    @Override
-    @Transactional
-    public void createUser(UserAccount user) throws ConstraintViolationException {
-
-        UserConfirmation confirmation = this.createConfirmation(user);
-        UserRole role = this.createRole(user);
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        this.userDAO.createUser(user);
-
-        this.performOnBackgroundThread(confirmation.getConfirmationCode(), user.getEmail());
-
-        this.confirmationDAO.createConfirmation(confirmation);
-        this.roleDAO.createRole(role);
-    }
-
-
-    @Override
-    @Transactional
-    public void createUser(UserAccount user, String role) {
-        UserConfirmation confirmation = this.createConfirmation(user);
-        confirmation.setUserEnabled(true);
-
-        UserRole userRole = this.createRole(user);
-        userRole.setRole(role);
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        this.userDAO.createUser(user);
-
-        this.confirmationDAO.createConfirmation(confirmation);
-        this.roleDAO.createRole(userRole);
-    }
-
-    @Override
-    @Transactional
-    public void updateUser(UserAccount user) throws ConstraintViolationException, DataIntegrityViolationException {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        this.userDAO.updateUser(user);
-    }
 
     @Override
     @Transactional
@@ -106,12 +65,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return this.roleDAO.listUsersNames();
     }
 
-
     @Override
     @Transactional
     public UserAccount getUser(String name) {
         return this.userDAO.findUser(name);
     }
+
 
     @Override
     @Transactional
@@ -121,15 +80,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public UserAccount getUserForUpdate(int id) {
-
-        return this.userDAO.findUser(id);
-    }
+    public UserAccount getUserForUpdate(int id) { return this.userDAO.findUser(id); }
 
     @Override
     @Transactional
     public void removeUser(int id) {
         this.userDAO.removeUser(id);
+    }
+
+    @Override
+    @Transactional
+    public List<String> getSimilarNames(String to) {
+        return this.userDAO.findSimilarNames(to);
     }
 
     @Override
@@ -143,17 +105,35 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public String getRandomAvatar() {
-        int random = new Random().nextInt(999) + 1;
-        return AVATAR_PREFIX + random;
+    @Transactional
+    public void createUser(UserAccount user) throws ConstraintViolationException {
+
+        UserConfirmation confirmation = this.createConfirmation(user);
+        UserRole role = this.createRole(user);
+
+        this.doCreateUser(user,confirmation,role);
+
+        this.sendEmailOnBackgroundThread(confirmation.getConfirmationCode(), user.getEmail());
     }
 
     @Override
     @Transactional
-    public List<String> getSimilarNames(String to) {
-        return this.userDAO.findSimilarNames(to);
+    public void createUser(UserAccount user, String role) {
+        UserConfirmation confirmation = this.createConfirmation(user);
+        confirmation.setUserEnabled(true);
+
+        UserRole userRole = this.createRole(user);
+        userRole.setRole(role);
+
+        this.doCreateUser(user,confirmation,userRole);
     }
 
+    @Override
+    @Transactional
+    public void updateUser(UserAccount user) throws ConstraintViolationException, DataIntegrityViolationException {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        this.userDAO.updateUser(user);
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -172,6 +152,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return buildUserForAuthentication(user, authorities);
 
     }
+
+
+    @Override
+    public String getRandomAvatar() {
+        int random = new Random().nextInt(MAX_RANGE_AVATAR_URL) + MIN_RANGE_AVATAR_URL;
+        return AVATAR_PREFIX + random;
+    }
+
+
+    private void doCreateUser(UserAccount user, UserConfirmation confirmation, UserRole role){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        this.userDAO.createUser(user);
+
+        this.confirmationDAO.createConfirmation(confirmation);
+        this.roleDAO.createRole(role);
+    }
+
 
     private User buildUserForAuthentication(model.UserAccount user, List<GrantedAuthority> authorities) {
         return new User(user.getUserName(), user.getPassword(), user.getUserConfirmation().isUserEnabled(), true, true, true, authorities);
@@ -207,7 +205,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return confirmation;
     }
 
-    private void performOnBackgroundThread(final String text, final String email) {
+    private void sendEmailOnBackgroundThread(final String text, final String email) {
         final Thread t = new Thread() {
             @Override
             public void run() {

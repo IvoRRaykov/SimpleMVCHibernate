@@ -50,6 +50,17 @@ public interface Constants {
     String USER_LIST_ATTRIBUTE = "listUsers";
     String USERS_NAMES_LIST_ATTRIBUTE = "listUsersNames";
 
+    String TABLE_COLUMN_CODE = "Code";
+    String TABLE_COLUMN_NAME = "Name";
+    String TABLE_COLUMN_PRICE = "Price";
+    String TABLE_COLUMN_OWNER = "Owner";
+    String SHEET_NAME = "FirstSheet";
+
+    int MAX_RANGE_AVATAR_URL = 999;
+    int MIN_RANGE_AVATAR_URL = 1;
+
+    String FORMAT_JPG = ".jpg";
+    String SAVE_TO_DIRECTORY = "tmpFiles";
 
     String ERROR_STRING_ATTRIBUTE = "errorString";
 }

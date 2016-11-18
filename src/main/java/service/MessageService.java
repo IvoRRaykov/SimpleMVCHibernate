@@ -4,9 +4,6 @@ import model.Message;
 
 import java.util.Map;
 
-/**
- * Created by Ivo Raykov on 12.10.2016 г..
- */
 public interface MessageService {
 
     Map<Message, String> getMessagesTo(int userId);

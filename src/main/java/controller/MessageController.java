@@ -69,7 +69,7 @@ public class MessageController {
     }
 
     @RequestMapping(value = {"/message/{name}"}, method = RequestMethod.POST)
-    public String sendMessage(@PathVariable(value = "name") String name, HttpServletRequest request, HttpSession session, Model model) {
+    public String sendMessage(@PathVariable(value = "name") String name, HttpServletRequest request, HttpSession session) {
 
         String text = (String) request.getParameter(TEXT_ATTRIBUTE);
         int id = (int) session.getAttribute(LOGGED_USER_ID_ATTRIBUTE);
@@ -97,7 +97,7 @@ public class MessageController {
     }
 
     @RequestMapping(value = {"/message/{from}/{messageId}"}, method = RequestMethod.GET)
-    public String deleteMessage(@PathVariable(value = "from") String from, @PathVariable(value = "messageId") int messageId,HttpSession session, Model model) {
+    public String deleteMessage(@PathVariable(value = "from") String from, @PathVariable(value = "messageId") int messageId) {
 
         this.messageService.deleteMessage(messageId);
 

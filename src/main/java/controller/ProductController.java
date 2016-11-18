@@ -26,7 +26,7 @@ import static util.Constants.*;
 
 @Controller
 public class ProductController {
-
+//VERY VERY WRONG
     private ProductService productService;
     private UserService userService;
 
@@ -207,7 +207,7 @@ public class ProductController {
         model.addAttribute(GENRES_LIST_ATTRIBUTE, this.productService.getGenres());
         model.addAttribute(PRODUCT_LIST_ATTRIBUTE, this.productService.getProductsForSale());
 
-        
+
         return "marketplace";
     }
 
